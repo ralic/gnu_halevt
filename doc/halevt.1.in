@@ -1,0 +1,67 @@
+.TH HALEVT 1
+.SH NAME
+halevt \- Generic handler for HAL events
+.SH SYNOPSIS
+.B halevt [options]
+.SH DESCRIPTION
+.I Halevt
+is a daemon that executes arbitrary commands when a device with certain 
+properties is added to the system and when
+device properties change, using HAL.
+Unless a configuration file is given on the command
+line with the \fI\-c\fP option, configuration files are searched for in 
+$HOME/.halevt, @sysconfdir@/@PACKAGE_NAME@, and @datadir@/@PACKAGE_NAME@ 
+(in that order). All the files ending with .xml found in these directories 
+are considered to be configuration files. If a file with the same name 
+has already been found in a previous directory, it is ignored. Default for
+halevt is to run as a daemon in the background.
+.PP
+.I Halevt
+may also be run in another mode, called the reporting mode, turned on by 
+the \fI\-i\fP option. In that case no config file is read, 
+.I Halevt
+stays in the foreground and report all the HAL events.
+.SH OPTIONS
+.TP
+.B \-c  \fIfile\fP
+Use configuration file \fIfile\fP.
+.TP
+.B \-f
+Stay in the foreground.
+.TP
+.B \-g  \fIgroup\fP
+Run as group \fIgroup\fP, if started by the root user. Default is to 
+run as @HALEVT_GROUP_NAME@.
+.TP
+.B \-h
+Help message and options summary.
+.TP
+.B \-i
+Run in reporting mode. No configuration file is read, and halevt 
+stays in the foreground, reporting all the HAL events.
+.TP
+.B \-p  \fIpidfile\fP
+Use pid file \fIpidfile\fP to store the daemon pid, instead of the default.
+Default is @halevt_piddir@/halevt\.pid if run as root user, and no pid file 
+if run as a user. \fI-\fP means no pidfile.
+.TP
+.B \-u  \fIuser\fP
+Run as user \fIuser\fP, if started by the root user. Default is to 
+run as @HALEVT_USER_NAME@.
+.SH SEE ALSO
+lshal(1), hald(8)
+.SH VERSION
+This is \fIHalevt\fP version @PACKAGE_VERSION@.
+.SH AUTHOR
+Main author is Patrice Dumas pertusus at free dot fr.
+.SH AVAILABILITY
+The latest version of this program can be found at:
+      http://www.environnement.ens.fr/perso/dumas/halevt.html
+.SH COPYRIGHT
+Copyright \(co 2007-2008  Patrice Dumas <pertusus at free dot fr>,
+       2005 Novell, Inc.
+
+There is NO warranty.  You may redistribute this software
+under the terms of the GNU General Public License; either version 2 
+of the License, or (at your option) any later version.
+For more information about these matters, see the file named COPYING.

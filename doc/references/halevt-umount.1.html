@@ -1,0 +1,170 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of HALEVT-MOUNT</TITLE>
+</HEAD><BODY>
+<H1>HALEVT-MOUNT</H1>
+Section: User Commands  (1)<BR><A HREF="#index">Index</A>
+<A HREF="halevt.html">Return to Main Contents</A><HR>
+
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+halevt-mount/halevt-umount - Mount or umount device through HAL
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>halevt-mount</B>
+
+[options] [-w] mountpoint|device|udi
+<P>
+
+<B>halevt-mount</B>
+
+[options] &lt;-c | -r&gt; &lt;-a | mountpoint | device | udi&gt;
+<P>
+
+<B>halevt-mount</B>
+
+[options] &lt;-l | -s&gt;
+<P>
+
+<B>halevt-umount </B>
+
+[options] &lt; -a | mountpoint | device | udi&gt;
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<I>halevt-mount</I>
+
+Mount or umount device through HAL and keep a track of devices handled.
+When called as <I>halevt-umount</I> the default is to unmount, when called 
+as <I>halevt-mount</I> the default is to mount.
+Option <I>-c</I>, <I>-l</I>, <I>-r</I>, <I>-s</I> or <I>-w</I> changes the 
+operation performed.
+Additional argument is considered to be a mount point, a device or an udi
+when unmounting or removing.
+<P>
+
+If the commands are not called with <I>-s</I> after changes in the state of the
+devices (after mounting, unmounting, removing devices), the information
+available for <I>halevt-mount</I> and <I>halevt-umount</I> may become 
+out of sync with the state of the system.
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-a</B>
+
+<DD>
+When listing, list all the existing devices. For the other operations, 
+perform the operation on all the handled devices.
+<DT><B>-c</B>
+
+<DD>
+Remove the handled device.
+<DT><B>-d  </B><I>device</I>
+
+<DD>
+Use device <I>device</I>.
+<DT><B>-f  </B><I>file</I>
+
+<DD>
+Use file <I>file</I> to store information about the handled devices 
+instead of the default.
+<DT><B>-h</B>
+
+<DD>
+Help message and options summary.
+<DT><B>-i  </B><I>directory</I>
+
+<DD>
+Use lock file and device information file in the directory <I>directory</I> (if 
+they are not already specified).
+<DT><B>-l</B>
+
+<DD>
+List handled devices. Formatted with, on each line, udi:device:mountpoint.
+<DT><B>-p  </B><I>mountpoint</I>
+
+<DD>
+Use mountpoint <I>mountpoint</I>.
+<DT><B>-m  </B><I>umask</I>
+
+<DD>
+Set mount umask to <I>umask</I> if run as a system user.
+<DT><B>-n  </B><I>file</I>
+
+<DD>
+Use file <I>file</I> as lock file.
+<DT><B>-o  </B><I>option</I>
+
+<DD>
+Add the option  <I>option</I> to the mount call.
+<DT><B>-r</B>
+
+<DD>
+Umount.
+<DT><B>-s</B>
+
+<DD>
+Sync the information about the handled devices with the informations 
+known by HAL.
+<DT><B>-u  </B><I>udi</I>
+
+<DD>
+Use udi <I>udi</I>.
+<DT><B>-w</B>
+
+<DD>
+Add to the handled devices.
+<P>
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<A HREF="halevt.1.html">halevt</A>(1), <A HREF="gnome-mount.1.html">gnome-mount</A>(1), <A HREF="pmount.1.html">pmount</A>(1)
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSION</H2>
+
+This is <I>halevt-mount</I> version 0.1.3.
+<A NAME="lbAH">&nbsp;</A>
+<H2>AUTHOR</H2>
+
+Main author is Patrice Dumas pertusus at free dot fr.
+<A NAME="lbAI">&nbsp;</A>
+<H2>AVAILABILITY</H2>
+
+The latest version of this program can be found at:
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="http://www.environnement.ens.fr/perso/dumas/halevt.html">http://www.environnement.ens.fr/perso/dumas/halevt.html</A>
+<A NAME="lbAJ">&nbsp;</A>
+<H2>COPYRIGHT</H2>
+
+Copyright &#169; 2007-2008  Patrice Dumas &lt;pertusus at free dot fr&gt;,
+<P>
+There is NO warranty.  You may redistribute this software
+under the terms of the GNU General Public License; either version 2 
+of the License, or (at your option) any later version.
+For more information about these matters, see the file named COPYING.
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+<DT><A HREF="#lbAG">VERSION</A><DD>
+<DT><A HREF="#lbAH">AUTHOR</A><DD>
+<DT><A HREF="#lbAI">AVAILABILITY</A><DD>
+<DT><A HREF="#lbAJ">COPYRIGHT</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 17:02:52 GMT, January 31, 2009
+</BODY>
+</HTML>

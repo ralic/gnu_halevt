@@ -1,0 +1,100 @@
+#!/bin/sh
+#
+# halevt         This script starts halevt deamon
+#
+# chkconfig: - 26 59
+# description: This script starts and stops the halevt deamon
+# processname: halevt
+# pid /var/run/halevt/halevt.pid
+# config: /etc/halevt/halevt.xml
+#
+### BEGIN INIT INFO
+# Provides: halevt
+# Required-Start: haldaemon
+# Required-Stop: haldaemon
+# Default-Stop: 0 1 6
+# Short-Description: halevt daemon to handle HAL events
+# Description: Halevt is a generic handler for HAL events. \
+#              It can be used to automount, run arbitrary commands when \
+#              events or conditions occur or properties are modified on your hardware \
+#              (e.g., run a command when you close your laptop's lid, run a command when \
+#              a particular device is attached or a particular CD is inserted, etc).
+### END INIT INFO
+
+. /etc/init.d/functions
+
+processname=halevt
+servicename=halevt
+
+# Sanity checks.
+[ -x /usr/bin/halevt ] || exit 0
+
+RETVAL=0
+
+halevt_start() {
+	echo -n "Starting halevt daemon: "
+	daemon --check $servicename $processname -p '-'
+	RETVAL=$?
+	echo
+	if [ $RETVAL -eq 0 ]; then
+		touch /var/lock/subsys/$servicename
+                # this will also collect the user halevt pid...
+                # having root and halevt daemons is asking for trouble anyway
+		echo `/sbin/pidof $processname` > /var/run/halevt.pid
+	fi
+	return $RETVAL
+}
+
+halevt_stop() {
+        echo -n "Stopping halevt daemon: "
+
+	killproc $servicename -TERM
+	RETVAL=$?
+	echo
+	if [ $RETVAL -eq 0 ]; then
+		rm -f /var/lock/subsys/$servicename
+		rm -f /var/run/halevt.pid
+	fi
+	return $RETVAL
+}
+
+function halevt_status() {
+	status $processname
+	RETVAL=$?
+	return $RETVAL
+}
+
+case "$1" in
+    start)
+	rm -f /var/lib/halevt/dev_tab
+	halevt_start
+	RETVAL=$?
+	;;
+    stop)
+	halevt_stop
+	RETVAL=$?
+	;;
+    restart|reload)
+	halevt_stop
+	sleep 1
+	halevt_start
+	RETVAL=$?
+	;;
+    condrestart)
+	if [ -f /var/lock/subsys/$servicename ]; then
+	    halevt_stop
+	    sleep 1
+	    halevt_start
+	    RETVAL=$?
+	fi
+	;;
+    status)
+	halevt_status
+	;;
+    *)
+	echo "Usage: $0 {start|stop|restart|reload|status|condrestart}"
+	exit 1
+	;;
+esac
+
+exit $RETVAL

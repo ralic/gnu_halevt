@@ -1,0 +1,291 @@
+\input texinfo @c -*-texinfo-*-
+
+@setfilename halevt.info
+@settitle Halevt configuation
+
+@dircategory Miscellaneous
+@direntry
+* Halevt: (halevt).            Halevt configuration.
+@end direntry
+
+@copying
+@noindent Copyright (C) 2008 Patrice Dumas@*
+
+Permission is granted to make and distribute verbatim
+copies of this manual provided the copyright notice and
+this permission notice are preserved on all copies.
+
+Permission is granted to copy and distribute modified
+versions of this manual under the conditions for verbatim
+copying, provided that the entire resulting derived work is
+distributed under the terms of a permission notice
+identical to this one.
+@end copying
+
+
+@node Top
+@top Halevt configuration
+
+The commands @command{halevt} and @command{halevt-mount} options and
+synopsis are given in the 
+@ifhtml
+@uref{halevt.1.html, halevt} and @uref{halevt-mount.1.html, halevt-mount}
+@end ifhtml
+@ifnothtml
+halevt(1) and halevt-mount(1) man
+@end ifnothtml
+pages.
+
+
+@menu
+* Configuration file locations::
+* Halevt configuration syntax::
+@end menu
+
+@heading License of this document
+@insertcopying
+
+@node Configuration file locations
+@chapter Configuration file locations
+
+The configuration file used can be set on the command line using 
+@option{-c @var{file}}. Otherwise @command{halevt} will use all the
+files ending in @samp{.xml} located in the following directories,
+in that order:
+@enumerate
+@item @file{$HOME/.halevt}
+@item @file{@@sysconfdir@@/halevt}
+@item @file{@@datadir@@/halevt}
+@end enumerate
+with @file{@@sysconfdir@@} and @file{@@datadir@@} being set during 
+the configuration and build of the software.
+If a file with a given name has already been found, it is ignored 
+in the other directores.
+
+When in reporting mode, turned on by the @option{-i} option, no configuration
+file is used, @command{halevt} reports all the HAL events.
+
+@node Halevt configuration syntax
+@chapter Halevt configuration syntax
+
+@menu
+* Basic syntax of halevt xml files::
+* Selecting devices and actions for hal events::
+@end menu
+
+@node Basic syntax of halevt xml files
+@section Basic syntax of halevt xml files
+
+Halevt configuration is in XML (described in-depth 
+at @uref{http://www.w3.org/XML/}). A configuration file should begin with:
+@example
+<?xml version="1.0" encoding="UTF-8"?>
+<halevt:Configuration version="0.1" xmlns:halevt="http://www.environnement.ens.fr/perso/dumas/halevt.html">
+@end example
+
+and end with
+@example
+</halevt:Configuration>
+@end example
+
+
+Comments are within @samp{<!--} and @samp{-->}. 
+
+Basically, there are nested @dfn{elements} marked by @samp{<...>}, 
+either with a start tag and an end tag with a slash marking 
+the end tag @samp{</...>}, like the @samp{halevt:Device} element:
+@example
+<halevt:Device ...>
+ ....
+</halevt:Device>
+@end example
+or standalone, like the @samp{halevt:Insertion} element, ending with a
+@samp{/>}:
+@example
+  <halevt:Insertion ..../>
+@end example
+
+In the element there may be @dfn{attributes}, with a name followed
+by an equal sign followed by a quoted string for the corresponding value. 
+Here is an example of a @samp{match} attribute for the 
+@samp{halevt:Device} element:
+@example
+<halevt:Device match="hal.block.device &amp; hal.block.is_volume">
+ .....
+</halevt:Device>
+@end example
+
+Since they have special meanings, a literal @samp{"} should be escaped 
+as @samp{&quot;}, @samp{&}
+should be escaped as @samp{&amp;}, @samp{<} as @samp{&lt;} and @samp{>}
+as @samp{&gt;}.
+
+For example the @code{exec} attribute here:
+@example
+<halevt:Device match="hal.block.device &amp; hal.block.is_volume">
+  <halevt:Insertion exec="echo &quot;$hal.udi$&quot; &gt; file"/>
+</halevt:Device>
+@end example
+is
+@example
+echo "$hal.udi$" > file
+@end example
+
+@node Selecting devices and actions for hal events
+@section Selecting devices and actions for hal events
+
+The configuration of @command{halevt} allows to select device such
+that a command is run upon an hal event. The device selection is 
+handled by the @samp{halevt:Device} element, it encloses 
+an action element, among
+@table @code
+@item halevt:OnInit
+for an action to perform if the device is already there when halevt is 
+started;
+@item halevt:Insertion
+for an action ot be performed on device insertion;
+@item halevt:Removal
+for an action ot be performed on device removal;
+@item halevt:Condition
+for an action to be performed when a condition is emitted by the
+device;
+@item halevt:Property
+for an action to be performed when a property changes. In that case
+the @code{halevt:Action} element is nested within the @code{halevt:Property}
+element to select an action based on the property value.
+@end table
+
+@menu
+* Device selection syntax::
+* Specifying a command to be executed::
+* Actions::
+@end menu
+
+@node Device selection syntax
+@subsection Device selection syntax
+
+A @code{halevt:Device} has a @code{match} attribute, to select the 
+device. The device match is done by selecting hal properties that should
+exist or properties matching a value. These items can be combined
+in boolean expressions, 
+with @samp{&} for and, @samp{|} for or and @samp{!} for the negation and 
+parenthesis for grouping.
+
+A hal property that should exist is selected by prepending @samp{hal.} to the
+property, like @samp{hal.block.device}. A property value match is 
+specified by the property name with @samp{hal.} prepended followed by 
+an equal sign 
+followed by the value. For example, the following is true if the 
+device property @samp{block.is_volume} has @samp{true} as a value:
+@example
+hal.block.is_volume = true
+@end example
+
+So, for example, the following selects devices with existing 
+@samp{block.device} property, and a property @samp{block.is_volume}
+matching the value @samp{true}:
+@example
+<halevt:Device match="hal.block.device &amp; hal.block.is_volume = true>
+ ...
+</halevt:Device>
+@end example
+
+When a property is an UDI which specifies a device, it is possible to 
+check a property of the device specified by this UDI, by inserting
+@samp{hal.} between the UDI device property and the property to check. 
+For example
+the following checks that the device specified by the 
+@samp{block.storage_device} property has the @samp{storage.hotpluggable}
+property set to @samp{true}:
+@example
+hal.block.storage_device.hal.storage.hotpluggable = true
+@end example
+If
+the property to check is also an UDI, the UDI can be considered to be
+another device and so on and so forth. 
+
+@node Specifying a command to be executed
+@subsection Specifying a command to be executed
+
+Every action leads to a command being executed when an HAL event
+happens for a selected device. The command to run is specified in 
+an attribute, the @code{exec} attribute. It will be in an element 
+corresponding with the HAL event. The @code{exec} attribute simply
+holds the command to be run, and it is possible to substitute a 
+hal property value, by enclosing in @samp{$..$} the property name
+with hal prepended. Also @code{$hal.udi$} is replaced by the device
+UDI. For example in:
+@example
+exec="halevt-mount -u $hal.udi$ -d $hal.block.device$ -o sync -m 002"
+@end example
+@code{$hal.udi$} is replaced by the device UDI and @code{$hal.block.device$}
+is replaced by the @samp{block.device} property value for the device.
+
+@node Actions
+@subsection Actions
+
+An action is performed for a selected device, therefore action element
+should appear within @code{halevt:Device} elements. 
+The following action possibility exist, each associated with a HAL 
+event:
+
+@table @code
+@item halevt:OnInit
+This element is associated with an @code{exec} attribute, allowing to
+specify an action to perform if the device is already known by HAL 
+when halevt is started. For example, the following leads to mounting
+all the block devices known by HAL by UDI.
+@example
+<halevt:Device match="hal.block.device">
+  <halevt:OnInit exec="halevt-mount -u $hal.udi$"/>
+</halevt:Device>
+@end example
+@item halevt:Insertion
+This element corresponds with an action to be performed on device insertion,
+specified by the @code{exec} attribute. This does exactly the same than
+above, but on device insertion:
+@example
+<halevt:Device match="hal.block.device">
+  <halevt:Insertion exec="halevt-mount -u $hal.udi$"/>
+</halevt:Device>
+@end example
+@item halevt:Removal
+This element corresponds with an action to be performed on 
+device removal, specified by a @code{exec} attribute. For example:
+@example
+<halevt:Device match="hal.block.device">
+  <halevt:Removal exec="halevt-umount -d $hal.block.device$"/>
+</halevt:Device>
+@end example
+
+@item halevt:Condition
+This element corresponds with an action to be performed when a condition
+is emitted. The @code{name} attribute allows to specify the condition, 
+while the @code{exec} attribute specifies the action. For example:
+@example
+<halevt:Device match="hal.info.udi = /org/freedesktop/Hal/devices/acpi_PWRF">
+    <halevt:Condition name="ButtonPressed" exec="sudo /sbin/shutdown"/>
+</halevt:Device>
+@end example
+@item halevt:Property
+for an action to be performed when a property changes. The property name
+is specified in the @code{name} attribute of the @code{halevt:Property}
+element. An @code{halevt:Action} element is nested within the 
+@code{halevt:Property} element to select an action based on the 
+property value. In the @code{halevt:Action} element, the @code{value}
+attribute allows to specify which value for the property should lead to 
+the action to be taken, and the @code{exec} attribute specifies the command to
+be run. For example:
+@example
+<halevt:Device match="hal.block.device &amp; hal.block.is_volume = true">
+   <halevt:Property name="hal.volume.is_mounted">
+      <halevt:Action value="true" exec="halevt-mount -s"/>
+   </halevt:Property>
+</halevt:Device>
+@end example
+In that example, the property that changes is @samp{volume.is_mounted}, 
+and the action is executed when the value of @samp{volume.is_mounted} 
+becomes @samp{true}.
+@end table
+
+@bye

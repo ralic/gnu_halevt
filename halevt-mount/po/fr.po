@@ -1,0 +1,340 @@
+# French translations for halevt package
+# Traductions françaises du paquet halevt.
+# This file is put in the public domain.
+# Patrice Dumas <pertusus@free.fr>, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: halevt 0.0.6\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-07-10 00:00+0200\n"
+"PO-Revision-Date: 2007-02-24 11:11+0100\n"
+"Last-Translator: Patrice Dumas <pertusus@free.fr>\n"
+"Language-Team: French <traduc@traduc.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: halevt-mount/halevt-mount.c:70 halevt-mount/halevt-mount.c:665
+#: halevt-mount/halevt-mount.c:1082
+#, c-format
+msgid "Error opening %s: %s\n"
+msgstr "Erreur à l'ouverture de %s : %s\n"
+
+#: halevt-mount/halevt-mount.c:79
+#, c-format
+msgid "Empty line\n"
+msgstr "Ligne vide\n"
+
+#: halevt-mount/halevt-mount.c:127
+#, c-format
+msgid "Empty udi: line %d\n"
+msgstr "udi manquant, ligne %d\n"
+
+#: halevt-mount/halevt-mount.c:133
+#, c-format
+msgid "Empty device: line %d\n"
+msgstr "Périphérique manquant, ligne %d\n"
+
+#: halevt-mount/halevt-mount.c:139
+#, c-format
+msgid "Empty mountpoint: line %d\n"
+msgstr "Point de montage vide, ligne %d\n"
+
+#: halevt-mount/halevt-mount.c:155
+#, c-format
+msgid "DBus Error %s: %s\n"
+msgstr "Erreur de D-BUS %s : %s\n"
+
+#: halevt-mount/halevt-mount.c:232 halevt-mount/halevt-mount.c:286
+#, c-format
+msgid "udi %s don't seem to be a volume\n"
+msgstr "L'udi %s ne semble pas être un volume\n"
+
+#: halevt-mount/halevt-mount.c:242
+#, c-format
+msgid "udi %s isn't a volume\n"
+msgstr "L'udi %s n'est pas un volume\n"
+
+#: halevt-mount/halevt-mount.c:253
+#, c-format
+msgid "udi %s don't seem to be a block device\n"
+msgstr "L'udi %s ne semble pas être un périphérique de type bloc\n"
+
+#: halevt-mount/halevt-mount.c:263 halevt-mount/halevt-mount.c:297
+#: halevt-mount/halevt-mount.c:350
+#, c-format
+msgid "Certainly out of memory, aborting\n"
+msgstr "Le mémoire est certainment épuisée, abandon\n"
+
+#: halevt-mount/halevt-mount.c:270 halevt-mount/halevt-mount.c:357
+#: halevt-mount/halevt-mount.c:366 halevt-mount/halevt-mount.c:494
+#: halevt-mount/halevt-mount.c:523 halevt-mount/halevt-mount.c:553
+#: halevt-mount/halevt-mount.c:572 halevt-mount/halevt-mount.c:721
+#: halevt-mount/halevt-mount.c:726 halevt-mount/halevt-mount.c:778
+#: halevt-mount/halevt-mount.c:800 halevt-mount/halevt-mount.c:807
+#: halevt-mount/halevt-mount.c:814 halevt-mount/halevt-mount.c:821
+#: halevt-mount/halevt-mount.c:828 halevt-mount/halevt-mount.c:835
+#: halevt-mount/halevt-mount.c:848 halevt-mount/halevt-mount.c:924
+#: halevt-mount/halevt-mount.c:936 halevt-mount/halevt-mount.c:947
+#: halevt-mount/halevt-mount.c:956 halevt-mount/halevt-mount.c:1101
+#: halevt-mount/halevt-mount.c:1113
+#, c-format
+msgid "Out of memory\n"
+msgstr "La mémoire est épuisée\n"
+
+#: halevt-mount/halevt-mount.c:276
+#, c-format
+msgid "for udi %s, device in file %s isn't the device in hal: %s\n"
+msgstr ""
+"Pour l'udi %s, le périphérique du fichier %s ne correspond pas à celui donné "
+"par HAL : %s\n"
+
+#: halevt-mount/halevt-mount.c:304
+#, c-format
+msgid "udi %s does not seem to contain a filesystem\n"
+msgstr "L'udi %s ne semble pas contenir de système de fichier\n"
+
+#: halevt-mount/halevt-mount.c:326
+#, c-format
+msgid "udi %s don't have information about volume mounting\n"
+msgstr "L'udi %s ne semble pas avoir d'information sur son montage\n"
+
+#: halevt-mount/halevt-mount.c:340
+#, c-format
+msgid "udi %s don't have the mountpoint property defined\n"
+msgstr "L'udi %s n'a pas de définition pour le point de montage\n"
+
+#: halevt-mount/halevt-mount.c:363
+#, c-format
+msgid "for udi %s, mountpoint in file %s isn't the mountpoint in hal: %s\n"
+msgstr ""
+"Pour l'udi %s, le point de montage du fichier %s ne correspond pas à celui "
+"donné par HAL : %s\n"
+
+#: halevt-mount/halevt-mount.c:442
+msgid " (ignore true)"
+msgstr ""
+
+#: halevt-mount/halevt-mount.c:446
+msgid " (ignore false)"
+msgstr ""
+
+#: halevt-mount/halevt-mount.c:511
+#, c-format
+msgid "device found %s and device specified %s don't match\n"
+msgstr "Le périphérique trouvé %s et celui donné %s ne correspondent pas\n"
+
+#: halevt-mount/halevt-mount.c:515
+#, c-format
+msgid "mountpoint found %s and mountpoint specified %s don't match\n"
+msgstr "Le point de montage trouvé %s et celui donné %s ne correspondent pas\n"
+
+#: halevt-mount/halevt-mount.c:561
+#, c-format
+msgid "Unmount error for %s:\n"
+msgstr ""
+
+#: halevt-mount/halevt-mount.c:600 halevt-mount/halevt-mount.c:1047
+#, c-format
+msgid "HAL didn't return any device\n"
+msgstr "HAL n'a pas trouvé un seul périphérique\n"
+
+#: halevt-mount/halevt-mount.c:618
+#, c-format
+msgid "Device %s is associated with udi %s, but udi %s was specified\n"
+msgstr ""
+"Le périphérique %s est associé à l'udi %s, pourtant l'udi %s a été donné\n"
+
+#: halevt-mount/halevt-mount.c:631
+#, c-format
+msgid "The specified device %s wasn't found\n"
+msgstr "Le périphérique %s n'a pas été trouvé\n"
+
+#: halevt-mount/halevt-mount.c:638
+#, c-format
+msgid "The specified udi %s doesn't seem to exist\n"
+msgstr "L'udi %s n'a pas été trouvé\n"
+
+#: halevt-mount/halevt-mount.c:657 halevt-mount/halevt-mount.c:983
+#: halevt-mount/halevt-mount.c:993
+#, c-format
+msgid "Cannot unlink %s: %s\n"
+msgstr "Impossible d'enlever le fichier %s : %s\n"
+
+#: halevt-mount/halevt-mount.c:671
+#, c-format
+msgid "Renaming %s to %s failed: %s\n"
+msgstr "Le renommage de %s en %s a échoué : %s\n"
+
+#: halevt-mount/halevt-mount.c:679
+#, c-format
+msgid ""
+" Usage: halevt-mount [option]\n"
+"        halevt-umount [option]\n"
+" Mount or umount device through hal and keep a track of devices handled.\n"
+" When called as halevt-umount the default is to unmount, when called as\n"
+" halevt-mount the default is to mount.\n"
+" Option -c, -l, -r, -s or -w change the operation performed.\n"
+"   -a               When listing, list all the existing devices.\n"
+"                    For the other operations, perform the operation on\n"
+"                    all the handled devices\n"
+"   -c               remove the handled device\n"
+"   -d x             use device <x>\n"
+"   -f x             use file <x> to store information about the handled\n"
+"                    devices instead of the default\n"
+"   -i x             use lock file and device information file in the \n"
+"                    directory <x> (if they are not already specified)\n"
+"   -l               list handled devices. Formatted with, on each line:\n"
+"                                 udi:device:mount point\n"
+"   -p x             use mountpoint <x>\n"
+"   -m x             set mount umask to <x> if run as a system user\n"
+"   -n x             use file <x> as lock file\n"
+"   -o x             add the option <x> to the mount call\n"
+"   -r               unmount\n"
+"   -s               sync the information about the handled devices\n"
+"                    with the informations known by HAL\n"
+"   -u x             use udi <x>\n"
+"   -w               add to the handled devices\n"
+"\n"
+" Additional argument is considered to be a mount point, a device or an udi\n"
+" when unmounting or removing.\n"
+"\n"
+" If the commands are not called with -s after changes in the state of the\n"
+" devices (after mounting, unmounting, removing devices) , the information\n"
+" available for halevt-mount and halevt-umount may become out of sync with\n"
+" the state of the system. \n"
+" "
+msgstr ""
+" Usage : halevt-mount [option]\n"
+"        halevt-umount [option]\n"
+" Monte ou démonte des périphériques en utilisant HAL, et garde une trace "
+"des\n"
+" périphériques pris en charge.\n"
+" Quand le nom de la command utilisé est halevt-umount, par défaut un \n"
+" démontage est effectué, quand le nom de commande est halevt-mount par \n"
+" défaut un montage est effectué mount. Les options -c, -l, -r, -s ou -w \n"
+" changent l'action effectuée.\n"
+"   -a               quand l'action effectuée est un listage, la liste de \n"
+"                    tous les périphériques existants est faite.\n"
+"                    Pour les autres actions, l'action va être effectuée \n"
+"                    sur l'ensemble des périphériques pris en charge.\n"
+"   -c               enlèver des périphériques pris en charge\n"
+"   -d x             utiliser le périphérique <x>\n"
+"   -f x             utiliser le fichier <x> pour garder les informations "
+"sur\n"
+"                    les périphériques pris en charge à la place du défaut\n"
+"   -i x             utiliser le fichier de verrouillage et le fichier \n"
+"                    d'information sur les périphériques dans le répertoire \n"
+"                    <x> (si ils ne sont pas spécifiés par ailleurs)\n"
+"   -l               listage des périphériques pris en charge.\n"
+"                    Le formatage est, sur chaque ligne :\n"
+"                                 udi:périphérique:point de montage\n"
+"   -p x             utiliser le point de montage <x>\n"
+"   -m x             mettre l'umask à <x> si on est utilisateur système\n"
+"   -n x             utiliser le fichier <x> comme fichier de verrouillage\n"
+"   -o x             ajouter l'option <x> au montage\n"
+"   -r               démonter\n"
+"   -s               synchroniser les informations sur les périphériques \n"
+"                    pris en charge avec les informations données par HAL\n"
+"   -u x             utiliser l'udi <x>\n"
+"   -w               ajouter aux périphériques pris en charge\n"
+"\n"
+" Additional argument is considered to be a mount point, a device or an udi\n"
+" when unmounting or removing.\n"
+"\n"
+" If the commands are not called with -s after changes in the state of the\n"
+" devices (after mounting, unmounting, removing devices) , the information\n"
+" available for halevt-mount and halevt-umount may become out of sync with\n"
+" the state of the system. \n"
+" "
+
+#: halevt-mount/halevt-mount.c:784
+#, c-format
+msgid "Error for getpwuid: %s\n"
+msgstr "getpwuid a échoué : %s\n"
+
+#: halevt-mount/halevt-mount.c:919
+#, c-format
+msgid "Cannot getenv HOME\n"
+msgstr "Impossible de récupérer la variable HOME\n"
+
+#: halevt-mount/halevt-mount.c:966
+#, c-format
+msgid "Cannot create directory %s: %s\n"
+msgstr "Impossible de créer le répertoire %s : %s\n"
+
+#: halevt-mount/halevt-mount.c:972
+#, c-format
+msgid "Error opening lock file %s: %s\n"
+msgstr "Erreur d'ouverture du fichier de verrouillage %s: %s\n"
+
+#: halevt-mount/halevt-mount.c:976
+#, c-format
+msgid "Error locking lock file %s: %s\n"
+msgstr "Le verrouillage du fichier verrou %s a échouée : %s\n"
+
+#: halevt-mount/halevt-mount.c:1003
+#, c-format
+msgid "Error parsing %s\n"
+msgstr "L'analyse du fichier %s a échouée\n"
+
+#: halevt-mount/halevt-mount.c:1012
+#, c-format
+msgid "Failed to create HAL context\n"
+msgstr "La création d'un contexte pour HAL a échouée\n"
+
+#: halevt-mount/halevt-mount.c:1019
+#, c-format
+msgid "Error connecting to D-BUS system bus: %s"
+msgstr "Erreur de connection au bus système de B-BUS : %s"
+
+#: halevt-mount/halevt-mount.c:1027
+#, c-format
+msgid "Error initializing HAL"
+msgstr "Erreur d'initialisation de HAL"
+
+#: halevt-mount/halevt-mount.c:1039
+#, c-format
+msgid "Devices handled:\n"
+msgstr "Périphériques pris en charge\n"
+
+#: halevt-mount/halevt-mount.c:1063
+#, c-format
+msgid ""
+"\n"
+"All devices:\n"
+msgstr ""
+"\n"
+"Tous les périphériques :\n"
+
+#: halevt-mount/halevt-mount.c:1070
+#, c-format
+msgid "An udi or a device is needed\n"
+msgstr "Il faut spécifier un udi ou un périphérique\n"
+
+#: halevt-mount/halevt-mount.c:1092
+#, c-format
+msgid "Renaming %s to %s after add failed: %s\n"
+msgstr "Le renommage de %s en %s après une addition a échoué : %s\n"
+
+#: halevt-mount/halevt-mount.c:1136
+#, c-format
+msgid "Mount error for %s:\n"
+msgstr "Erreur de montage pour %s :\n"
+
+#: halevt-mount/halevt-mount.c:1143
+#, c-format
+msgid "Renaming %s to %s after a mount failed: %s\n"
+msgstr "Le renommage du fichier %s en %s (après un montage) a échoué : %s\n"
+
+#: halevt-mount/halevt-mount.c:1151
+#, c-format
+msgid "An argument or -a is needed\n"
+msgstr "Un argument ou -a doit être spécifié\n"
+
+#: halevt-mount/halevt-mount.c:1228
+#, c-format
+msgid "Error on close %s: %s\n"
+msgstr "Erreur à la fermeture de %s : %s\n"

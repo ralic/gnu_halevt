@@ -1,0 +1,473 @@
+#! /bin/sh
+
+#    hvmount record mounted devices and their mountpoints, and call
+#          mount commands to do the actual mount
+#    Copyright (C) 2007  Patrice Dumas
+#
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program; if not, write to the Free Software
+#    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+user_name=`id -un`
+system_user=@HALEVT_USER_NAME@
+PACKAGE_NAME=@PACKAGE_NAME@
+mount_sync=no
+filename=uditab
+lockfile=$PACKAGE_NAME.lock
+userdir=${PACKAGE_NAME}-mount
+localstatedir="@localstatedir@"
+
+
+function usage(){
+if [ x"$cmdname" = xhvumount ]; then
+   echo "Usage: $0 [options] -a | <mountpoint> | <device> | <udi>
+  Umount the mountpoint, device, or udi given on the command line, or
+  all mounted devices. Alternatively (and additionaly), device, udi 
+  and mountpoint may be given using options -p, -d or -u.
+
+  Options:
+    -a                                  umount all
+    -c <umount_command>                 set umount command (autodetected)
+    -d <device>                         set device
+    -p <mountpoint>                     set mountpoint
+    -u <udi>                            set udi"
+  
+return
+fi
+
+echo "Usage: $0 <command> <args> [options]
+  Options:
+    -a                                  umount all
+    -c <mount_command>                  set mount command (autodetected)
+    -d <device>                         set device
+    -p <mountpoint>                     set mountpoint
+    -l <label>                          set label (for pmount)
+    -m <umask>                          mount umask (for pmount)
+    -s                                  if set, mount sync
+    -u <udi>                            set udi
+  Commands:
+    mount                               mount <device> which has <udi>
+    mountpoint                          register <mountpoint> for <udi>
+    umount                              unmount device, mountpoint or udi
+    list                                list mounted and registered 
+                                        devices
+    umountpoint                         unregister mountpoint for <udi>
+    remove                              remove completly <udi>
+    clean                               remove database" 1>&2
+    
+}
+
+cmdname=`basename $0`
+
+if [ x"$cmdname" = 'xhvumount' ]; then
+    command='umount'
+else
+    command=$1
+    shift
+fi
+
+
+dir=
+umount_all='no'
+
+while [ $# != 0 ]; do
+        case "$1" in 
+          -a) umount_all=yes ;;
+          -s) mount_sync=yes ;;
+          -c) mount_cmd=$2 ; shift;;
+          -u) udi=$2 ; shift ;;
+          -d) device=$2 ; shift ;;
+          -D) dir=$2 ; shift ;;
+          -p) mountpoint=$2 ; shift ;;
+          -m) mount_umask=$2 ; shift ;;
+          -h) usage ; exit 0 ; shift ;;
+          *) break ;;
+        esac
+        shift
+done
+
+[ -z "$command" ] && usage && exit 1
+
+system=no
+if [ "$user_name" = $system_user -o `id -u` = 0 ]; then
+   system=yes
+fi
+
+if [ x"$dir" = x ]; then
+   if [ $system = 'yes' ]; then
+      dir="${localstatedir}/lib/$PACKAGE_NAME"
+   else
+      if [ -z "$HOME" ]; then
+         echo "No HOME variable" 1>&2
+         exit 1
+      fi
+      if [ ! -d "$HOME/.$userdir" ]; then
+          mkdir "$HOME/.$userdir" || { echo "mkdir $HOME/.$userdir failed" ; exit 1 ; }
+      fi
+      dir="$HOME/.$userdir"
+   fi
+fi
+
+if [ ! -d "$dir" ]; then
+   echo "No directory $dir" 1>&2
+   exit 1
+fi
+
+dev_file="${dir}/${filename}"
+lockfile="${dir}/${lockfile}"
+
+if [ x"$mountpoint" != x ]; then
+   mountpoint=`echo "$mountpoint" | sed 's:/*$::'`
+fi
+
+(
+   flock 200
+
+if [ $command = 'mount' ]; then
+   if [ x"$udi" = x -o x"$device" = x ]; then
+       echo "mount requires udi and device" 1>&2
+       exit 1
+   fi
+
+# first update the devices file
+   if [ -f "$dev_file" ]; then
+       cp -p $dev_file $dev_file.tmp || { echo "Cannot cp $dev_file" ; exit 1 ;}
+   else
+       echo -n "" > $dev_file.tmp
+   fi
+   echo -n "" > $dev_file
+   if [ `id -u` = 0 ]; then
+       chown $system_user $dev_file
+   fi
+   udi_found='no'
+   while read line; do
+       f_udi=`echo $line | cut -d: -f1`
+       f_device=`echo $line | cut -d: -f2`
+       f_mountpoint=`echo $line | cut -d: -f3`
+       if [ x"$f_udi" = x ]; then
+           echo "Warning: bad file $dev_file, no udi on a line" 1>&2
+           continue
+       fi
+       if [ "$f_udi" = "$udi" ]; then
+           udi_found='yes'
+           if [ x"$f_device" != x -a x"$f_device" != x"$device" ]; then
+              echo "$command: $udi device $f_device in file, and $device is requested" 1>&2
+           fi
+           new_line="${udi}:${device}"
+
+           if [ x"$f_mountpoint" != x -a x"$mountpoint" != x -a x"$f_mountpoint" != x"$mountpoint" ]; then
+              echo "$command: $udi mountpoint $f_mountpoint in file, and $mountpoint is requested" 1>&2
+           elif [ x"$f_mountpoint" != x ]; then
+               new_line="${new_line}:${f_mountpoint}"
+           fi
+ 
+           echo "$new_line" >> $dev_file
+       else
+           echo "$line" >> $dev_file
+       fi
+   done < $dev_file.tmp
+   if [ $udi_found = 'no' ]; then
+       echo "${udi}:${device}" >> $dev_file
+   fi
+   rm $dev_file.tmp
+
+# now perform the mount
+   if [ x"$mount_cmd" = x ]; then
+       if pmount-hal > /dev/null 2>&1; then
+           mount_cmd=pmount-hal
+       elif [ $system = 'no' ]; then
+           if gnome-mount --help > /dev/null 2>&1; then
+               mount_cmd=gnome-mount
+           fi
+       fi
+       
+       if [ z"$mount_cmd" = z ]; then
+           if pmount --help > /dev/null 2>&1; then
+               mount_cmd=pmount
+           else
+               mount_cmd=mount
+           fi
+       fi
+   fi
+   if [ "$mount_cmd" = 'gnome-mount' ]; then
+       mount_switch=-h
+       mount_arg=$udi
+       if [ $mount_sync = 'yes' ]; then
+           exec $mount_cmd -o sync $mount_switch "$mount_arg"
+       else
+           exec $mount_cmd $mount_switch "$mount_arg"
+       fi
+   elif  [ "$mount_cmd" = 'pmount' -o "$mount_cmd" = 'pmount-hal' ]; then
+       sync_switch='-s'
+       if [ "$mount_cmd" = 'pmount' ]; then
+            mount_arg=$device
+       else
+            mount_arg=$udi
+       fi
+       sync_arg=
+       if [ $mount_sync = yes ]; then
+           sync_arg=$sync_switch
+       fi
+       if [ z"$mount_umask" != z -a $system = 'yes' ]; then
+           umask_arg="-u $mount_umask"
+       fi
+       if [ z"$label" != z -a "$mount_cmd" = 'pmount' ]; then
+            exec $mount_cmd $sync_arg $umask_arg "$mount_arg" "$label"
+       elif [ "$mount_cmd" = 'pmount' ]; then
+            exec $mount_cmd $sync_arg $umask_arg "$mount_arg"
+       else # pmount-hal
+            exec $mount_cmd "$mount_arg" $sync_arg $umask_arg
+       fi
+   else
+       sync_switch='-o sync'
+       sync_arg=
+       if [ $mount_sync = yes ]; then
+           sync_arg=$sync_switch
+       fi
+       mount_arg=$device
+       if [ z"$mountpoint" != z ]; then
+           exec $mount_cmd $sync_arg "$mount_arg" "$mountpoint"
+       else
+           exec $mount_cmd $sync_arg "$mount_arg" 
+       fi
+   fi
+
+
+elif [ $command = 'mountpoint' ]; then
+   if [ x"$udi" = x -o x"$mountpoint" = x ]; then
+       echo "mountpoint requires udi and mountpoint" 1>&2
+       exit 1
+   fi
+
+   if [ -f "$dev_file" ]; then
+       cp -p $dev_file $dev_file.tmp || { echo "Cannot cp $dev_file" ; exit 1 ;}
+   else
+       exit 0
+   fi
+   echo -n "" > $dev_file
+   udi_found='no'
+   while read line; do
+       f_udi=`echo $line | cut -d: -f1`
+       f_device=`echo $line | cut -d: -f2`
+       f_mountpoint=`echo $line | cut -d: -f3`
+       if [ x"$f_udi" = x ]; then
+           echo "Warning: bad file $dev_file, no udi on a line" 1>&2
+           continue
+       fi
+       if [ "$f_udi" = "$udi" ]; then
+           udi_found='yes'
+           if [ x"$f_device" != x -a x"$device" != x -a x"$f_device" != x"$device" ]; then
+              echo "$command: $udi device $f_device in file, and $device is requested" 1>&2
+              f_device=$device
+           fi
+
+           if [ x"$f_mountpoint" != x -a x"$f_mountpoint" != x"$mountpoint" ]; then
+              echo "$command: $udi mountpoint $f_mountpoint in file, and $mountpoint is requested" 1>&2
+           fi
+           
+           echo "${udi}:${f_device}:$mountpoint" >> $dev_file
+       else
+           echo "$line" >> $dev_file
+       fi
+   done < $dev_file.tmp
+# We don't mess with devices we didn't register
+#   if [ $udi_found = 'no' ]; then
+#       echo "Warning: $udi not found in file, adding it with mountpoint" 1>&2
+#       echo "${udi}:${device}:$mountpoint" >> $dev_file
+#   fi
+   rm "$dev_file.tmp"
+
+
+elif [ $command = 'umount' ]; then
+   if [ x"$udi" = x -a x"$mountpoint" = x -a x"$device" = x -a $umount_all = 'no' ]; then
+       mountarg=$1
+       shift
+       if [ x"$mountarg" = x ]; then
+           echo "umount requires an udi, a mountpoint, a device or -a" 1>&2
+           exit 1
+       fi
+       mountarg=`echo "$mountarg" | sed 's:/*$::'`
+   fi
+   if [ ! -f $dev_file ]; then 
+      exit 0
+   fi
+   # pumount isn't able to unmount partitions after removal of the device,
+   # while it seems to be possible to do so with gome-mount -u
+   umount_cmd=$mount_cmd
+   if [ x"$umount_cmd" = x ]; then
+      if pumount > /dev/null 2>&1; then
+          umount_cmd=pmount
+      elif [ $system = 'no' ]; then
+          if gnome-mount --help > /dev/null 2>&1; then
+              umount_cmd='gnome-mount -u -d'
+          fi
+      fi
+      if [ z"$umount_cmd" = z ]; then
+          umount_cmd=umount
+      fi
+   fi
+
+   udi_found='no'
+   while read line; do
+       f_udi=`echo $line | cut -d: -f1`
+       f_device=`echo $line | cut -d: -f2`
+       f_mountpoint=`echo $line | cut -d: -f3`
+       if [ x"$f_udi" = x ]; then
+           echo "Warning: bad file $dev_file, no udi on a line" 1>&2
+           continue
+       fi
+       if [ $umount_all = yes ]; then
+           if [ x"$f_mountpoint" != x ]; then
+               if [ x"$f_device" = x ]; then
+                   echo "Warning: no device for mountpoint $f_mountpoint!" 1>&2
+               else
+                   eval "$umount_cmd $f_device"
+               fi
+           fi
+           continue
+       fi
+       if [ x"$mountarg" != x -a \( x"$mountarg" = x"$f_device" -o x"$mountarg" = x"$f_mountpoint" -o x"$mountarg" = x"$f_udi" \) ]; then
+           if [ x"$f_device" = x ]; then
+                echo "Warning: no device in file to be unmounted!" 1>&2
+                continue
+           fi
+           eval "$umount_cmd $f_device"
+           
+       elif [ x"$f_udi" = x"$udi" -o \( x"$f_device" != x -a x"$f_device" = x"$device" \) -o \( x"$f_mountpoint" != x -a x"$f_mountpoint" = x"$mountpoint" \) ]; then
+           udi_found='yes'
+           if [ x"$f_device" = x ]; then
+                echo "Warning: no device in file to be unmounted!" 1>&2
+                continue
+           fi
+           if [ x"$device" != x -a x"$device" != x"$f_device" ]; then
+                echo "Warning: umount $f_device in file and $device different" 1>&2
+                f_device=$device
+           fi
+           eval "$umount_cmd $f_device"
+       fi
+   done < "$dev_file"
+# don't mess with devices/udi we didn't register
+#   if [ $udi_found = 'no' ]; then
+#       echo "Warning: Nothing to umount found in file" 1>&2
+#       if [ x"$device" != x ]; then
+#            echo "Unmounting device anyway: exec $umount_cmd $device" 1>&2
+#            exec $umount_cmd $device
+#       fi
+#   fi
+
+
+elif [ $command = 'umountpoint' ]; then
+   if [ x"$udi" = x  ]; then
+       echo "umountpoint requires udi" 1>&2
+       exit 1
+   fi
+
+   if [ -f "$dev_file" ]; then
+       cp -p "$dev_file" "$dev_file.tmp" || { echo "Cannot cp $dev_file" ; exit 1 ;}
+   else
+       exit 0
+   fi
+   echo -n "" > "$dev_file"
+   udi_found='no'
+   while read line; do
+       f_udi=`echo $line | cut -d: -f1`
+       f_device=`echo $line | cut -d: -f2`
+       f_mountpoint=`echo $line | cut -d: -f3`
+       if [ x"$f_udi" = x ]; then
+           echo "Warning: bad file $dev_file, no udi on a line" 1>&2
+           continue
+       fi
+       if [ "$f_udi" = "$udi" ]; then
+           udi_found='yes'
+           if [ x"$f_device" != x -a x"$device" != x -a x"$f_device" != x"$device" ]; then
+              echo "$command: $udi device $f_device in file, and $device is requested" 1>&2
+              f_device=$device
+           fi
+
+           if [ x"$f_mountpoint" != x -a x"$mountpoint" != x -a x"$f_mountpoint" != x"$mountpoint" ]; then
+              echo "$command: $udi mountpoint $f_mountpoint in file, and removal of $mountpoint requested" 1>&2
+           fi
+           if [ x"$f_mountpoint" = x ]; then
+              echo "Warning: mountpoint for $udi already removed" 1>&2
+           fi
+           
+           echo "${udi}:${f_device}" >> "$dev_file"
+       else
+           echo "$line" >> "$dev_file"
+       fi
+   done < "$dev_file.tmp"
+   rm "$dev_file.tmp"
+# We don't mess with devices we didn't register
+#   if [ $udi_found = 'no' ]; then
+#       echo "Warning: $udi not found in file" 1>&2
+#   fi
+
+elif [ $command = 'remove' ]; then
+   if [ x"$udi" = x  ]; then
+       echo "remove requires an udi" 1>&2
+       exit 1
+   fi
+   if [ -f "$dev_file" ]; then
+       cp -p "$dev_file" "$dev_file.tmp" || { echo "Cannot cp $dev_file" ; exit 1 ;}
+   else
+       exit 0
+   fi
+   echo -n "" > "$dev_file"
+   udi_found='no'
+
+   while read line; do
+       f_udi=`echo $line | cut -d: -f1`
+       f_device=`echo $line | cut -d: -f2`
+       f_mountpoint=`echo $line | cut -d: -f3`
+       if [ x"$f_udi" = x ]; then
+           echo "Warning: bad file $dev_file, no udi on a line" 1>&2
+           continue
+       fi
+       if [ "$f_udi" = "$udi" ]; then
+           udi_found='yes'
+           if [ x"$f_device" != x -a x"$device" != x -a x"$f_device" != x"$device" ]; then
+              echo "$command: $udi device $f_device in file, and $device is requested" 1>&2
+              f_device=$device
+           fi
+
+       else
+           echo "$line" >> "$dev_file"
+       fi
+   done < "$dev_file.tmp"
+# We don't mess with devices we didn't register
+#   if [ $udi_found = 'no' ]; then
+#       echo "Warning: $udi not found in file" 1>&2
+#   fi
+   rm "$dev_file.tmp"
+
+elif [ $command = 'list' ]; then
+   if [ -f "$dev_file" ]; then
+       cat "$dev_file"
+   fi
+elif [ $command = 'clean' ]; then
+   if [ -f "$dev_file" ]; then
+       rm "$dev_file"
+   fi
+   if [ -f "$dev_file.tmp" ]; then
+       rm "$dev_file.tmp"
+   fi
+else
+   echo "Unkown command $command"
+   usage
+   exit 1
+fi
+
+) 200>"$lockfile"
+
+# is it really safe?
+rm $lockfile

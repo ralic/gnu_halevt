@@ -1,0 +1,5 @@
+# List of source files which contain translatable strings.
+src/hal_interface.c
+src/manager.c
+src/match.c
+src/parse_config.c

@@ -1,0 +1,63 @@
+.TH HVMOUNT 1
+.AT 3
+.SH NAME
+hvmount \- Mount or umount device through HAL
+.SH SYNOPSIS
+.B hvmount
+COMMAND ARGS [options]
+.LP
+.B hvumount
+[options] <\-c | \-r> <\-a | mountpoint | device | udi>
+.SH DESCRIPTION
+.I hvmount
+Umount the mountpoint, device, or udi given on the command line, or
+all mounted devices. Alternatively (and additionaly), device, udi and
+mountpoint may be given using options \-p, \-d or \-u.
+.SH COMMANDS
+.B mount
+.I device udi
+mount \fidevice\fp which has \fiudi\fP.
+.TP
+.B register \fImountpoint udi\fP
+register \fImountpoint\fP for \fIudi\fP.
+.TP
+.B umount
+unmount device, mountpoint or udi.
+.TP
+.B list
+list mounted and registered devices.
+.TP
+.B umountpoint \fIudi\fP
+unregister mountpoint for \fIudi\fP.
+.TP
+.B remove \fIudi\fP
+remove completly \fIudi\fP.
+.TP
+.B clean
+remove database.
+
+.SH OPTIONS
+.TP
+.B \-d  \fIdevice\fP
+.TP
+.B \-p  \fImountpoint\fP
+.TP
+.B \-u  \fIudi\fP
+.TP
+.B \-a
+When listing, list all the existing devices. For the other operations,
+perform the operation on all the handled devices.
+.TP
+.SS "hvumount Options"
+.B \-l  \fIlabel\fP
+set label (for pmount)
+.TP
+.B \-m  \fIumask\fP
+.RS 4
+.TP
+.B \--s
+if set, mount sync
+
+.SH SEE ALSO
+.BR halevt (1),
+.BR halevt-mount (1)
