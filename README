@@ -1,0 +1,192 @@
+What is Halevt?
+===============
+
+Halevt (HAL events manager) is a daemon that executes arbitrary commands 
+when a device with certain properties is added to the system and when 
+device properties change. Halevt uses HAL to monitor the state of your 
+system's hardware. With the default config file and script, it can handle 
+the mounting of media as they are inserted/attached to the system.
+
+Halevt comes with halevt-mount a program able to use HAL to mount, umount 
+devices and keep a list of devices handled by halevt-mount.
+
+Who wrote it?
+=============
+
+The initialization of hal and dbus is based on gnome-volume-manager, 
+by Robert M. Love. The remaining is by Patrice Dumas 
+<pertusus at free dot fr>.
+
+The design is largely based on Ivman which was written by 
+Ikke <eikke at users dot sourceforge dot org>, and
+maintained by Rohan McGovern afterwards.
+
+halevt-mount is loosely based on gnome-mount, but in the end the
+dbus API and hal specification of DBus interface were used and no
+code was borrowed.
+
+
+Homepage
+========
+
+http://www.environnement.ens.fr/perso/dumas/halevt.html
+You can reach the current maintainer at <pertusus at free dot fr>.
+
+
+Install
+=======
+
+libxml2, D-Bus, glib and D-Bus glib and HAL are required.
+A less known library is also needed, boolstuff which may be found at
+http://perso.b2b2c.ca/sarrazip/dev/boolstuff.html
+boolstuff has to be version >= 0.1.12.
+
+Halevt uses the autotools, so may be installed simply with
+
+./configure
+make
+make install
+
+When run as root (system-wide) the default is to drop privileges 
+and run as the halevt user. A make target allows to create this 
+user and set the permissions to the directories that it should own:
+
+   make perms
+
+For automounting to work well, it is advisable to have either 
+gnome-mount, pmount or halevt-mount (provided with halevt) installed 
+for user mount, and pmount installed for system-wide mounts. 
+
+The non standard glibc daemon function is used, it could be missing on
+some platform.
+
+To regenerate the documentation after a modification, makeinfo and 
+man2html are needed.
+
+Development packages on different distributions:
+
+On debian: libxml2-dev dbus-glib-1-dev libhal-dev boolstuff-dev
+
+On Fedora: dbus-glib-devel hal-devel libxml2-devel boolstuff-devel
+           gettext pkgconfig
+
+
+Configuration
+=============
+
+If a config file is given on the command line no other file is used.
+
+If no config file has been specified config files are searched first 
+in the user home directory in .halevt/, then in the system configuration 
+directory which is typically along /etc/halevt, and last in the vendor 
+directory which is typically along /usr/share/halevt/.
+
+All the files ending with .xml found in these directories are considered
+to be configuration files. If a file with the same name has already been 
+found in a previous directory, it is ignored. This allows to override
+vendor configuration files by system configuration files, and system 
+configuration files by user files. The configuration files should be xml
+files, for the format see the examples shipeed with halevt and the 
+documentation.
+
+A file is shipped with halevt, called halevt.xml. With this file
+removable devices should be automounted. The halevt-mount program is 
+used to mount or unmount through hal and keep a list of mounted and 
+inserted devices by querying hal. It is installed in the default case.
+
+Another example is given, in the file halevt-hvmount.xml which uses 
+the script hvmount for automounting; this script also allows to keep a list 
+of mounted and inserted devices. gnome-mount, pmount(-hal) or mount 
+are used to perform the actual mount. It is not installed in the default 
+case.
+
+
+Usage
+=====
+
+The commands accept the -h switch to show their help.
+
+A typical use would be to add, in login scripts
+
+   halevt -p ~/.halevt/halevt.pid
+
+And in log out scripts
+
+   kill `cat ~/.halevt/halevt.pid`
+
+If you want halevt to run system-wide, you could use the halevt-initscript.
+It has been tested on a fedora. It is likely that strange things will happen 
+if you mix up running halevt system-wide and as users. There may be some
+permission issues when running system-wide. Indeed, the halevt user should
+be able to access devices, and users should be granted the right to access
+to devices handled by halevt.
+
+
+If you use halevt-mount
+-----------------------
+
+Automatically mounted devices may be unmounted by calling
+
+   halevt-umount <mount_point>
+
+All mounted devices may be unmounted by calling
+
+   halevt-umount -a
+
+You can update the information available to halevt-mount (usefull
+if halevt is not running, for example) by calling
+
+   halevt-mount -s
+
+You can remove all the devices information (for example in a 
+login script) by calling
+
+   halevt-mount -c -a
+
+To unmount all the devices, you could add
+
+   halevt-umount -a
+
+to your logout script.
+
+
+If you use hvmount
+------------------
+
+Automatically mounted devices may be umounted by calling
+
+   hvumount <mount_point>
+
+All mounted devices may be umounted by calling
+
+   hvumount -a
+
+If you want to use the automounting facilities, you could also add, in your
+startup scripts:
+
+   hvmount clean
+
+This cleans possible stale devices registered by hvmount. This can happen,
+for example, if devices are removed after halevt is stopped.
+
+And in log out scripts, to umount all the devices:
+
+   hvumount -a
+
+
+Notes
+-----
+
+hvmount and halevt-mount use the same file to store their information, 
+the same lock file and the same format, so they should cohabitate well,
+but it isn't widely tested, and is a bit silly.
+
+If you really want to run halevt as root you'll have to specify:
+  -u root -g root
+
+When using pmount/pumount you have to unmount all your devices before 
+removing the removable media, since pumount cannot operate without the
+device file.
+
+When devices have been mounted through HAL and the device is removed 
+without unmounting, HAL should unmount the file systems automatically.

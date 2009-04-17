@@ -1,0 +1,57 @@
+0.1.4 (Sat Jan 31 2009)
+* man page for hvmount (Mike O'Connor)
+* use an entity for the condition matching a mountable device (Byron Clark)
+
+0.1.3 (Thu Dec 18 2008)
+* adapt to boolstuff 0.1.12
+
+0.1.2 (Thu Jul 10 2008)
+* fix halevt-mount option parsing, patch from Matthijs van de Water.
+
+0.1.1 (Sat Jun 14 2008)
+* fix copying references html pages.
+
+0.1.0 (Mon Jun  9 2008)
+* add the -i command line option, and report every hal events only when set. 
+  In that case no configuration file is read.
+* add man pages, and a texinfo manual for the configuration.
+
+0.0.9 (Sat May 24 2008)
+* mount when block.storage_device parent has storage.hotpluggable true.  
+* only add uid= option when the option is valid.
+
+0.0.8 (Mon Mar 10 2008)
+* add uid= option when mounting with halevt-mount as a user.
+
+0.0.7 (Tue Dec 25 2007)
+* device properties can now be used when a device is removed. Feature
+  asked for by Marcus Habermehl.
+
+0.0.6 (Sat Feb 24 2007)
+
+* bugfix for halevt-mount when mounting with device name.
+* Internationalize halevt-mount.
+
+0.0.5 (Sat Feb 17 2007)
+
+* directory used by halevt-mount/hvmount in HOME is .halevt-mount (previously
+  it was .halevt).
+* use all the files found in config directories ending with .xml as config 
+  file.
+
+0.0.4 (Tue Feb 13 2007)
+
+* add a possibility for halevt-mount to mount with a device name.
+
+0.0.3 (Sun Feb 11 2007)
+
+* new helper program, halevt-mount, able to mount devices through HAL
+  and record the state of the devices by querying hal.
+
+0.0.2 (Tue Feb  6 2007)
+
+* initscript and bugfixes.
+
+0.0.1 (Mon Feb  5 2007)
+
+* Initial release.

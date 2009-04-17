@@ -1,0 +1,97 @@
+.TH HALEVT-MOUNT 1
+.AT 3
+.SH NAME
+halevt-mount/halevt-umount \- Mount or umount device through HAL
+.SH SYNOPSIS
+.B halevt\-mount
+[options] [\-w] mountpoint|device|udi
+.LP
+.B halevt\-mount
+[options] <\-c | \-r> <\-a | mountpoint | device | udi>
+.LP
+.B halevt\-mount
+[options] <\-l | -s>
+.LP
+.B halevt\-umount 
+[options] < \-a | mountpoint | device | udi>
+.SH DESCRIPTION
+.I halevt-mount
+Mount or umount device through HAL and keep a track of devices handled.
+When called as \fIhalevt-umount\fP the default is to unmount, when called 
+as \fIhalevt-mount\fP the default is to mount.
+Option \fI-c\fP, \fI-l\fP, \fI-r\fP, \fI-s\fP or \fI-w\fP changes the 
+operation performed.
+Additional argument is considered to be a mount point, a device or an udi
+when unmounting or removing.
+.PP
+If the commands are not called with \fI-s\fP after changes in the state of the
+devices (after mounting, unmounting, removing devices), the information
+available for \fIhalevt-mount\fP and \fIhalevt-umount\fP may become 
+out of sync with the state of the system.
+.SH OPTIONS
+.TP
+.B \-a
+When listing, list all the existing devices. For the other operations, 
+perform the operation on all the handled devices.
+.TP
+.B \-c
+Remove the handled device.
+.TP
+.B \-d  \fIdevice\fP
+Use device \fIdevice\fP.
+.TP
+.B \-f  \fIfile\fP
+Use file \fIfile\fP to store information about the handled devices 
+instead of the default.
+.TP
+.B \-h
+Help message and options summary.
+.TP
+.B \-i  \fIdirectory\fP
+Use lock file and device information file in the directory \fIdirectory\fP (if 
+they are not already specified).
+.TP
+.B \-l
+List handled devices. Formatted with, on each line, udi:device:mountpoint.
+.TP
+.B \-p  \fImountpoint\fP
+Use mountpoint \fImountpoint\fP.
+.TP
+.B \-m  \fIumask\fP
+Set mount umask to \fIumask\fP if run as a system user.
+.TP
+.B \-n  \fIfile\fP
+Use file \fIfile\fP as lock file.
+.TP
+.B \-o  \fIoption\fP
+Add the option  \fIoption\fP to the mount call.
+.TP
+.B \-r
+Umount.
+.TP
+.B \-s
+Sync the information about the handled devices with the informations 
+known by HAL.
+.TP
+.B \-u  \fIudi\fP
+Use udi \fIudi\fP.
+.TP
+.B \-w
+Add to the handled devices.
+
+.SH SEE ALSO
+halevt(1), gnome-mount(1), pmount(1)
+.SH VERSION
+This is \fIhalevt\-mount\fP version @PACKAGE_VERSION@.
+.SH AUTHOR
+Main author is Patrice Dumas pertusus at free dot fr.
+.SH AVAILABILITY
+The latest version of this program can be found at:
+      http://www.environnement.ens.fr/perso/dumas/halevt.html
+.SH COPYRIGHT
+Copyright \(co 2007-2008  Patrice Dumas <pertusus at free dot fr>,
+
+There is NO warranty.  You may redistribute this software
+under the terms of the GNU General Public License; either version 2 
+of the License, or (at your option) any later version.
+For more information about these matters, see the file named COPYING.
