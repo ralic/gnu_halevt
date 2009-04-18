@@ -10,6 +10,7 @@ the mounting of media as they are inserted/attached to the system.
 Halevt comes with halevt-mount a program able to use HAL to mount, umount 
 devices and keep a list of devices handled by halevt-mount.
 
+
 Who wrote it?
 =============
 
@@ -29,8 +30,11 @@ code was borrowed.
 Homepage
 ========
 
-http://www.environnement.ens.fr/perso/dumas/halevt.html
+http://www.nongnu.org/halevt/
+
 You can reach the current maintainer at <pertusus at free dot fr>.
+The preferred channel for communication is the mailing list at
+http://lists.nongnu.org/mailman/listinfo/halevt-dev.
 
 
 Install
@@ -69,6 +73,15 @@ On debian: libxml2-dev dbus-glib-1-dev libhal-dev boolstuff-dev
 
 On Fedora: dbus-glib-devel hal-devel libxml2-devel boolstuff-devel
            gettext pkgconfig
+
+
+Starting from CVS
+=================
+
+You need autoconf, automake, autoreconf, gettext and autopoint. You can 
+use the script bootstrap.sh shipped in CVS, like
+
+./bootstrap.sh
 
 
 Configuration

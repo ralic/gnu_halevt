@@ -1,0 +1,39 @@
+Todo list
+---------
+
+* (Marcin Gryszkalis) It would be really great if I could use regexp 
+  (PCRE based I think) in conditionals/matches, like
+
+<halevt:Device match="
+        hal.volume.is_disc = true &amp;
+        hal.volume.disk.type ~ /^cd/
+
+Looks like a very good idea to me. The issue I see is that it could
+complicate the match parsing, since currently it is a 2 phase parsing,
+first the characters &|()! that delimits boolean expressions are used to
+delimitate the strings, and then the strings are parsed. if &|()! can appear
+within regular expressions, it means that some parsing of the strings is
+needed during boolean expressions delimitation. Also using / as a regexp
+delimiter means that it has to be possible to escape it.
+
+even without regexp lack of explicit string delimiters is a problem, like - I
+hard to match on hal.info.product because it contains spaces
+
+* (felix) system configuration files are read after the user's, overwriting 
+the user's settings. Also it is confusing not to have all the files read.
+
+The problem is that the configurations are merely added and never replaced.
+
+
+Release
+-------
+
+Edit ../halevt-web/index.html
+
+make distcheck
+cp doc/halevt.html doc/halevt.1.html doc/halevt-mount.1.html doc/hvmount.1.html ../halevt-web/doc
+(cd ../halevt-web && cvs commit)
+VERSION=0.1.5
+gpg -b --use-agent halevt-${VERSION}.tar.gz
+cp halevt-${VERSION}.tar.gz* ../halevt-releases/
+rsync -v -r ../halevt-releases/ pertusus@dl.sv.nongnu.org:/releases/halevt/
