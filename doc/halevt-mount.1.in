@@ -58,7 +58,8 @@ List handled devices. Formatted with, on each line, udi:device:mountpoint.
 Use mountpoint \fImountpoint\fP.
 .TP
 .B \-m  \fIumask\fP
-Set mount umask to \fIumask\fP if run as a system user.
+Set mount umask to \fIumask\fP if run as a system user, and the filesystem
+supports it.
 .TP
 .B \-n  \fIfile\fP
 Use file \fIfile\fP as lock file.

@@ -42,7 +42,7 @@
 #define LOCKFILENAME "/" PACKAGE ".lock"
 #define DEVICEFILENAME "/uditab"
 #define TMPPOSTFIX ".tmp"
-#define MASKOPTSTR "umask="
+#define UMASKOPTSTR "umask="
 #define UIDOPTSTR "uid="
 
 typedef struct halevt_mount_udi
@@ -739,6 +739,7 @@ int main (int argc, char **argv)
   int fd_lock;
   int c;
   int do_all = 0;
+  int set_umask = 0;
   char *device_file = NULL;
   char *tmp_device_file;
   char *device = NULL;
@@ -843,16 +844,14 @@ int main (int argc, char **argv)
        case 'm':
          if (system_user)
          {
-           if ((mask_string = (char *) malloc ((1 + strlen (optarg) + strlen (MASKOPTSTR)) * sizeof(char))) == NULL)
+           if ((mask_string = (char *) malloc ((1 + strlen (optarg) + strlen (UMASKOPTSTR)) * sizeof(char))) == NULL)
            {
              fprintf (stderr, _("Out of memory\n"));
              exit (1);
            }
-           strcpy (mask_string, MASKOPTSTR);
+           strcpy (mask_string, UMASKOPTSTR);
            strcat (mask_string, optarg);
-           option_nr = halevt_mount_add_option(options_array, mask_string, option_nr);
-           if (option_nr == 0) { exit (1); }
-           free (mask_string);
+           set_umask = 1;
          }
          break;
        case 'a':
@@ -1104,7 +1103,17 @@ int main (int argc, char **argv)
 
     if (mountpoint == NULL) { mountpoint = ""; }
 
-    if (! system_user && halevt_mount_check_mount_option(new_device_udi, hal_ctx, "uid="))
+    if (set_umask)
+    {
+       if (halevt_mount_check_mount_option(new_device_udi, hal_ctx, UMASKOPTSTR))
+       {
+          option_nr = halevt_mount_add_option(options_array, mask_string, option_nr);
+          if (option_nr == 0) { exit (1); }
+       }
+       free (mask_string);
+    }
+
+    if (! system_user && halevt_mount_check_mount_option(new_device_udi, hal_ctx, UIDOPTSTR))
     {
        snprintf(uid_nr, 49, "%d", getuid());
        uid_nr[49] = '\0';
