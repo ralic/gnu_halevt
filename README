@@ -134,6 +134,20 @@ permission issues when running system-wide. Indeed, the halevt user should
 be able to access devices, and users should be granted the right to access
 to devices handled by halevt.
 
+You may have to add something along the following to the PolicyKit
+config file, which could be in /etc/PolicyKit/PolicyKit.conf:
+
+<!DOCTYPE pkconfig PUBLIC "-//freedesktop//DTD PolicyKit Configuration 1.0//EN" "http://hal.freedesktop.org/releases/PolicyKit/1.0/config.dtd">
+
+<!-- See the manual page PolicyKit.conf(5) for file format -->
+
+<config version="0.1">
+<match user="halevt">
+  <return result="yes"/>
+</match>
+</config>
+
+
 
 If you use halevt-mount
 -----------------------
