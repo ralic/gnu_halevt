@@ -80,6 +80,7 @@ fi
 %defattr(-,root,root,-)
 %doc COPYING AUTHORS README NEWS halevt-hvmount.xml
 %doc doc/*.html
+%doc examples/
 %dir %{_sysconfdir}/halevt
 %{_sysconfdir}/rc.d/init.d/halevt
 %{_bindir}/halevt
