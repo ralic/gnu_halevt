@@ -66,7 +66,7 @@ Note that at that point the device is already out of hal, so we use
 * which matches any device in the match attribute, and only pass the
 udi to the command.
 !-->
-<halevt:Device match="hal.*">
+<halevt:Device match="hal.block.device &amp; hal.block.is_volume = true">
      <halevt:Removal exec="halevt-umount -u $hal.udi$; halevt-umount -s"/>
 </halevt:Device>
 
