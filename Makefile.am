@@ -1,6 +1,6 @@
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = po doc src scripts halevt-mount
+SUBDIRS = po doc src scripts halevt-mount examples
 
 confdir = $(pkgdatadir)
 

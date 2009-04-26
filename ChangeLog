@@ -1,6 +1,7 @@
 2009-04-26  Patrice Dumas <pertusus@free.fr>
 
 	* halevt.xml: call halevt-umount only on volumes.
+	* examples/: new directory for examples.
 
 2009-04-24  Patrice Dumas <pertusus@free.fr>
 

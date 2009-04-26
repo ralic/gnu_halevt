@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<halevt:Configuration version="0.1" xmlns:halevt="http://www.environnement.ens.fr/perso/dumas/halevt.html">
+
+<!-- 
+You have to create a mount point with correct ownership.
+You should also have to activate "user_allow_other" in the fuse configuration
+file.
+  mkdir /mnt/mtpfs
+  chown halevt:plugdev /mnt/mtpfs
+-->
+
+<halevt:Device match="hal.info.category = portable_audio_player">
+   <halevt:Insertion exec="mtpfs /mnt/mtpfs -o sync -o allow_other"/>
+</halevt:Device>
+
+<halevt:Device match="hal.info.category = portable_audio_player">
+   <halevt:OnInit exec="mtpfs /mnt/mtpfs -o sync -o allow_other"/>
+</halevt:Device>
+
+<!-- It is not clear that it is used since the device may have 
+already gone -->
+<halevt:Device match="hal.info.category = portable_audio_player">
+   <halevt:Removal exec="fusermount -u /mnt/mtpfs"/>
+</halevt:Device>
+

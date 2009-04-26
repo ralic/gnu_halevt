@@ -86,6 +86,7 @@ AC_SUBST(halevt_piddir)
 
 AC_CONFIG_FILES([Makefile  po/Makefile.in halevt-mount/po/Makefile.in\
               src/Makefile \
+              examples/Makefile \
               doc/Makefile \
               doc/references/Makefile \
               scripts/Makefile \
