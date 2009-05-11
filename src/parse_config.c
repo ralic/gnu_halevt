@@ -262,7 +262,7 @@ halevt_removal *halevt_add_removal(const xmlChar *match, const xmlChar *exec)
 }
 
 halevt_condition *halevt_add_condition(const xmlChar *match, 
-    const xmlChar *exec, const xmlChar *name)
+    const xmlChar *exec, const xmlChar *name, const xmlChar *value)
 {
    halevt_condition *new_condition;
    new_condition = malloc (sizeof(halevt_condition));
@@ -279,15 +279,25 @@ halevt_condition *halevt_add_condition(const xmlChar *match,
          free(new_condition);
          return NULL;
       }
-      if ((new_condition->exec = halevt_new_exec(exec)) == NULL)
+      if (value == NULL) { new_condition->value = NULL; }
+      else if ((new_condition->value = (char *) xmlStrdup(value)) == NULL)
       { 
          halevt_free_boolean_expression (new_condition->match);
          free(new_condition->name);
          free(new_condition);
          return NULL;
       }
+      if ((new_condition->exec = halevt_new_exec(exec)) == NULL)
+      { 
+         halevt_free_boolean_expression (new_condition->match);
+         free(new_condition->name);
+         if (new_condition->value != NULL)
+            free(new_condition->value);
+         free(new_condition);
+         return NULL;
+      }
 /*
-      printf ("add_condition %s, %s, %s\n", match, exec, name);
+      printf ("add_condition %s, %s, %s, %s\n", match, exec, name, value);
 */
       new_condition->next = halevt_condition_root;
       halevt_condition_root = new_condition;
@@ -453,15 +463,17 @@ int halevt_parse_config (char const *path)
                {
                   xmlChar *exec = NULL;
                   xmlChar *name = NULL;
+                  xmlChar *value = NULL;
                   exec =  xmlGetProp(cur, (const xmlChar *) "exec");
                   name =  xmlGetProp(cur, (const xmlChar *) "name");
+                  value =  xmlGetProp(cur, (const xmlChar *) "value");
                   if (exec == NULL || name == NULL)
                   {
                      DEBUG(_("Warning: %s XML tag encountered with missing or bad attributes, ignored"), cur->name);
                   }
                   else
                   {
-                     halevt_add_condition(match, exec, name);
+                     halevt_add_condition(match, exec, name, value);
                   }
                }
                else if (! xmlStrcmp(cur->name, (const xmlChar *) "Property"))

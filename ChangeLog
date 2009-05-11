@@ -2,6 +2,10 @@
 
 	* manager.c: set errno to 0 before calling get*, as said in the 
 	functions man pages, report by nb.
+	* hal_interface.c: a * in Action value matches any action, report
+	from gry. 
+	* hal_interface.c, parse_config.c, parse_config.h: Mike Kasick 
+	patch to add a match on the Condition value.
 
 2009-04-26  Patrice Dumas <pertusus@free.fr>
 

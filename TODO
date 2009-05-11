@@ -24,6 +24,9 @@ the user's settings. Also it is confusing not to have all the files read.
 
 The problem is that the configurations are merely added and never replaced.
 
+* maybe it would make sense to have a way to get the Condition value 
+  expanded in the exec, or example as $hal.condition_value$.
+
 
 Release
 -------

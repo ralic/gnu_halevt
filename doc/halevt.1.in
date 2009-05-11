@@ -56,7 +56,7 @@ This is \fIHalevt\fP version @PACKAGE_VERSION@.
 Main author is Patrice Dumas pertusus at free dot fr.
 .SH AVAILABILITY
 The latest version of this program can be found at:
-      http://www.environnement.ens.fr/perso/dumas/halevt.html
+      http://www.nongnu.org/halevt/
 .SH COPYRIGHT
 Copyright \(co 2007-2008  Patrice Dumas <pertusus at free dot fr>,
        2005 Novell, Inc.

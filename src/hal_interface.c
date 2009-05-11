@@ -165,7 +165,7 @@ void halevt_device_property_modified(LibHalContext *ctx, const char *udi,
            current_action = current_property->action;
            while (current_action != NULL)
            {
-               if (halevt_property_matches_udi(key, current_action->value, udi))
+               if ((!strcmp (current_action->value, "*")) || halevt_property_matches_udi(key, current_action->value, udi))
                {
                    halevt_run_command(current_action->exec, udi, NULL);
                }
@@ -204,6 +204,8 @@ void halevt_device_condition(LibHalContext *ctx, const char *udi,
     while (current_condition != NULL)
     {
         if (!strcmp(current_condition->name, condition_name)
+            &&  (current_condition->value == NULL
+                 ||  !strcmp(current_condition->value, condition_detail))
             &&  halevt_true_tree(current_condition->match, udi, NULL))
         {
             halevt_run_command(current_condition->exec, udi, NULL);

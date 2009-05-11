@@ -1,4 +1,7 @@
-Author: Patrice Dumas
+* Patrice Dumas: 
+    - main author
+* Mike Kasick: 
+    - match on condition value
 
 halevt_setup_HAL inspired from code in gnome-volume-manager src/manager.c from 
 Robert Love.
