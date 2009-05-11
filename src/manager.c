@@ -305,12 +305,14 @@ int main(int argc, char *argv[])
         if (pid_file == NULL) { pid_file = PIDFILE; }
         if (!strcmp(pid_file, "-")) { pid_file = NULL; }
 
+        errno = 0;
         if ((passwd_struct = getpwnam(user)) == NULL)
         {
             DEBUG(_("Error getting uid for %s: %s"), user, strerror(errno));
             exit(1);
         }
         uid = passwd_struct->pw_uid;
+        errno = 0;
         if ((group_struct = getgrnam(group)) == NULL)
         {
             DEBUG(_("Error getting gid for %s: %s"), group, strerror(errno));
