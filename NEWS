@@ -1,3 +1,11 @@
+0.1.5 ()
+* move the project to savannah
+* only pass umask= if it is a valid option (report from nb)
+* add an example for mtpfs (nb)
+* a * in halevt:Action value matches any value (report from gry)
+* Add a value attribute for Halevt:Condition to match on the condition 
+  value (Mike Kasick)
+
 0.1.4 (Sat Jan 31 2009)
 * man page for hvmount (Mike O'Connor)
 * use an entity for the condition matching a mountable device (Byron Clark)

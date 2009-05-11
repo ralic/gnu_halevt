@@ -74,6 +74,7 @@ typedef struct halevt_oninit
 typedef struct halevt_condition
 {
    char *name;
+   char *value;
    halevt_exec *exec;
    halevt_boolean_expression *match;
    struct halevt_condition* next;

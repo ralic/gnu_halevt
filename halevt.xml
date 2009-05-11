@@ -92,6 +92,18 @@ true for that device, the corresponding exec command is launched.
 !-->
 
 <!-- 
+Example of a use of Condition with detail value attribute. This condition
+differentiates between three different hotkeys for a ButtonPressed event
+and performs the appropriate action for each.
+
+<halevt:Device match="hal.input.originating_device.hal.info.linux.driver = atkbd">
+    <halevt:Condition name="ButtonPressed" value="mute"        exec="amixer -q set Master toggle"/>
+    <halevt:Condition name="ButtonPressed" value="volume-down" exec="amixer -q set Master 1-"/>
+    <halevt:Condition name="ButtonPressed" value="volume-up"   exec="amixer -q set Master 1+"/>
+</halevt:Device>
+!-->
+
+<!-- 
 Example of a use of OnInit. At startup all the devices are matched and the exec
 comand is run for those that match.
 

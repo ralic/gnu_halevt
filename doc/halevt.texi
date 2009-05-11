@@ -261,10 +261,19 @@ device removal, specified by a @code{exec} attribute. For example:
 @item halevt:Condition
 This element corresponds with an action to be performed when a condition
 is emitted. The @code{name} attribute allows to specify the condition, 
-while the @code{exec} attribute specifies the action. For example:
+while the @code{exec} attribute specifies the action. An optional 
+@code{value} attribute may also be used to match only for a given
+condition detail value.
+For example:
 @example
 <halevt:Device match="hal.info.udi = /org/freedesktop/Hal/devices/acpi_PWRF">
     <halevt:Condition name="ButtonPressed" exec="sudo /sbin/shutdown"/>
+</halevt:Device>
+@end example
+With a value:
+@example
+<halevt:Device match="hal.input.originating_device.hal.info.linux.driver = atkbd">
+    <halevt:Condition name="ButtonPressed" value="mute" exec="amixer -q set Master toggle"/>
 </halevt:Device>
 @end example
 @item halevt:Property
@@ -275,7 +284,8 @@ element. An @code{halevt:Action} element is nested within the
 property value. In the @code{halevt:Action} element, the @code{value}
 attribute allows to specify which value for the property should lead to 
 the action to be taken, and the @code{exec} attribute specifies the command to
-be run. For example:
+be run. @samp{*} as an @code{halevt:Action} @code{value} will match
+any value. For example:
 @example
 <halevt:Device match="hal.block.device &amp; hal.block.is_volume = true">
    <halevt:Property name="hal.volume.is_mounted">
