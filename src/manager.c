@@ -31,6 +31,7 @@
 #include <errno.h>
 #include <libintl.h>
 #include <dirent.h>
+#include <locale.h>
 
 #include <glib.h>
 
