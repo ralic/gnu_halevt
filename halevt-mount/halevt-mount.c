@@ -31,6 +31,7 @@
 #include <fcntl.h>
 #include <pwd.h>
 #include <libintl.h>
+#include <locale.h>
 
 #include <dbus/dbus.h>
 #include <libhal.h>
