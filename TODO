@@ -26,6 +26,13 @@ The problem is that the configurations are merely added and never replaced.
 
 * maybe it would make sense to have a way to get the Condition value 
   expanded in the exec, or example as $hal.condition_value$.
+  Also instead of a simple value, it could be a match.
+
+* (Григорий Фучеджи, gry) speaking about value in Property Action 
+I think it would be useful to add some conditions handling like in match 
+attribute for halevt:Device tag. Maybe halevt:Action tag should have 
+value or match attribute which will contain condition.
+
 
 
 Release
