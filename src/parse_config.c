@@ -555,7 +555,7 @@ void halevt_print_config()
    condition = halevt_condition_root;
    while (condition != NULL)
    {
-      fprintf(stderr, "condition %s, %s, %s\n", halevt_print_boolean_expression(condition->match), halevt_print_exec(condition->exec), condition->name);
+      fprintf(stderr, "condition %s, %s, %s, %s\n", halevt_print_boolean_expression(condition->match), halevt_print_exec(condition->exec), condition->name, condition->value);
       condition = condition->next;
    }
    property = halevt_property_root;
