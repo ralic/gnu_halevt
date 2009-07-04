@@ -1,3 +1,9 @@
+2009-07-04  Patrice Dumas <pertusus@free.fr>
+
+	* halevt-mount/halevt-mount.c: warn if there is no device found 
+	when umounting or listing a specific device. Report from Adrian 
+	Mariano.
+
 2009-05-11  Patrice Dumas <pertusus@free.fr>
 
 	* manager.c: set errno to 0 before calling get*, as said in the 

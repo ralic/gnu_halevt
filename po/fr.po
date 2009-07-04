@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: halevt 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-18 01:02+0200\n"
+"POT-Creation-Date: 2009-07-04 10:43+0200\n"
 "PO-Revision-Date: 2007-02-05 02:07+0100\n"
 "Last-Translator: Patrice Dumas <pertusus@free.fr>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -16,95 +16,95 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: src/hal_interface.c:227
+#: src/hal_interface.c:229
 msgid "Failed to create HAL context!"
 msgstr "La création d'un contexte pour HAL a échoué"
 
-#: src/hal_interface.c:235
+#: src/hal_interface.c:237
 #, c-format
 msgid "Error connecting to D-BUS system bus: %s"
 msgstr "La connection au bus système de D-BUS a échouée : %s"
 
-#: src/hal_interface.c:255
+#: src/hal_interface.c:257
 msgid "Error initializing HAL"
 msgstr "Erreur d'initialisation de HAL"
 
-#: src/hal_interface.c:260
+#: src/hal_interface.c:262
 #, c-format
 msgid "Failed to watch all HAL properties: %s"
 msgstr ""
 
-#: src/hal_interface.c:272
+#: src/hal_interface.c:274
 #, c-format
 msgid "DBus Error! %s: %s"
 msgstr "Erreur de DBus ! %s : %s"
 
-#: src/hal_interface.c:295
+#: src/hal_interface.c:297
 msgid "No hal devices. Out of memory or an error occured in Hal"
 msgstr "Pas de périphériques pour hal. Il n'y a plus de mémoire, ou une erreur"
 
-#: src/hal_interface.c:409
+#: src/hal_interface.c:411
 #, c-format
 msgid "Hal type not handled in match (%s,%s,%s): %d"
 msgstr "Le type Hal n'est pas supporté (%s,%s,%s): %d"
 
-#: src/hal_interface.c:708
+#: src/hal_interface.c:710
 #, fuzzy, c-format
 msgid "Unhandled HAL iterator type: %d!"
 msgstr "Type HAL non supporté pour la propriété %s et le périhériaue %s : %d"
 
-#: src/hal_interface.c:780
+#: src/hal_interface.c:782
 #, c-format
 msgid "Unhandled HAL type for property %s, device %s: %d!"
 msgstr "Type HAL non supporté pour la propriété %s et le périhériaue %s : %d"
 
-#: src/hal_interface.c:805 src/hal_interface.c:838
+#: src/hal_interface.c:807 src/hal_interface.c:840
 #, c-format
 msgid "Out of memory, cannot run %s"
 msgstr "Epuisement de la mémoire, impossible d'exécuter %s"
 
-#: src/hal_interface.c:817
+#: src/hal_interface.c:819
 #, fuzzy, c-format
 msgid "Hal property %s in command '%s' not found (or OOM)"
 msgstr "La propriété Hal %s n'a pas été trouvé, pour la commande %s"
 
-#: src/hal_interface.c:852
+#: src/hal_interface.c:854
 #, c-format
 msgid "Running: %s"
 msgstr "Exécution de %s"
 
-#: src/hal_interface.c:856
+#: src/hal_interface.c:858
 #, c-format
 msgid "Execution of '%s' failed with error: %s"
 msgstr "L'exécution dela commande '%s' a échoué : %s"
 
-#: src/manager.c:53
+#: src/manager.c:54
 #, c-format
 msgid "Got signal %d"
 msgstr "Signal %d reçu"
 
-#: src/manager.c:83 src/manager.c:94 src/manager.c:114 src/manager.c:156
-#: src/manager.c:163 src/manager.c:249 src/manager.c:254 src/manager.c:271
-#: src/manager.c:278 src/manager.c:285
+#: src/manager.c:84 src/manager.c:95 src/manager.c:115 src/manager.c:157
+#: src/manager.c:164 src/manager.c:250 src/manager.c:255 src/manager.c:272
+#: src/manager.c:279 src/manager.c:286
 msgid "Out of memory"
 msgstr "Epuisement de la mémoire"
 
-#: src/manager.c:172
+#: src/manager.c:173
 #, fuzzy, c-format
 msgid "stat failed for %s: %s"
 msgstr "L'obtention de l'identifiant uid pour %s a échoué : %s"
 
-#: src/manager.c:192
+#: src/manager.c:193
 #, c-format
 msgid "Deleting lockfile %s"
 msgstr "Suppression du fichier de verrouillage %s"
 
-#: src/manager.c:195
+#: src/manager.c:196
 #, c-format
 msgid "Failed to delete lockfile %s!"
 msgstr "Erreur lors de la suppression du fichier de verrouillage %s"
 
-#: src/manager.c:202
+#: src/manager.c:203
 #, fuzzy, c-format
 msgid ""
 " Usage: halevt [option]\n"
@@ -133,70 +133,70 @@ msgstr ""
 "utilisé\n"
 "   -u x             utiliser l'utilisateur <x>\n"
 
-#: src/manager.c:259
+#: src/manager.c:260
 #, fuzzy, c-format
 msgid "stat on %s failed: %s"
 msgstr "Le verrouillage de %s a échoué : %s"
 
-#: src/manager.c:310
+#: src/manager.c:312
 #, c-format
 msgid "Error getting uid for %s: %s"
 msgstr "L'obtention de l'identifiant uid pour %s a échoué : %s"
 
-#: src/manager.c:316
+#: src/manager.c:319
 #, c-format
 msgid "Error getting gid for %s: %s"
 msgstr "L'obtention de l'identifiant gid pour %s a échoué : %s"
 
-#: src/manager.c:322
+#: src/manager.c:325
 #, c-format
 msgid "Error setting gid to %u: %s"
 msgstr "Echec du changement de l'identifiant gid en %u : %s"
 
-#: src/manager.c:327
+#: src/manager.c:330
 #, c-format
 msgid "Error setting uid to %u: %s"
 msgstr "Echec du changement de l'identifiant uid en %u : %s"
 
-#: src/manager.c:338
+#: src/manager.c:341
 msgid "No configuration file found"
 msgstr "Aucun fichier de configuration trouvé"
 
-#: src/manager.c:346
+#: src/manager.c:349
 #, c-format
 msgid "Configuration file %s parsing failed"
 msgstr "L'analyse du fichier configuration %s a échouée"
 
-#: src/manager.c:351
+#: src/manager.c:354
 #, c-format
 msgid "Using configuration file %s"
 msgstr "Le fichier de configuration %s est utilisé"
 
-#: src/manager.c:366
+#: src/manager.c:369
 #, c-format
 msgid "Daemonize error: %s"
 msgstr "Erreur en devenant un démon : %s"
 
-#: src/manager.c:376
+#: src/manager.c:379
 msgid "No pid file used"
 msgstr ""
 
-#: src/manager.c:383
+#: src/manager.c:386
 #, fuzzy, c-format
 msgid "Open pid file %s failed: %s"
 msgstr "L'écriture du pid dans %s a échoué"
 
-#: src/manager.c:388
+#: src/manager.c:391
 #, c-format
 msgid "Lock %s failed: %s"
 msgstr "Le verrouillage de %s a échoué : %s"
 
-#: src/manager.c:393
+#: src/manager.c:396
 #, c-format
 msgid "Writing pid to %s failed"
 msgstr "L'écriture du pid dans %s a échoué"
 
-#: src/manager.c:405
+#: src/manager.c:408
 msgid "Error creating main loop!"
 msgstr "La création de la boucle principale a échouée"
 
@@ -232,43 +232,43 @@ msgstr ""
 msgid "Bad exec string: %s"
 msgstr "Commande incorrecte : %s"
 
-#: src/parse_config.c:313
+#: src/parse_config.c:323
 #, c-format
 msgid "Invalid Property name: %s"
 msgstr "Nom de propriété incorrect : %s"
 
-#: src/parse_config.c:374
+#: src/parse_config.c:384
 msgid "Document not parsed successfully"
 msgstr "L'analyse du fichier a échoué"
 
-#: src/parse_config.c:380
+#: src/parse_config.c:390
 msgid "Document is empty"
 msgstr "Le fichier est vide"
 
-#: src/parse_config.c:386
+#: src/parse_config.c:396
 #, c-format
 msgid "Incorrect document type, root node should have been %s"
 msgstr "Document incorrect, l'élément racine aurait du être %s"
 
-#: src/parse_config.c:397
+#: src/parse_config.c:407
 #, c-format
 msgid "Warning: Incorrect element '%s', should be '%s'"
 msgstr "Attention, élément incorrect '%s', devrait être '%s'"
 
-#: src/parse_config.c:405 src/parse_config.c:419 src/parse_config.c:432
-#: src/parse_config.c:445 src/parse_config.c:460 src/parse_config.c:473
-#: src/parse_config.c:497
+#: src/parse_config.c:415 src/parse_config.c:429 src/parse_config.c:442
+#: src/parse_config.c:455 src/parse_config.c:472 src/parse_config.c:485
+#: src/parse_config.c:509
 #, c-format
 msgid "Warning: %s XML tag encountered with missing or bad attributes, ignored"
 msgstr ""
 "Attention, élément XML %s avec des attributs manquants ou incorrects, ignoré"
 
-#: src/parse_config.c:487
+#: src/parse_config.c:499
 #, c-format
 msgid "Warning: Incorrect Property element '%s', should be '%s'"
 msgstr "Attention, élément Property incorrect '%s', devrait être '%s'"
 
-#: src/parse_config.c:511
+#: src/parse_config.c:523
 #, c-format
 msgid "Warning: Incorrect element '%s'"
 msgstr "Attention, élément incorrect '%s'"
