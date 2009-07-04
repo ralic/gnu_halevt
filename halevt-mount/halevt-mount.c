@@ -1216,7 +1216,17 @@ int main (int argc, char **argv)
           }
         }
       }
-    /*  else { fprintf (stderr, "Nothing found to be processed\n"); } */
+      else 
+      {
+        if (! strcmp (cmd, "list"))
+        {  
+          fprintf (stderr, _("Cannot find a device to be listed\n"));
+        }
+        else
+        {
+          fprintf (stderr, _("Cannot find a device to be umounted\n"));
+        }
+      }
     }
     /* when umounting we don't write to the device file, to avoid messing
      with file permissions in case the umount was done as root */
