@@ -9,7 +9,7 @@
 @end direntry
 
 @copying
-@noindent Copyright (C) 2008 Patrice Dumas@*
+@noindent Copyright (C) 2008, 2009 Patrice Dumas@*
 
 Permission is granted to make and distribute verbatim
 copies of this manual provided the copyright notice and
@@ -26,6 +26,11 @@ identical to this one.
 @node Top
 @top Halevt configuration
 
+@heading License of this document
+@insertcopying
+
+@heading Other sources of information
+
 The commands @command{halevt} and @command{halevt-mount} options and
 synopsis are given in the 
 @ifhtml
@@ -40,10 +45,8 @@ pages.
 @menu
 * Configuration file locations::
 * Halevt configuration syntax::
+* Discovering hal properties::
 @end menu
-
-@heading License of this document
-@insertcopying
 
 @node Configuration file locations
 @chapter Configuration file locations
@@ -297,5 +300,37 @@ In that example, the property that changes is @samp{volume.is_mounted},
 and the action is executed when the value of @samp{volume.is_mounted} 
 becomes @samp{true}.
 @end table
+
+@node Discovering hal properties
+@chapter Tips and tricks for discovering hal properties
+
+The hal properties are very important in halevt, but cannot necessarily 
+be found easily. Here are some tricks.
+
+To discover what changes when a device is inserted, one can use 
+@command{lshal -m}. Once started, it will wait for hal events and 
+will print all the changes emitted 
+by the hald daemon, allowing to know which UDI was added and which 
+property changed.
+
+Also, one can use @command{lshal} to list the devices with their 
+properties. The properties can then be used in @code{match} 
+prepended by @samp{hal.}, and also in @code{exec}, also prepended by @samp{hal}
+and enclosed in @samp{$}, like:
+@example
+exec="halevt-mount -d $hal.block.device$"
+@end example
+
+Reference to other UDI are recognizable because they begin with
+@example
+/org/freedesktop/Hal/devices/
+@end example
+For example, one can have:
+@example
+  info.parent = '/org/freedesktop/Hal/devices/usb_device_47b_2_noserial_if1'  (string)
+  input.originating_device = '/org/freedesktop/Hal/devices/usb_device_47b_2_noserial_if1'  (string)
+@end example
+The properties of those devices can be used as explained 
+in @ref{Device selection syntax}.
 
 @bye
