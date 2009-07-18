@@ -2,6 +2,8 @@
 
 	* hal_interface.c: fix crash when there is no property when 
 	removing device, patch from Dmitry A. Ermolov.
+	* halevt-mount/halevt-mount.c: realloc may modify the option array
+	so, pass its address (bug #26933). Patch from an anonymous user.
 
 2009-07-06  Patrice Dumas <pertusus@free.fr>
 
