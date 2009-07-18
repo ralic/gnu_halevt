@@ -714,15 +714,15 @@ void usage()
 ); 
 }
 
-int halevt_mount_add_option(char **options_array, char * option, int option_nr)
+int halevt_mount_add_option(char ***options_array, char * option, int option_nr)
 {
   option_nr++;
-  if ((realloc (options_array, option_nr * sizeof(char *))) == NULL)
+  if ((*options_array = realloc (*options_array, option_nr * sizeof(char *))) == NULL)
   {
     fprintf (stderr, _("Out of memory\n"));
     return 0;
   }
-  if ((options_array[option_nr - 1] = strdup(option)) == NULL)
+  if (((*options_array)[option_nr - 1] = strdup(option)) == NULL)
   {
     fprintf (stderr, _("Out of memory\n"));
     return 0;
@@ -839,7 +839,7 @@ int main (int argc, char **argv)
          }
          break;
        case 'o':
-         option_nr = halevt_mount_add_option(options_array, optarg, option_nr);
+         option_nr = halevt_mount_add_option(& options_array, optarg, option_nr);
          if (option_nr == 0) { exit (1); }
          break;
        case 'm':
@@ -1108,7 +1108,7 @@ int main (int argc, char **argv)
     {
        if (halevt_mount_check_mount_option(new_device_udi, hal_ctx, UMASKOPTSTR))
        {
-          option_nr = halevt_mount_add_option(options_array, mask_string, option_nr);
+          option_nr = halevt_mount_add_option(& options_array, mask_string, option_nr);
           if (option_nr == 0) { exit (1); }
        }
        free (mask_string);
@@ -1126,7 +1126,7 @@ int main (int argc, char **argv)
        strcpy (uid_string, UIDOPTSTR);
        strcat (uid_string, uid_nr);
        
-       option_nr = halevt_mount_add_option(options_array, uid_string, option_nr);
+       option_nr = halevt_mount_add_option(& options_array, uid_string, option_nr);
        if (option_nr == 0) { exit (1); }
        free (uid_string);
     }
