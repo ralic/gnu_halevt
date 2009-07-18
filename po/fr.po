@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: halevt 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-04 10:43+0200\n"
+"POT-Creation-Date: 2009-07-18 16:38+0200\n"
 "PO-Revision-Date: 2007-02-05 02:07+0100\n"
 "Last-Translator: Patrice Dumas <pertusus@free.fr>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -48,32 +48,32 @@ msgstr "Pas de périphériques pour hal. Il n'y a plus de mémoire, ou une erreu
 msgid "Hal type not handled in match (%s,%s,%s): %d"
 msgstr "Le type Hal n'est pas supporté (%s,%s,%s): %d"
 
-#: src/hal_interface.c:710
+#: src/hal_interface.c:717
 #, fuzzy, c-format
 msgid "Unhandled HAL iterator type: %d!"
 msgstr "Type HAL non supporté pour la propriété %s et le périhériaue %s : %d"
 
-#: src/hal_interface.c:782
+#: src/hal_interface.c:789
 #, c-format
 msgid "Unhandled HAL type for property %s, device %s: %d!"
 msgstr "Type HAL non supporté pour la propriété %s et le périhériaue %s : %d"
 
-#: src/hal_interface.c:807 src/hal_interface.c:840
+#: src/hal_interface.c:814 src/hal_interface.c:847
 #, c-format
 msgid "Out of memory, cannot run %s"
 msgstr "Epuisement de la mémoire, impossible d'exécuter %s"
 
-#: src/hal_interface.c:819
+#: src/hal_interface.c:826
 #, fuzzy, c-format
 msgid "Hal property %s in command '%s' not found (or OOM)"
 msgstr "La propriété Hal %s n'a pas été trouvé, pour la commande %s"
 
-#: src/hal_interface.c:854
+#: src/hal_interface.c:861
 #, c-format
 msgid "Running: %s"
 msgstr "Exécution de %s"
 
-#: src/hal_interface.c:858
+#: src/hal_interface.c:865
 #, c-format
 msgid "Execution of '%s' failed with error: %s"
 msgstr "L'exécution dela commande '%s' a échoué : %s"

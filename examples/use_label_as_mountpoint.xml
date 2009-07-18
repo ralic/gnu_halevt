@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<halevt:Configuration version="0.1" xmlns:halevt="http://www.environnement.ens.fr/perso/dumas/halevt.html">
+
+<!-- 
+  example config to mount with label, from Marcin Gryszkalis.
+
+  First a fdi rule has to be created to set volume.policy.desired_mount_point
+  to the label, like:
+
+<match key="volume.label" empty="false">
+    <match key="volume.label" is_absolute_path="false">
+        <merge key="volume.policy.desired_mount_point" type="copy_property">volume.label</merge>
+    </match>
+</match>
+
+  Then use the mountpoint in halevt-mount
+-->
+
+<halevt:Device match="&MOUNTABLE;">
+  <halevt:Insertion exec="halevt-mount -u $hal.udi$ -o sync -p $hal.volume.policy.desired_mount_point$ -m 002" />
+</halevt:Device>

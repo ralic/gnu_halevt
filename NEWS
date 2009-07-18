@@ -1,10 +1,11 @@
 0.1.5 ()
 * move the project to savannah
 * only pass umask= if it is a valid option (report from nb)
-* add an example for mtpfs (nb)
+* add an example for mtpfs (nb) and 2 other examples from Marcin Gryszkalis
 * a * in halevt:Action value matches any value (report from gry)
-* Add a value attribute for Halevt:Condition to match on the condition 
+* add a value attribute for Halevt:Condition to match on the condition 
   value (Mike Kasick)
+* fix bug #26933 and other issues. For a full list of changes see ChangeLog
 
 0.1.4 (Sat Jan 31 2009)
 * man page for hvmount (Mike O'Connor)

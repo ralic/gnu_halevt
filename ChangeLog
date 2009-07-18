@@ -4,6 +4,8 @@
 	removing device, patch from Dmitry A. Ermolov.
 	* halevt-mount/halevt-mount.c: realloc may modify the option array
 	so, pass its address (bug #26933). Patch from an anonymous user.
+	* examples/poppler_notifications.xml,use_label_as_mountpoint.xml:
+	examples from Marcin Gryszkalis.
 
 2009-07-06  Patrice Dumas <pertusus@free.fr>
 
