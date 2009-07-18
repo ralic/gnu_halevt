@@ -592,7 +592,14 @@ char **halevt_property_value(const char *key, const char *udi,
     { 
         halevt_device_property *property = 
              halevt_device_list_get_property(key, device);
-        return property->values;
+        if (property != NULL)
+        {
+            return property->values;
+        }
+        else
+        {
+            return NULL;
+        }
     }
     return halevt_udi_property_value(key, udi);
 }
