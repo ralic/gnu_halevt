@@ -99,8 +99,8 @@ to be configuration files. If a file with the same name has already been
 found in a previous directory, it is ignored. This allows to override
 vendor configuration files by system configuration files, and system 
 configuration files by user files. The configuration files should be xml
-files, for the format see the examples shipeed with halevt and the 
-documentation.
+files, for the format see the examples shiped with halevt (some examples
+are in the examples/ directory) and the documentation.
 
 A file is shipped with halevt, called halevt.xml. With this file
 removable devices should be automounted. The halevt-mount program is 
