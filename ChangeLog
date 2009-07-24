@@ -1,3 +1,8 @@
+2009-07-25  Patrice Dumas <pertusus@free.fr>
+
+	* examples/*umount_from_tray*: example of use of alltray and 
+	xmessage to have a tray icon to umount devices.
+
 2009-07-18  Patrice Dumas <pertusus@free.fr>
 
 	* hal_interface.c: fix crash when there is no property when 
