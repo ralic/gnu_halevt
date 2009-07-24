@@ -1,1 +1,1 @@
-EXTRA_DIST = mtpfs.xml poppler_notifications.xml use_label_as_mountpoint.xml
+EXTRA_DIST = mtpfs.xml popper_notifications.xml use_label_as_mountpoint.xml
