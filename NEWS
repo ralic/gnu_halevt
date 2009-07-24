@@ -1,7 +1,8 @@
 0.1.5 ()
 * move the project to savannah
 * only pass umask= if it is a valid option (report from nb)
-* add an example for mtpfs (nb) and 2 other examples from Marcin Gryszkalis
+* add an example for mtpfs (nb), 2 other examples from Marcin Gryszkalis
+  and a third example that puts an icon in the tray for unmounting
 * a * in halevt:Action value matches any value (report from gry)
 * add a value attribute for Halevt:Condition to match on the condition 
   value (Mike Kasick)
