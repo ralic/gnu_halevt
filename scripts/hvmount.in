@@ -28,7 +28,7 @@ userdir=${PACKAGE_NAME}-mount
 localstatedir="@localstatedir@"
 
 
-function usage(){
+usage() {
 if [ x"$cmdname" = xhvumount ]; then
    echo "Usage: $0 [options] -a | <mountpoint> | <device> | <udi>
   Umount the mountpoint, device, or udi given on the command line, or
