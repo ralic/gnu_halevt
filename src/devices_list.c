@@ -73,7 +73,7 @@ halevt_device_property *halevt_new_device_property (char *key,
 halevt_device *halevt_device_list_add_device (LibHalContext *ctx, const char *udi)
 {
    DBusError dbus_error;
-   LibHalPropertySetIterator *device_property_iterator;
+   LibHalPropertySetIterator device_property_iterator;
    LibHalPropertySet* device_property_set;
    halevt_device *device;
    char *key;
@@ -84,9 +84,6 @@ halevt_device *halevt_device_list_add_device (LibHalContext *ctx, const char *ud
    udi_string = strdup(udi);
    if (udi_string == NULL) { return NULL; }
 
-   device_property_iterator = malloc(sizeof(device_property_iterator));
-   if (device_property_iterator == NULL) { return NULL; }
-
    dbus_error_init(&dbus_error);
    device_property_set = libhal_device_get_all_properties(ctx, udi, &dbus_error);
    halevt_check_dbus_error (&dbus_error);
@@ -95,31 +92,26 @@ halevt_device *halevt_device_list_add_device (LibHalContext *ctx, const char *ud
       DEBUG(_("No property found for %s (or oom)"), udi);
       return NULL;
    }
-   libhal_psi_init(device_property_iterator, device_property_set);
-   if (device_property_iterator == NULL)
-   {
-      DEBUG(_("Iterator initialization failed for %s (or oom)"), udi);
-      return NULL;
-   }
+   libhal_psi_init(&device_property_iterator, device_property_set);
    
    device = malloc (sizeof(halevt_device));
    if (device == NULL) { return NULL; }
    device->udi = udi_string;
    device->properties = NULL;
 
-   while (libhal_psi_has_more(device_property_iterator))
+   while (libhal_psi_has_more(&device_property_iterator))
    {
-      LibHalPropertyType type = libhal_psi_get_type(device_property_iterator);
-      key = strdup(libhal_psi_get_key(device_property_iterator));
+      LibHalPropertyType type = libhal_psi_get_type(&device_property_iterator);
+      key = strdup(libhal_psi_get_key(&device_property_iterator));
       if (key == NULL) { goto oom; }
-      value = halevt_get_iterator_value (type, device_property_iterator);
+      value = halevt_get_iterator_value (type, &device_property_iterator);
       if (value == NULL) { goto oom; }
       new_property = halevt_new_device_property (key, value);
       if (new_property == NULL) { goto oom; }
       new_property->next = device->properties;
       device->properties = new_property;
 
-      libhal_psi_next(device_property_iterator);
+      libhal_psi_next(&device_property_iterator);
    }
    device->next = halevt_device_root;
    halevt_device_root = device;
