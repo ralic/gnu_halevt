@@ -92,14 +92,15 @@ halevt_device *halevt_device_list_add_device (LibHalContext *ctx, const char *ud
       DEBUG(_("No property found for %s (or oom)"), udi);
       return NULL;
    }
-   libhal_psi_init(&device_property_iterator, device_property_set);
    
    device = malloc (sizeof(halevt_device));
    if (device == NULL) { return NULL; }
    device->udi = udi_string;
    device->properties = NULL;
 
-   while (libhal_psi_has_more(&device_property_iterator))
+   for (libhal_psi_init(&device_property_iterator, device_property_set);
+        libhal_psi_has_more(&device_property_iterator);
+        libhal_psi_next(&device_property_iterator))
    {
       LibHalPropertyType type = libhal_psi_get_type(&device_property_iterator);
       key = strdup(libhal_psi_get_key(&device_property_iterator));
@@ -110,8 +111,6 @@ halevt_device *halevt_device_list_add_device (LibHalContext *ctx, const char *ud
       if (new_property == NULL) { goto oom; }
       new_property->next = device->properties;
       device->properties = new_property;
-
-      libhal_psi_next(&device_property_iterator);
    }
    device->next = halevt_device_root;
    halevt_device_root = device;
