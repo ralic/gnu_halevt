@@ -84,9 +84,9 @@ int halevt_parse_config(char const *path);
 char *halevt_hal_string (char *string);
 void halevt_print_config ();
 
-halevt_property *halevt_property_root;
-halevt_insertion *halevt_insertion_root;
-halevt_removal *halevt_removal_root;
-halevt_condition *halevt_condition_root;
-halevt_oninit *halevt_oninit_root;
+extern halevt_property *halevt_property_root;
+extern halevt_insertion *halevt_insertion_root;
+extern halevt_removal *halevt_removal_root;
+extern halevt_condition *halevt_condition_root;
+extern halevt_oninit *halevt_oninit_root;
 #endif

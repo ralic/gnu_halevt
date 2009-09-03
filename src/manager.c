@@ -217,6 +217,9 @@ void usage()
 ));
 }
 
+int halevt_fork = 0;
+int halevt_report = 0;
+
 /**
  * main function.
  */
@@ -234,9 +237,6 @@ int main(int argc, char *argv[])
     gid_t gid;
     int c;
     int do_fork = 1;
-
-    halevt_fork = 0;
-    halevt_report = 0;
 
     setlocale (LC_ALL, "");
     bindtextdomain (PACKAGE, DATADIR "/locale/");

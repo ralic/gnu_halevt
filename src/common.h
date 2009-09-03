@@ -29,9 +29,9 @@
 # include "config.h"
 #endif
 
-int halevt_fork;
-int halevt_report;
-int halevt_priority;
+extern int halevt_fork;
+extern int halevt_report;
+extern int halevt_priority;
 
 
 void debug(const char *format, const char *file, const int line,
