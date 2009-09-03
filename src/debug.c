@@ -71,7 +71,11 @@ void debug(const char *format, const char *file, const int line,
    }
    size = strlen(buffer) + strlen(file) + strlen(func) + 26;
    buffer_next = malloc(sizeof(char *)* size);
-   if (buffer_next == NULL) { return; }
+   if (buffer_next == NULL)
+   {
+      free(buffer);
+      return;
+   }
    if (halevt_report)
    {
       snprintf(buffer_next, size - 1, "%s", buffer);
@@ -84,4 +88,6 @@ void debug(const char *format, const char *file, const int line,
       buffer_next[size-1] = '\0';
       fprintf (stderr, "%s\n", buffer_next);
    }
+   free(buffer);
+   free(buffer_next);
 }
