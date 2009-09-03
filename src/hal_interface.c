@@ -248,6 +248,7 @@ void halevt_setup_HAL()
 void halevt_cleanup_HAL()
 {
     DBusError dbus_error;
+    DBusConnection *dbus_connection = libhal_ctx_get_dbus_connection(hal_ctx);
 
     dbus_error_init (&dbus_error);
 
@@ -257,7 +258,8 @@ void halevt_cleanup_HAL()
     }
 
     halevt_check_dbus_error(&dbus_error);
-    dbus_connection_unref(libhal_ctx_get_dbus_connection(hal_ctx));
+    dbus_connection_unref(dbus_connection);
+    dbus_connection_set_exit_on_disconnect(dbus_connection, FALSE);
     dbus_shutdown();
     libhal_ctx_free(hal_ctx);
 }
