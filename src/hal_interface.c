@@ -522,7 +522,10 @@ char **halevt_udi_property_value (const char *property, const char *udi)
  * return the value for a property. If the property is 'udi' simply
  * return the udi. Otherwise if a device is given look at the device
  * property, otherwise use hal to get the property.
+ * -- halevt_property_value calls halevt_duplicate_str_list defined below
+ * -- so declcare it here
  */
+char **halevt_duplicate_str_list(char **);
 char **halevt_property_value(const char *key, const char *udi,
    const halevt_device* device)
 {
@@ -550,7 +553,7 @@ char **halevt_property_value(const char *key, const char *udi,
     {
         halevt_device_property *property =
              halevt_device_list_get_property(key, device);
-        values = property != NULL ? property->values : NULL;
+        values = property != NULL ? halevt_duplicate_str_list(property->values) : NULL;
     }
     else
     {
@@ -575,7 +578,6 @@ char **halevt_duplicate_str_list(char** str_list)
        value = malloc ((total_value_nr+1) * sizeof(char*));
        if (value == NULL)
        {
-           libhal_free_string_array (str_list);
            return NULL;
        }
        *value = NULL;
@@ -595,13 +597,14 @@ char **halevt_duplicate_str_list(char** str_list)
            cur_value++;
            *cur_value = NULL;
        }
-       libhal_free_string_array (str_list);
    }
    return value;
 }
 
 /* cut and paste of halevt_get_property_value with libhal_psi_get_* instead of
- * libhal_device_get_property_* */
+ * libhal_device_get_property_*
+ * don't free hal resources here, the whole set needs to be free'd by the
+ * caller via libhal_free_property_set() */
 char **halevt_get_iterator_value(const LibHalPropertyType type,
   LibHalPropertySetIterator *iter)
 {
@@ -624,7 +627,6 @@ char **halevt_get_iterator_value(const LibHalPropertyType type,
         if (hal_value != NULL)
         {
             value[0] = strdup(hal_value);
-            libhal_free_string(hal_value);
         }
     }
     else if (type == LIBHAL_PROPERTY_TYPE_BOOLEAN)
@@ -677,8 +679,9 @@ char **halevt_get_property_value(LibHalPropertyType type,
     {
        char **str_list = libhal_device_get_property_strlist
           (hal_ctx, udi, property, dbus_error_pointer);
-
-       return halevt_duplicate_str_list(str_list);
+       char **new_list = halevt_duplicate_str_list(str_list);
+       libhal_free_string_array(str_list);
+       return new_list;
     }
 
     value = malloc(2*sizeof(char *));

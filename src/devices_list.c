@@ -93,9 +93,11 @@ halevt_device *halevt_device_list_add_device (LibHalContext *ctx, const char *ud
    }
    device->next = halevt_device_root;
    halevt_device_root = device;
+   libhal_free_property_set(device_property_set);
    return device;
 
 oom:
+   libhal_free_property_set(device_property_set);
    halevt_free_device(device);
    return NULL;
 }
