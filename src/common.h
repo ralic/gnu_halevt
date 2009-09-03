@@ -29,6 +29,38 @@
 # include "config.h"
 #endif
 
+#define WALK_LINKED_LISTP(previous, entry, first) \
+   for (previous = NULL, entry = first; \
+        entry != NULL; previous = entry, \
+        entry = entry->next)
+
+#define WALK_LINKED_LIST(entry, first) \
+   for (entry = first; entry != NULL; entry = entry->next)
+
+#define FREE_LINKED_LIST(type, root, free_function) \
+   do { \
+      type *current; \
+      type *next; \
+      for (current = root; current != NULL; current = next) \
+      { \
+         next = current->next; \
+         free_function(current); \
+      } \
+   } while(0)
+
+#define WALK_NULL_ARRAY(entry, first) \
+   for (entry = first; entry && *entry != NULL; entry++)
+
+#define FREE_NULL_ARRAY(type, first, free_function) \
+   do { \
+      type *current; \
+      for (current = first; current && *current != NULL; current++) \
+      { \
+         free_function(*current); \
+      } \
+      free(first); \
+   } while(0)
+
 #define DEBUG(fmt, arg...) \
 	do { \
 		debug(fmt, __FILE__, __LINE__, __FUNCTION__, ##arg); \

@@ -264,7 +264,6 @@ void halevt_run_oninit()
    char **all_udi;
    char **current_udi;
    int num_device;
-   halevt_oninit *current_oninit;
 
    dbus_error_init(&dbus_error);
    all_udi = libhal_get_all_devices (hal_ctx, &num_device, &dbus_error);
@@ -276,27 +275,23 @@ void halevt_run_oninit()
        return;
    }
    
-   current_udi = all_udi;
-   
-   while ((*current_udi) != NULL)
+   WALK_NULL_ARRAY(current_udi, all_udi)
    {
-      current_oninit = halevt_oninit_root;
+      halevt_oninit *current_oninit;
 
 /*
       DEBUG("Run OnInit for device: %s", (*current_udi));
 */
 
-      while (current_oninit != NULL)
+      WALK_LINKED_LIST(current_oninit, halevt_oninit_root)
       {
          if (halevt_true_tree(current_oninit->match, (*current_udi), NULL))
          {
              halevt_run_command(current_oninit->exec, (*current_udi), NULL);
          }
-         current_oninit = current_oninit->next;
       }
       /* construct the devices list */
       halevt_device_list_add_device (hal_ctx, *current_udi);
-      current_udi++;
    }
 
    libhal_free_string_array(all_udi);
@@ -359,20 +354,16 @@ int halevt_property_matches_udi (const char *property,
           char **cur_str;
           char **str_list = libhal_device_get_property_strlist
                 (hal_ctx, udi, property, &dbus_error);
-          if (str_list != NULL)
+          WALK_NULL_ARRAY(cur_str, str_list)
           {
-              cur_str = str_list;
-              while ((*cur_str) != NULL)
+              if (!strcmp((*cur_str), value))
               {
-                  if (!strcmp((*cur_str), value))
-                  {
-                      result = 1;
-                      break;
-                  }
-                  cur_str++;
+                  result = 1;
+                  break;
               }
-              libhal_free_string_array (str_list);
           }
+
+          libhal_free_string_array (str_list);
       }
       else if (type == DBUS_TYPE_UINT64)
       {
@@ -414,21 +405,16 @@ int halevt_property_matches_device (const char *key,
       DEBUG("Warning: halevt_property_matches_device called with a NULL value");
       return 0;
    }
-   property = halevt_device_list_get_property (key, device);
-   if (property != NULL) { values = property->values ;}
 
-   if (values != NULL)
+   if ((property = halevt_device_list_get_property (key, device)) == NULL) { return 0; }
+
+   if (value == NULL) { return 1; }
+
+   WALK_NULL_ARRAY(values, property->values)
    {
-       if (value == NULL) { return 1; }
-       while ((*values) != NULL)
-       {
-           if (!strcmp ((*values), value))
-           {
-               return 1;
-           }
-           values++;
-       }
+       if (!strcmp(*values, value)) { return 1; }
    }
+
    return 0;
 }
 
@@ -439,9 +425,7 @@ int halevt_match_device (const halevt_match *match, const halevt_device *device)
     char **new_udi;
     char **parent;
 
-    parent = match->parents;
-
-    while (*parent != NULL)
+    WALK_NULL_ARRAY(parent, match->parents)
     {
        udi_property = halevt_device_list_get_property (*parent, new_device);
        if (udi_property != NULL)
@@ -454,7 +438,6 @@ int halevt_match_device (const halevt_match *match, const halevt_device *device)
        {
           return 0;
        }
-       parent++;
     }
     return halevt_property_matches_device(match->name, match->value, new_device);
 }
@@ -467,9 +450,7 @@ int halevt_match_udi (const halevt_match *match, const char *udi)
 
     dbus_error_init(&dbus_error);
 
-    parent = match->parents;
-
-    while (*parent != NULL)
+    WALK_NULL_ARRAY(parent, match->parents)
     {
        if (! libhal_device_property_exists 
              (hal_ctx, new_udi, *parent, &dbus_error))
@@ -481,7 +462,6 @@ int halevt_match_udi (const halevt_match *match, const char *udi)
        new_udi = libhal_device_get_property_string
             (hal_ctx, new_udi, (*parent), &dbus_error);
        halevt_check_dbus_error(&dbus_error);
-       parent++;
     }
     return halevt_property_matches_udi(match->name, match->value, new_udi);
 }
@@ -604,28 +584,20 @@ char **halevt_duplicate_str_list(char** str_list)
        }
        *value = NULL;
 
-       cur_str = str_list;
        cur_value = value;
               
-       while ((*cur_str) != NULL)
+       WALK_NULL_ARRAY(cur_str, str_list)
        {
            cur_val = strdup(*cur_str);
            if (cur_val == NULL)
            { 
                libhal_free_string_array (str_list);
-               cur_value = value;
-               while ((*cur_value) != NULL)
-               {
-                   free(*cur_value);
-                   cur_value++;
-               }
-               free(value);
+               FREE_NULL_ARRAY(char *, value, free);
                return NULL;
            }
            *cur_value = cur_val;
            cur_value++;
            *cur_value = NULL;
-           cur_str++;
        }
        libhal_free_string_array (str_list);
    }

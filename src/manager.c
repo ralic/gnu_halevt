@@ -138,15 +138,13 @@ char **halevt_find_conf_files()
                }
                if (extension == NULL) { continue ;}
                found = 0;
-               current_basefile = basefiles;
-               while (*current_basefile != NULL)
+               WALK_NULL_ARRAY(current_basefile, basefiles)
                {
                    if (! strcmp (*current_basefile, next_file->d_name))
                    {
                        found = 1;
                        break;
                    }
-                   current_basefile++;
                }
                if (! found)
                {
@@ -179,13 +177,7 @@ char **halevt_find_conf_files()
        closedir(dir);
     }
 
-    current_basefile = basefiles;
-    while (*current_basefile != NULL)
-    {
-       free (*current_basefile);
-       current_basefile++;
-    }
-    free (basefiles);
+    FREE_NULL_ARRAY(char *, basefiles, free);
 
     return conffiles;
 }
@@ -333,8 +325,7 @@ int main(int argc, char *argv[])
             DEBUG(_("No configuration file found"));
             exit (1);
         }
-        current_conffile = conffiles;
-        while (*current_conffile != NULL)
+        WALK_NULL_ARRAY(current_conffile, conffiles)
         {
             if (! halevt_parse_config (*current_conffile))
             {
@@ -346,7 +337,6 @@ int main(int argc, char *argv[])
                 DEBUG(_("Using configuration file %s"), *current_conffile);
             }
             free (*current_conffile);
-            current_conffile++;
         }
         free (conffiles);
     }

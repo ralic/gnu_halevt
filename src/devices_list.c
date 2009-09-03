@@ -27,37 +27,16 @@
 #include <dbus/dbus.h>
 #include <libhal.h>
 
-void halevt_free_property_value (char **values)
-{
-    char **cur_value = values;
-    
-    while ((*cur_value) != NULL)
-    {
-        free (*cur_value);
-        cur_value++;
-    }
-    free (values);
-}
-
 void halevt_free_device_property (halevt_device_property *property)
 {
     free (property->key);
-    halevt_free_property_value (property->values);
+    FREE_NULL_ARRAY(char *, property->values, free);
 }
 
 void halevt_free_device (halevt_device *device)
 {
-    halevt_device_property *property = device->properties;
-    halevt_device_property *previous_property;
-
     free (device->udi);
-    
-    while (property != NULL)
-    {
-        previous_property = property;
-        property = property->next;
-        free (previous_property);
-    }
+    FREE_LINKED_LIST(halevt_device_property, device->properties, free);
 }
 
 halevt_device_property *halevt_new_device_property (char *key, 
@@ -123,59 +102,48 @@ oom:
 
 int halevt_device_list_remove_device (const char *udi)
 {
-   halevt_device *previous = halevt_device_root;
-   halevt_device *device = halevt_device_root;
+   halevt_device *previous;
+   halevt_device *device;
 
    /* no device. Assert? */
-   if (device == NULL) { return 0; };
+   if (halevt_device_root == NULL) { return 0; };
 
-   /* device is the first one */
-   if (!strcmp (device->udi, udi))
-   {
-      halevt_device_root = device->next;
-      halevt_free_device(device);
-      return 1;
-   }
-
-   while (device != NULL)
+   WALK_LINKED_LISTP(previous, device, halevt_device_root)
    {
       if (!strcmp (device->udi, udi)) 
       {
-          previous->next = device->next;
+          if (previous == NULL) { halevt_device_root = device->next; }
+          else { previous->next = device->next; }
           halevt_free_device(device);
           return 1;
       }
-      previous = device;
-      device = device->next;
    }
    return 0;
 }
 
 halevt_device *halevt_device_list_find_device(const char *udi)
 {
-   halevt_device *device = halevt_device_root;
-   while (device != NULL)
+   halevt_device *device;
+
+   WALK_LINKED_LIST(device, halevt_device_root)
    {
-      if (!strcmp (device->udi, udi)) { return device; };
-      device = device->next;
+      if (!strcmp (device->udi, udi)) { break; }
    }
-   return NULL;
+
+   return device;
 }
 
 halevt_device_property *halevt_device_list_get_property (const char *key, 
    const halevt_device *device)
 {
-   halevt_device_property *property = device->properties;
+   halevt_device_property *property;
 
-   while (property != NULL)
+   WALK_LINKED_LIST(property, device->properties)
    {
-       if (!strcmp (key, property->key))
-       {
-           return property;
-       }
-       property = property->next;
+       if (!strcmp (key, property->key)) { break; }
    }
-   return NULL;
+
+   return property;
 }
 
 int halevt_device_list_set_property (const char *udi, const char *key)
@@ -193,7 +161,7 @@ int halevt_device_list_set_property (const char *udi, const char *key)
    property = halevt_device_list_get_property(key, device);
    if (property != NULL)
    {
-       halevt_free_property_value(property->values);
+       FREE_NULL_ARRAY(char *, property->values, free);
        property->values = values;
    }
    else
@@ -201,13 +169,13 @@ int halevt_device_list_set_property (const char *udi, const char *key)
        char *new_key = strdup(key);
        if (new_key == NULL)
        {
-           halevt_free_property_value(values);
+           FREE_NULL_ARRAY(char *, values, free);
            return 0; 
        }
        property = halevt_new_device_property (new_key, values);
        if (property == NULL) 
        {
-           halevt_free_property_value(values);
+           FREE_NULL_ARRAY(char *, values, free);
            free(new_key);
            return 0; 
        }
@@ -220,78 +188,68 @@ int halevt_device_list_set_property (const char *udi, const char *key)
 int halevt_device_list_remove_property (const char *udi, const char *key)
 {
    halevt_device *device = halevt_device_list_find_device(udi);
-   halevt_device_property *property;
    halevt_device_property *previous;
+   halevt_device_property *property;
 
    if (device == NULL) { return 0; }
 
    /* device without properties. Assert? */
    if (device->properties == NULL) { return 0; }
 
-   property = device->properties;
-   /* first property */
-   if (!strcmp(key, property->key))
-   {
-       device->properties = property->next;
-       halevt_free_device_property (property);
-   }
-   previous = property;
-
-   while (property != NULL)
+   WALK_LINKED_LISTP(previous, property, device->properties)
    {
       if (!strcmp (property->key, key)) 
       {
-          previous->next = property->next;
+          if (previous == NULL) { device->properties = property->next; }
+          else { previous->next = property->next; }
           halevt_free_device_property(property);
           return 1;
       }
-      previous = property;
-      property = property->next;
    }
+
    return 0;
 }
 
 /* debugging */
 void halevt_print_device (const halevt_device *device)
 {
-    halevt_device_property *property = device->properties;
-    char **cur_value;
+    halevt_device_property *property;
 
     if (device == NULL) { fprintf(stderr, "Device is NULL\n"); }
 
     fprintf (stderr, "Device udi: %s\n", device->udi);
-    while (property != NULL)
+
+    WALK_LINKED_LIST(property, device->properties)
     {
+        char **cur_value;
+
         fprintf(stderr, " %s = ", property->key);
-        cur_value = property->values;
-        while ((*cur_value) != NULL)
+
+        WALK_NULL_ARRAY(cur_value, property->values)
         {
             fprintf (stderr, "'%s' ", (*cur_value));
-            cur_value++;
         }
+
         fprintf (stderr, "\n");
-        property = property->next;
     }
 }
 
 void halevt_print_all_devices ()
 {
-   halevt_device *device = halevt_device_root;
-   while (device != NULL)
+   halevt_device *device;
+
+   WALK_LINKED_LIST(device, halevt_device_root)
    {
       fprintf(stderr, "%s\n", device->udi);
-      device = device->next;
    }
 }
 
 int halevt_count_devices ()
 {
    int nr = 0;
-   halevt_device *device = halevt_device_root;
-   while (device != NULL)
-   {
-      nr++;
-      device = device->next;
-   }
+   halevt_device *device;
+
+   WALK_LINKED_LIST(device, halevt_device_root) { nr++; }
+
    return nr;
 }
