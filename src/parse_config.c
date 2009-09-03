@@ -294,23 +294,20 @@ halevt_condition *halevt_add_condition(const xmlChar *match,
    return new_condition;
 }
 
-halevt_property *halevt_add_property(const xmlChar *match, const xmlChar *name)
+halevt_property *halevt_add_property(const xmlChar *match, xmlChar *name)
 {
    halevt_property *new_property;
-   char *property_name;
    new_property = malloc(sizeof(halevt_property));
    if (new_property != NULL)
    {
-      if ((new_property->name = (char *) xmlStrdup(name)) == NULL)
+      if ((new_property->name = halevt_hal_string(name)) == NULL)
       {
+         DEBUG(_("Invalid Property name: %s"), name);
          free(new_property);
          return NULL;
       }
-      property_name = halevt_hal_string (new_property->name);
-      if (property_name == NULL)
+      if ((new_property->name = (char *)xmlStrdup(new_property->name)) == NULL)
       {
-         DEBUG(_("Invalid Property name: %s"), name);
-         free(new_property->name);
          free(new_property);
          return NULL;
       }
@@ -324,7 +321,6 @@ halevt_property *halevt_add_property(const xmlChar *match, const xmlChar *name)
 /*
       printf ("add_property %s, %s\n", name, match);
 */
-      new_property->name = property_name;
       new_property->next = halevt_property_root;
       new_property->action = NULL;
       halevt_property_root = new_property;
