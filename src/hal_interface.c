@@ -589,7 +589,6 @@ char **halevt_duplicate_str_list(char** str_list)
            cur_val = strdup(*cur_str);
            if (cur_val == NULL)
            {
-               libhal_free_string_array (str_list);
                FREE_NULL_ARRAY(char *, value, free);
                return NULL;
            }
