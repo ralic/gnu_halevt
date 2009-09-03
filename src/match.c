@@ -24,8 +24,6 @@
 #include <ctype.h>
 #include <libintl.h>
 
-#include <boolstuff/c-api.h>
-
 #include "common.h"
 #include "match.h"
 #include "hal_interface.h"
