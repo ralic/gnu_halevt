@@ -445,25 +445,41 @@ int halevt_match_device (const halevt_match *match, const halevt_device *device)
 int halevt_match_udi (const halevt_match *match, const char *udi)
 {
     DBusError dbus_error;
-    const char *new_udi = udi;
     char **parent;
+    char *old_udi = strdup(udi);
+    int result = 0;
 
     dbus_error_init(&dbus_error);
 
     WALK_NULL_ARRAY(parent, match->parents)
     {
+       char *new_udi;
+
+       if (old_udi == NULL) { goto out; }
+
        if (! libhal_device_property_exists
-             (hal_ctx, new_udi, *parent, &dbus_error))
+             (hal_ctx, old_udi, *parent, &dbus_error))
        {
-          return 0;
+          goto out;
        }
+
        halevt_check_dbus_error(&dbus_error);
 
        new_udi = libhal_device_get_property_string
-            (hal_ctx, new_udi, (*parent), &dbus_error);
+            (hal_ctx, old_udi, (*parent), &dbus_error);
+       free(old_udi);
        halevt_check_dbus_error(&dbus_error);
+       old_udi = new_udi;
     }
-    return halevt_property_matches_udi(match->name, match->value, new_udi);
+
+    if (old_udi != NULL)
+    {
+        result = halevt_property_matches_udi(match->name, match->value, old_udi);
+    }
+
+out:
+    free(old_udi);
+    return result;
 }
 
 /*
