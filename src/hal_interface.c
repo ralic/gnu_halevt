@@ -830,6 +830,7 @@ int halevt_run_command(const halevt_exec *exec, char const *udi,
     {
         DEBUG(_("Execution of '%s' failed with error: %s"),
               command, error->message);
+        g_error_free(error);
         free(command);
         return 0;
     }
