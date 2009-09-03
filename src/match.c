@@ -36,7 +36,7 @@ static const char *hal_substring = ".hal.";
  * and the atom strings are stored at that index.
  * This function also parses the 'atoms' into a key and a value and
  * does the initial processing of the boolean expression */
-halevt_boolean_expression *halevt_new_boolean_expression(char *original_string)
+halevt_boolean_expression *halevt_new_boolean_expression(const xmlChar *original_string)
 {
    halevt_boolean_expression *new_expression;
    char *expr;
@@ -78,7 +78,7 @@ halevt_boolean_expression *halevt_new_boolean_expression(char *original_string)
       }
       while (1)
       {
-         next_char = *(original_string+index);
+         next_char = *(new_expression->string+index);
          if (next_char == '&' || next_char == '|' ||
              next_char == '(' || next_char == ')' || next_char == '!' ||
              next_char == '\0')
@@ -90,8 +90,8 @@ halevt_boolean_expression *halevt_new_boolean_expression(char *original_string)
                int n;
                int b = 0;
                /* add an end of string and remove trailing spaces */
-               while (isspace(*(original_string+index-b -1))){ b++; }
-               *(original_string+index - b) = '\0';
+               while (isspace(*(new_expression->string+index-b -1))){ b++; }
+               *(new_expression->string+index - b) = '\0';
                /* add the atom to the list of atoms */
                (new_expression->matches_size)++;
                if (new_expression->matches_size >= atom_sizes -1)
@@ -139,7 +139,7 @@ halevt_boolean_expression *halevt_new_boolean_expression(char *original_string)
          }
          else if (atom == NULL && ! isspace(next_char))
          { /* begin an atom expression */
-            atom = original_string+index;
+            atom = new_expression->string+index;
          }
          index++;
       }

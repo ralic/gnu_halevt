@@ -172,23 +172,13 @@ char *halevt_print_exec(halevt_exec *exec_str)
    return result;
 }
 
-halevt_boolean_expression *halevt_new_match(const xmlChar *match)
-{
-   char *string;
-   if ((string = (char *) xmlStrdup(match)) == NULL)
-   {
-      return NULL;
-   }
-   return halevt_new_boolean_expression (string);
-}
-
 halevt_insertion *halevt_add_insertion(const xmlChar *match, const xmlChar *exec)
 {
    halevt_insertion *new_insertion;
    new_insertion = malloc(sizeof(halevt_insertion));
    if (new_insertion != NULL)
    {
-      if ((new_insertion->match = halevt_new_match(match)) == NULL)
+      if ((new_insertion->match = halevt_new_boolean_expression(match)) == NULL)
       {
          free(new_insertion);
          return NULL;
@@ -214,7 +204,7 @@ halevt_oninit *halevt_add_oninit(const xmlChar *match, const xmlChar *exec)
    new_oninit = malloc(sizeof(halevt_oninit));
    if (new_oninit != NULL)
    {
-      if ((new_oninit->match = halevt_new_match (match)) == NULL)
+      if ((new_oninit->match = halevt_new_boolean_expression (match)) == NULL)
       {
          free(new_oninit);
          return NULL;
@@ -240,7 +230,7 @@ halevt_removal *halevt_add_removal(const xmlChar *match, const xmlChar *exec)
    new_removal = malloc(sizeof(halevt_removal));
    if (new_removal != NULL)
    {
-      if ((new_removal->match = halevt_new_match(match)) == NULL)
+      if ((new_removal->match = halevt_new_boolean_expression(match)) == NULL)
       {
          free (new_removal);
          return NULL;
@@ -267,7 +257,7 @@ halevt_condition *halevt_add_condition(const xmlChar *match,
    new_condition = malloc (sizeof(halevt_condition));
    if (new_condition != NULL)
    {
-      if ((new_condition->match = halevt_new_match(match)) == NULL)
+      if ((new_condition->match = halevt_new_boolean_expression(match)) == NULL)
       {
          free(new_condition);
          return NULL;
@@ -324,7 +314,7 @@ halevt_property *halevt_add_property(const xmlChar *match, const xmlChar *name)
          free(new_property);
          return NULL;
       }
-      if ((new_property->match = halevt_new_match(match)) == NULL)
+      if ((new_property->match = halevt_new_boolean_expression(match)) == NULL)
       {
          free(new_property->name);
          free(new_property);

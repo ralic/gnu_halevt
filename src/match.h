@@ -22,6 +22,7 @@
 #define _MATCH_H
 
 #include <boolstuff/c-api.h>
+#include <libxml/xmlstring.h>
 #include "devices_list.h"
 
 typedef struct halevt_match
@@ -41,7 +42,7 @@ typedef struct halevt_boolean_expression
 } halevt_boolean_expression;
 
 void halevt_free_boolean_expression(halevt_boolean_expression *expr);
-halevt_boolean_expression *halevt_new_boolean_expression(char *expression);
+halevt_boolean_expression *halevt_new_boolean_expression(const xmlChar *expression);
 char *halevt_print_boolean_expression(halevt_boolean_expression *expr);
 int halevt_true_tree(const halevt_boolean_expression *expr, const char* udi,
    const halevt_device *device);
