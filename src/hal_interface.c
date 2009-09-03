@@ -320,6 +320,8 @@ void halevt_run_oninit()
       device = halevt_device_list_add_device (hal_ctx, *current_udi);
       current_udi++;
    }
+
+   libhal_free_string_array(all_udi);
 }
 
 /*
