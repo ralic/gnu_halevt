@@ -845,7 +845,7 @@ int halevt_run_command(const halevt_exec *exec, char const *udi,
             current_size += str_len;
             if ((command = (char *) realloc (command, string_size*sizeof(char))) == NULL)
             {
-                if (hal_value_used) { free (string); }
+                if (hal_value_used) { FREE_NULL_ARRAY(char *, values, free); }
                 DEBUG(_("Out of memory, cannot run %s"), exec->string);
                 return 0;
             }
