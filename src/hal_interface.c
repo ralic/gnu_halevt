@@ -286,7 +286,6 @@ void halevt_run_oninit()
    char **current_udi;
    int num_device;
    halevt_oninit *current_oninit;
-   halevt_device *device;
 
    dbus_error_init(&dbus_error);
    all_udi = libhal_get_all_devices (hal_ctx, &num_device, &dbus_error);
@@ -317,7 +316,7 @@ void halevt_run_oninit()
          current_oninit = current_oninit->next;
       }
       /* construct the devices list */
-      device = halevt_device_list_add_device (hal_ctx, *current_udi);
+      halevt_device_list_add_device (hal_ctx, *current_udi);
       current_udi++;
    }
 
