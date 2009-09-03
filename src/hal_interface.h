@@ -38,6 +38,7 @@ void halevt_device_property_modified(LibHalContext *ctx, const char *udi,
 void halevt_device_condition(LibHalContext *ctx, const char *udi,
     const char *condition_name, const char *condition_detail);
 void halevt_setup_HAL();
+void halevt_cleanup_HAL();
 
 void halevt_check_dbus_error(DBusError *error);
 

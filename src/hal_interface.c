@@ -243,6 +243,26 @@ void halevt_setup_HAL()
 }
 
 /*
+ * Clean up connection to HAL.
+ */
+void halevt_cleanup_HAL()
+{
+    DBusError dbus_error;
+
+    dbus_error_init (&dbus_error);
+
+    if (!libhal_ctx_shutdown(hal_ctx, &dbus_error))
+    {
+       DEBUG(_("Failed to shut down HAL connection"));
+    }
+
+    halevt_check_dbus_error(&dbus_error);
+    dbus_connection_unref(libhal_ctx_get_dbus_connection(hal_ctx));
+    dbus_shutdown();
+    libhal_ctx_free(hal_ctx);
+}
+
+/*
  * print and reset a dbus error
  */
 void halevt_check_dbus_error(DBusError *error)
