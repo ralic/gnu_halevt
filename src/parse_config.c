@@ -397,8 +397,7 @@ int halevt_parse_config (char const *path)
       }
       else
       {
-         xmlChar *match = NULL;
-         match = xmlGetProp (device, (const xmlChar *) "match");
+         xmlChar *match = xmlGetProp (device, (const xmlChar *) "match");
          if (match == NULL)
          {
             DEBUG(_("Warning: %s XML tag encountered with missing or bad attributes, ignored"), device->name);
@@ -411,8 +410,7 @@ int halevt_parse_config (char const *path)
                if (cur->type == XML_TEXT_NODE || cur->type == XML_COMMENT_NODE) { ; }
                else if (! xmlStrcmp (cur->name, (const xmlChar *) "Insertion"))
                {
-                  xmlChar *exec = NULL;
-                  exec =  xmlGetProp (cur, (const xmlChar *) "exec");
+                  xmlChar *exec = xmlGetProp (cur, (const xmlChar *) "exec");
                   if (exec == NULL)
                   {
                      DEBUG(_("Warning: %s XML tag encountered with missing or bad attributes, ignored"), cur->name);
@@ -420,12 +418,12 @@ int halevt_parse_config (char const *path)
                   else
                   {
                      halevt_add_insertion (match, exec);
+                     xmlFree(exec);
                   }
                }
                else if (! xmlStrcmp (cur->name, (const xmlChar *) "Removal"))
                {
-                  xmlChar *exec = NULL;
-                  exec =  xmlGetProp (cur, (const xmlChar *) "exec");
+                  xmlChar *exec = xmlGetProp (cur, (const xmlChar *) "exec");
                   if (exec == NULL)
                   {
                      DEBUG(_("Warning: %s XML tag encountered with missing or bad attributes, ignored"), cur->name);
@@ -433,12 +431,12 @@ int halevt_parse_config (char const *path)
                   else
                   {
                      halevt_add_removal (match, exec);
+                     xmlFree(exec);
                   }
                }
                else if (! xmlStrcmp (cur->name, (const xmlChar *) "OnInit"))
                {
-                  xmlChar *exec = NULL;
-                  exec =  xmlGetProp (cur, (const xmlChar *) "exec");
+                  xmlChar *exec = xmlGetProp (cur, (const xmlChar *) "exec");
                   if (exec == NULL)
                   {
                      DEBUG(_("Warning: %s XML tag encountered with missing or bad attributes, ignored"), cur->name);
@@ -446,16 +444,14 @@ int halevt_parse_config (char const *path)
                   else
                   {
                      halevt_add_oninit (match, exec);
+                     xmlFree(exec);
                   }
                }
                else if (! xmlStrcmp(cur->name, (const xmlChar *) "Condition"))
                {
-                  xmlChar *exec = NULL;
-                  xmlChar *name = NULL;
-                  xmlChar *value = NULL;
-                  exec =  xmlGetProp(cur, (const xmlChar *) "exec");
-                  name =  xmlGetProp(cur, (const xmlChar *) "name");
-                  value =  xmlGetProp(cur, (const xmlChar *) "value");
+                  xmlChar *exec =  xmlGetProp(cur, (const xmlChar *) "exec");
+                  xmlChar *name =  xmlGetProp(cur, (const xmlChar *) "name");
+                  xmlChar *value =  xmlGetProp(cur, (const xmlChar *) "value");
                   if (exec == NULL || name == NULL)
                   {
                      DEBUG(_("Warning: %s XML tag encountered with missing or bad attributes, ignored"), cur->name);
@@ -464,11 +460,13 @@ int halevt_parse_config (char const *path)
                   {
                      halevt_add_condition(match, exec, name, value);
                   }
+                  xmlFree(exec);
+                  xmlFree(name);
+                  xmlFree(value);
                }
                else if (! xmlStrcmp(cur->name, (const xmlChar *) "Property"))
                {
-                  xmlChar *name = NULL;
-                  name =  xmlGetProp(cur, (const xmlChar *) "name");
+                  xmlChar *name = xmlGetProp(cur, (const xmlChar *) "name");
                   if (name == NULL)
                   {
                      DEBUG(_("Warning: %s XML tag encountered with missing or bad attributes, ignored"), cur->name);
@@ -489,10 +487,8 @@ int halevt_parse_config (char const *path)
                            }
                            else
                            {
-                              xmlChar *value = NULL;
-                              xmlChar *exec = NULL;
-                              exec =  xmlGetProp(property_value_node, (const xmlChar *) "exec");
-                              value =  xmlGetProp(property_value_node, (const xmlChar *) "value");
+                              xmlChar *exec = xmlGetProp(property_value_node, (const xmlChar *) "exec");
+                              xmlChar *value = xmlGetProp(property_value_node, (const xmlChar *) "value");
                               if (exec == NULL || value == NULL)
                               {
                                  DEBUG(_("Warning: %s XML tag encountered with missing or bad attributes, ignored"), property_value_node->name);
@@ -501,11 +497,14 @@ int halevt_parse_config (char const *path)
                               {
                                  halevt_add_property_value(new_property, exec, value);
                               }
+                              xmlFree(exec);
+                              xmlFree(value);
                            }
                            property_value_node = property_value_node->next;
                         }
                      }
                   }
+                  xmlFree(name);
                }
                else
                {
@@ -514,6 +513,7 @@ int halevt_parse_config (char const *path)
                cur = cur->next;
             }
          }
+         xmlFree(match);
       }
       device = device->next;
    }
