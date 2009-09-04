@@ -17,7 +17,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 #include <stdio.h>
 #include <unistd.h>
 #include <signal.h>
@@ -54,7 +53,6 @@ void halevt_signal_handler(int sig)
     DEBUG(_("Got signal %d"), sig);
     g_main_loop_quit (loop);
 }
-
 
 #define DIRECTORY_NR 3
 
@@ -238,7 +236,7 @@ int main(int argc, char *argv[])
     {
         c = getopt(argc, argv, "ic:u:g:fp:h");
         if (c == -1) { break ; }
-        switch (c) 
+        switch (c)
         {
             case 'c':
                if ((conffiles = (char **) malloc (sizeof(char *) * 2)) == NULL)
@@ -251,8 +249,8 @@ int main(int argc, char *argv[])
                    DEBUG(_("Out of memory"));
                    exit (1);
                }
-               if  (stat (conffiles[0], &statbuf) < 0) 
-               { 
+               if  (stat (conffiles[0], &statbuf) < 0)
+               {
                    DEBUG(_("stat on %s failed: %s"), conffiles[0], strerror (errno));
                    exit (1);
                }
@@ -367,7 +365,7 @@ int main(int argc, char *argv[])
             {
                 DEBUG(_("Open pid file %s failed: %s"), pid_file, strerror(errno));
                 exit (1);
-            } 
+            }
             if (lockf(fileno(file), F_TLOCK, 0) != 0)
             {
                 DEBUG(_("Lock %s failed: %s"), pid_file, strerror(errno));
@@ -385,7 +383,7 @@ int main(int argc, char *argv[])
     halevt_run_oninit ();
 
     loop = g_main_loop_new(NULL, FALSE);
-    if (!loop) 
+    if (!loop)
     {
         DEBUG(_("Error creating main loop"));
         return 1;
@@ -395,12 +393,12 @@ int main(int argc, char *argv[])
     signal(SIGINT, halevt_signal_handler);
     signal(SIGHUP, halevt_signal_handler);
 
-/*    
-    DEBUG(_("Entering main loop.")); 
+/*
+    DEBUG(_("Entering main loop."));
 */
     g_main_loop_run(loop);
-/*    
-    DEBUG(_("Exiting normally.")); 
+/*
+    DEBUG(_("Exiting normally."));
 */
 
     if (halevt_fork) { halevt_clear_pidfile(pid_file); }

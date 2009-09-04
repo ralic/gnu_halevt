@@ -21,7 +21,7 @@
 
 /*
  * The (C) Copyright 2005 Novell, Inc. is for halevt_setup_HAL, inspired from
- * code in gnome-volume-manager src/manager.c, with author Robert Love 
+ * code in gnome-volume-manager src/manager.c, with author Robert Love
  * <rml@novell.com>
  */
 
@@ -36,12 +36,12 @@
 #include "common.h"
 #include "match.h"
 #include "parse_config.h"
-#include "hal_interface.h" 
+#include "hal_interface.h"
 #include "devices_list.h"
 
 static LibHalContext *hal_ctx;
 
-/** Invoked when a device is added to the Global Device List. 
+/** Invoked when a device is added to the Global Device List.
 *
 *  @param  udi                 Universal Device Id
 */
@@ -62,18 +62,18 @@ void halevt_device_added(LibHalContext *ctx, const char *udi)
     halevt_device_list_add_device (ctx, udi);
 }
 
-/** Invoked when a device is removed from the Global Device List. 
+/** Invoked when a device is removed from the Global Device List.
 *
 *  @param  udi                 Universal Device Id
 */
 void halevt_device_removed(LibHalContext *ctx, const char *udi)
 {
-    halevt_removal *current_removal = halevt_removal_root; 
+    halevt_removal *current_removal = halevt_removal_root;
     halevt_device *removed_device;
-   
+
     DEBUG_REPORT("Device removed: %s", udi);
 
-    /* use preferably the device from the devices list since the 
+    /* use preferably the device from the devices list since the
      * properties will be right */
     removed_device = halevt_device_list_find_device(udi);
     if (removed_device != NULL)
@@ -137,11 +137,11 @@ void halevt_device_property_modified(LibHalContext *ctx, const char *udi,
 {
     DEBUG_REPORT("Property %s:%s modified (removed: %d, added: %d)",udi,key,is_removed,is_added);
 
-    halevt_property *current_property = halevt_property_root; 
+    halevt_property *current_property = halevt_property_root;
     halevt_property_action *current_action;
     while (current_property != NULL)
     {
-       if (!strcmp(current_property->name, key) && 
+       if (!strcmp(current_property->name, key) &&
            halevt_true_tree(current_property->match, udi, NULL))
        {
            current_action = current_property->action;
@@ -166,7 +166,6 @@ void halevt_device_property_modified(LibHalContext *ctx, const char *udi,
         halevt_device_list_set_property (udi, key);
     }
 }
-
 
 /** Invoked when a device in the GDL emits a condition that cannot be
 *  expressed in a property (like when the processor is overheating)
@@ -211,7 +210,7 @@ void halevt_setup_HAL()
 
     dbus_error_init (&dbus_error);
     dbus_connection = dbus_bus_get (DBUS_BUS_SYSTEM, &dbus_error);
-    if (dbus_error_is_set (&dbus_error)) 
+    if (dbus_error_is_set (&dbus_error))
     {
         DEBUG (_("Error connecting to D-BUS system bus: %s"), dbus_error.message);
         dbus_error_free (&dbus_error);
@@ -236,19 +235,19 @@ void halevt_setup_HAL()
         DEBUG(_("Error initializing HAL"));
         exit(1);
     }
-    if (!libhal_device_property_watch_all(hal_ctx, &dbus_error)) 
+    if (!libhal_device_property_watch_all(hal_ctx, &dbus_error))
     {
         DEBUG(_("Failed to watch all HAL properties: %s"), dbus_error.message);
         exit(1);
     }
 }
 
-/* 
+/*
  * print and reset a dbus error
  */
 void halevt_check_dbus_error(DBusError *error)
 {
-    if (dbus_error_is_set(error)) 
+    if (dbus_error_is_set(error))
     {
         DEBUG(_("D-Bus Error %s: %s"), error->name, error->message);
         dbus_error_free(error);
@@ -346,7 +345,7 @@ int halevt_property_matches_udi (const char *property,
       }
       else if (type == LIBHAL_PROPERTY_TYPE_INT32)
       {
-          result = (libhal_device_get_property_int 
+          result = (libhal_device_get_property_int
                (hal_ctx, udi, property, &dbus_error) == atoi(value));
       }
       else if (type == LIBHAL_PROPERTY_TYPE_STRLIST)
@@ -368,14 +367,14 @@ int halevt_property_matches_udi (const char *property,
       }
       else if (type == LIBHAL_PROPERTY_TYPE_UINT64)
       {
-          result = (libhal_device_get_property_int 
-               (hal_ctx, udi, property, &dbus_error) == 
+          result = (libhal_device_get_property_int
+               (hal_ctx, udi, property, &dbus_error) ==
                   strtoull(value, NULL, 10));
       }
       else if (type == LIBHAL_PROPERTY_TYPE_DOUBLE)
       {
           result = (libhal_device_get_property_double
-               (hal_ctx, udi, property, &dbus_error) == 
+               (hal_ctx, udi, property, &dbus_error) ==
                   strtod(value, NULL));
       }
       else
@@ -453,7 +452,7 @@ int halevt_match_udi (const halevt_match *match, const char *udi)
 
     WALK_NULL_ARRAY(parent, match->parents)
     {
-       if (! libhal_device_property_exists 
+       if (! libhal_device_property_exists
              (hal_ctx, new_udi, *parent, &dbus_error))
        {
           return 0;
@@ -470,7 +469,7 @@ int halevt_match_udi (const halevt_match *match, const char *udi)
 /*
  * return true if a device matches a halevt_match
  */
-int halevt_matches (const halevt_match *match, const char *udi, 
+int halevt_matches (const halevt_match *match, const char *udi,
    const halevt_device *device)
 {
     if (((udi == NULL) && (device == NULL)) || (match == NULL))
@@ -512,7 +511,7 @@ char **halevt_udi_property_value (const char *property, const char *udi)
 	halevt_check_dbus_error(&dbus_error);
 
         values = halevt_get_property_value(type, property, udi, &dbus_error);
-        
+
     }
     halevt_check_dbus_error(&dbus_error);
 
@@ -549,9 +548,9 @@ char **halevt_property_value(const char *key, const char *udi,
         return values;
     }
 
-    if (device != NULL) 
-    { 
-        halevt_device_property *property = 
+    if (device != NULL)
+    {
+        halevt_device_property *property =
              halevt_device_list_get_property(key, device);
         if (property != NULL)
         {
@@ -575,23 +574,23 @@ char **halevt_duplicate_str_list(char** str_list)
        char *cur_val;
        unsigned int total_value_nr;
        char **cur_value;
-       total_value_nr = libhal_string_array_length(str_list);       
+       total_value_nr = libhal_string_array_length(str_list);
 
        value = malloc ((total_value_nr+1) * sizeof(char*));
        if (value == NULL)
-       { 
+       {
            libhal_free_string_array (str_list);
            return NULL;
        }
        *value = NULL;
 
        cur_value = value;
-              
+
        WALK_NULL_ARRAY(cur_str, str_list)
        {
            cur_val = strdup(*cur_str);
            if (cur_val == NULL)
-           { 
+           {
                libhal_free_string_array (str_list);
                FREE_NULL_ARRAY(char *, value, free);
                return NULL;
@@ -607,7 +606,7 @@ char **halevt_duplicate_str_list(char** str_list)
 
 /* cut and paste of halevt_get_property_value with libhal_psi_get_* instead of
  * libhal_device_get_property_* */
-char **halevt_get_iterator_value(const LibHalPropertyType type, 
+char **halevt_get_iterator_value(const LibHalPropertyType type,
   LibHalPropertySetIterator *iter)
 {
     char **value = NULL;
@@ -618,7 +617,7 @@ char **halevt_get_iterator_value(const LibHalPropertyType type,
        char **str_list = libhal_psi_get_strlist (iter);
        return halevt_duplicate_str_list(str_list);
     }
- 
+
     value = malloc(2*sizeof(char *));
     if (value == NULL) { return NULL; };
     value[1] = NULL;
@@ -672,7 +671,7 @@ char **halevt_get_iterator_value(const LibHalPropertyType type,
     return value;
 }
 
-char **halevt_get_property_value(LibHalPropertyType type, 
+char **halevt_get_property_value(LibHalPropertyType type,
   const char *property, const char *udi, DBusError *dbus_error_pointer)
 {
     char **value = NULL;
@@ -682,10 +681,10 @@ char **halevt_get_property_value(LibHalPropertyType type,
     {
        char **str_list = libhal_device_get_property_strlist
           (hal_ctx, udi, property, dbus_error_pointer);
-       
+
        return halevt_duplicate_str_list(str_list);
     }
- 
+
     value = malloc(2*sizeof(char *));
     if (value == NULL) { return NULL; };
     value[1] = NULL;
@@ -748,7 +747,7 @@ char **halevt_get_property_value(LibHalPropertyType type,
  * run the command specified in halevt_exec, performing substitution
  * of hal properties.
  */
-int halevt_run_command(const halevt_exec *exec, char const *udi, 
+int halevt_run_command(const halevt_exec *exec, char const *udi,
    const halevt_device *device)
 {
     char *argv[4];
@@ -767,7 +766,7 @@ int halevt_run_command(const halevt_exec *exec, char const *udi,
        DEBUG(_("Out of memory, cannot run %s"), exec->string);
     }
     *command = '\0';
-    
+
     while(exec->elements[string_index].string != NULL)
     {
         hal_value_used = 0;
@@ -792,7 +791,7 @@ int halevt_run_command(const halevt_exec *exec, char const *udi,
         str_len = strlen(string);
         if (str_len + string_size > current_size)
         {
-            string_size = 2 *(str_len + string_size); 
+            string_size = 2 *(str_len + string_size);
             current_size += str_len;
             if ((command = (char *) realloc (command, string_size*sizeof(char))) == NULL)
             {
@@ -824,5 +823,3 @@ int halevt_run_command(const halevt_exec *exec, char const *udi,
     free(command);
     return 1;
 }
-
-

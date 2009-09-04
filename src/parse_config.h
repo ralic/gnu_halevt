@@ -31,7 +31,7 @@ typedef struct halevt_exec_element
 typedef struct halevt_exec
 {
    char *string;
-   char *parsed_string; 
+   char *parsed_string;
    halevt_exec_element *elements;
 } halevt_exec;
 

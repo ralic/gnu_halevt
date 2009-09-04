@@ -17,7 +17,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -62,7 +61,7 @@ halevt_boolean_expression *halevt_new_boolean_expression(char *original_string)
          free(new_expression);
          return NULL;
       }
-      
+
       if ((expr = malloc (expr_string_size*sizeof(char))) == NULL)
       {
          free(new_expression->string);
@@ -80,7 +79,7 @@ halevt_boolean_expression *halevt_new_boolean_expression(char *original_string)
       while (1)
       {
          next_char = *(original_string+index);
-         if (next_char == '&' || next_char == '|' || 
+         if (next_char == '&' || next_char == '|' ||
              next_char == '(' || next_char == ')' || next_char == '!' ||
              next_char == '\0')
          {
@@ -107,12 +106,12 @@ halevt_boolean_expression *halevt_new_boolean_expression(char *original_string)
                /* in the boolean expression, the atom is substituted by
                  the index of the atom */
 
-               /* the atom expression index is put into 
+               /* the atom expression index is put into
                 * atom_index_string */
                n = snprintf(atom_index_string, atom_index_max_size, "%d", new_expression->matches_size - 1);
                if (n == -1 || n >= atom_index_max_size)
-               { /* the index number representation in char is more 
-                    than atom_index_max_size characters... This should 
+               { /* the index number representation in char is more
+                    than atom_index_max_size characters... This should
                     never happen */
                   DEBUG(_("Too much boolean expressions: %d"), new_expression->matches_size);
                   goto free_memory;
@@ -138,9 +137,9 @@ halevt_boolean_expression *halevt_new_boolean_expression(char *original_string)
             next_char_string[1] = '\0';
             strcat(expr, next_char_string);
          }
-         else if (atom == NULL && ! isspace(next_char)) 
+         else if (atom == NULL && ! isspace(next_char))
          { /* begin an atom expression */
-            atom = original_string+index; 
+            atom = original_string+index;
          }
          index++;
       }
@@ -153,7 +152,7 @@ halevt_boolean_expression *halevt_new_boolean_expression(char *original_string)
    /* fprintf(stderr, "%s\n", expr); */
 
    /* parse the boolean 'atoms' into name = value and store name and value
-    * in the matches structures array */ 
+    * in the matches structures array */
    if ((new_expression->matches = malloc (new_expression->matches_size *
        sizeof(halevt_match))) == NULL)
    {
@@ -171,7 +170,7 @@ halevt_boolean_expression *halevt_new_boolean_expression(char *original_string)
       /* first parse a 'name = value' or a simple 'name', remove leading
          sapces from value and trailing spaces from name */
       new_match->value = atoms[i];
-         
+
       new_match->name = strsep(&(new_match->value), "=");
       if (new_match->value != NULL)
       {
@@ -186,7 +185,7 @@ halevt_boolean_expression *halevt_new_boolean_expression(char *original_string)
          DEBUG(_("Bad match expression: %s"), new_match->name);
          goto free_match;
       }
-      /* cut the string in substring separated by hal. the last 
+      /* cut the string in substring separated by hal. the last
          corresponds with the value, the other are the parents */
 
       /* first find the number of parents */
@@ -225,7 +224,7 @@ halevt_boolean_expression *halevt_new_boolean_expression(char *original_string)
             }
             new_match->parents[j] = string;
          }
-         new_match->name = new_match->parents[parent_index]; 
+         new_match->name = new_match->parents[parent_index];
       }
       else
       {
@@ -269,7 +268,7 @@ free_memory:
 
 void halevt_free_boolean_expression (halevt_boolean_expression *expr)
 {
-   free (expr->expression_string); 
+   free (expr->expression_string);
    free (expr->matches);
    free (expr);
 }
@@ -319,7 +318,7 @@ char *halevt_print_boolean_expression (halevt_boolean_expression *expr)
    return string;
 }
 
-int halevt_value_true(const char *value, const char *udi, 
+int halevt_value_true(const char *value, const char *udi,
    const halevt_device *device,
    const halevt_boolean_expression *expr)
 {
@@ -327,12 +326,12 @@ int halevt_value_true(const char *value, const char *udi,
 }
 
 /* return 1 if the tree evaluate to true, 0 if the tree evaluates to false.
- * the tree should already be in DNF. 
- * 
+ * the tree should already be in DNF.
+ *
  * If the udi is NULL, the device passed in argument will be used by
- * halevt_value_true 
+ * halevt_value_true
  * */
-int halevt_true_tree(const halevt_boolean_expression *expr, const char* udi, 
+int halevt_true_tree(const halevt_boolean_expression *expr, const char* udi,
    const halevt_device *device)
 {
     int or_root_number = 0;

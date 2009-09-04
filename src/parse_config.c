@@ -17,7 +17,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 #include <libxml/tree.h>
 #include <stdio.h>
 #include <string.h>
@@ -195,7 +194,7 @@ halevt_insertion *halevt_add_insertion(const xmlChar *match, const xmlChar *exec
          return NULL;
       }
       if ((new_insertion->exec = halevt_new_exec(exec)) == NULL)
-      { 
+      {
          halevt_free_boolean_expression (new_insertion->match);
          free(new_insertion);
          return NULL;
@@ -221,7 +220,7 @@ halevt_oninit *halevt_add_oninit(const xmlChar *match, const xmlChar *exec)
          return NULL;
       }
       if ((new_oninit->exec = halevt_new_exec (exec)) == NULL)
-      { 
+      {
          halevt_free_boolean_expression (new_oninit->match);
          free(new_oninit);
          return NULL;
@@ -247,7 +246,7 @@ halevt_removal *halevt_add_removal(const xmlChar *match, const xmlChar *exec)
          return NULL;
       }
       if ((new_removal->exec = halevt_new_exec(exec)) == NULL)
-      { 
+      {
          halevt_free_boolean_expression (new_removal->match);
          free (new_removal);
          return NULL;
@@ -261,7 +260,7 @@ halevt_removal *halevt_add_removal(const xmlChar *match, const xmlChar *exec)
    return new_removal;
 }
 
-halevt_condition *halevt_add_condition(const xmlChar *match, 
+halevt_condition *halevt_add_condition(const xmlChar *match,
     const xmlChar *exec, const xmlChar *name, const xmlChar *value)
 {
    halevt_condition *new_condition;
@@ -274,21 +273,21 @@ halevt_condition *halevt_add_condition(const xmlChar *match,
          return NULL;
       }
       if ((new_condition->name = (char *) xmlStrdup(name)) == NULL)
-      { 
+      {
          halevt_free_boolean_expression (new_condition->match);
          free(new_condition);
          return NULL;
       }
       if (value == NULL) { new_condition->value = NULL; }
       else if ((new_condition->value = (char *) xmlStrdup(value)) == NULL)
-      { 
+      {
          halevt_free_boolean_expression (new_condition->match);
          free(new_condition->name);
          free(new_condition);
          return NULL;
       }
       if ((new_condition->exec = halevt_new_exec(exec)) == NULL)
-      { 
+      {
          halevt_free_boolean_expression (new_condition->match);
          free(new_condition->name);
          if (new_condition->value != NULL)
@@ -331,7 +330,7 @@ halevt_property *halevt_add_property(const xmlChar *match, const xmlChar *name)
          free(new_property);
          return NULL;
       }
-      
+
 /*
       printf ("add_property %s, %s\n", name, match);
 */
@@ -343,12 +342,12 @@ halevt_property *halevt_add_property(const xmlChar *match, const xmlChar *name)
    return new_property;
 }
 
-halevt_property_action *halevt_add_property_value(halevt_property *property, 
+halevt_property_action *halevt_add_property_value(halevt_property *property,
     const xmlChar *exec, const xmlChar *value)
 {
    halevt_property_action *new_property_action;
    new_property_action = malloc (sizeof(halevt_property_action));
-   
+
    if (new_property_action != NULL)
    {
       if ((new_property_action->value = (char *) xmlStrdup(value)) == NULL)
@@ -356,7 +355,7 @@ halevt_property_action *halevt_add_property_value(halevt_property *property,
          free (new_property_action);
          return NULL;
       }
-      if ((new_property_action->exec = halevt_new_exec(exec)) == NULL) 
+      if ((new_property_action->exec = halevt_new_exec(exec)) == NULL)
       {
          free (new_property_action->value);
          free (new_property_action);
@@ -376,7 +375,7 @@ int halevt_parse_config (char const *path)
    xmlDocPtr doc;
    xmlNodePtr cur;
    xmlNodePtr device;
-   char *root_node = "Configuration";   
+   char *root_node = "Configuration";
 
    doc = xmlParseFile (path);
    if (doc == NULL)

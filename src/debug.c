@@ -17,7 +17,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
@@ -34,7 +33,7 @@ void debug(const char *format, const char *file, const int line,
    va_list ap;
    char *buffer, *buffer_next;
    int n, size = 100;
-   
+
    if (halevt_fork)
    {
       va_start (ap, func);
@@ -59,12 +58,12 @@ void debug(const char *format, const char *file, const int line,
           size = n+1; /* precisely what is needed */
       else           /* glibc 2.0 */
           size *= 2;  /* twice the old size */
-      if ((buffer_next = realloc (buffer, size)) == NULL) 
+      if ((buffer_next = realloc (buffer, size)) == NULL)
       {
          free(buffer);
          return;
-      } 
-      else 
+      }
+      else
       {
           buffer = buffer_next;
       }
@@ -83,7 +82,7 @@ void debug(const char *format, const char *file, const int line,
    }
    else
    {
-      snprintf(buffer_next, size - 1, "%s:%d (%s) %s", 
+      snprintf(buffer_next, size - 1, "%s:%d (%s) %s",
          file, line, func, buffer);
       buffer_next[size-1] = '\0';
       fprintf (stderr, "%s\n", buffer_next);

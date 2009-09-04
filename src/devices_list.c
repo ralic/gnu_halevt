@@ -39,7 +39,7 @@ void halevt_free_device (halevt_device *device)
     FREE_LINKED_LIST(halevt_device_property, device->properties, free);
 }
 
-halevt_device_property *halevt_new_device_property (char *key, 
+halevt_device_property *halevt_new_device_property (char *key,
    char **values)
 {
    halevt_device_property *new_property = malloc (sizeof(halevt_device_property));
@@ -71,7 +71,7 @@ halevt_device *halevt_device_list_add_device (LibHalContext *ctx, const char *ud
       DEBUG(_("No property found for %s (or oom)"), udi);
       return NULL;
    }
-   
+
    device = malloc (sizeof(halevt_device));
    if (device == NULL) { return NULL; }
    device->udi = udi_string;
@@ -110,7 +110,7 @@ int halevt_device_list_remove_device (const char *udi)
 
    WALK_LINKED_LISTP(previous, device, halevt_device_root)
    {
-      if (!strcmp (device->udi, udi)) 
+      if (!strcmp (device->udi, udi))
       {
           if (previous == NULL) { halevt_device_root = device->next; }
           else { previous->next = device->next; }
@@ -133,7 +133,7 @@ halevt_device *halevt_device_list_find_device(const char *udi)
    return device;
 }
 
-halevt_device_property *halevt_device_list_get_property (const char *key, 
+halevt_device_property *halevt_device_list_get_property (const char *key,
    const halevt_device *device)
 {
    halevt_device_property *property;
@@ -170,14 +170,14 @@ int halevt_device_list_set_property (const char *udi, const char *key)
        if (new_key == NULL)
        {
            FREE_NULL_ARRAY(char *, values, free);
-           return 0; 
+           return 0;
        }
        property = halevt_new_device_property (new_key, values);
-       if (property == NULL) 
+       if (property == NULL)
        {
            FREE_NULL_ARRAY(char *, values, free);
            free(new_key);
-           return 0; 
+           return 0;
        }
        property->next = device->properties;
        device->properties = property;
@@ -198,7 +198,7 @@ int halevt_device_list_remove_property (const char *udi, const char *key)
 
    WALK_LINKED_LISTP(previous, property, device->properties)
    {
-      if (!strcmp (property->key, key)) 
+      if (!strcmp (property->key, key))
       {
           if (previous == NULL) { device->properties = property->next; }
           else { previous->next = property->next; }

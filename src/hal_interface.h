@@ -48,11 +48,11 @@ int halevt_matches (const halevt_match* match, const char *udi,
    const halevt_device *device);
 char **halevt_property_value (const char* property, const char *udi,
    const halevt_device* device);
-char **halevt_get_property_value(LibHalPropertyType type, const char *property, 
+char **halevt_get_property_value(LibHalPropertyType type, const char *property,
    const char *udi, DBusError *dbus_error_pointer);
-char **halevt_get_iterator_value(const LibHalPropertyType type, 
+char **halevt_get_iterator_value(const LibHalPropertyType type,
   LibHalPropertySetIterator *iter);
-int halevt_run_command(const halevt_exec *exec, char const *udi, 
+int halevt_run_command(const halevt_exec *exec, char const *udi,
   const halevt_device* device);
 
 #endif

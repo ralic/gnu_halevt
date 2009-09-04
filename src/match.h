@@ -31,7 +31,7 @@ typedef struct halevt_match
   char **parents;
 } halevt_match;
 
-typedef struct halevt_boolean_expression 
+typedef struct halevt_boolean_expression
 {
   boolexpr_t tree;
   char *string;
