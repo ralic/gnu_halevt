@@ -49,10 +49,7 @@ void halevt_device_added(LibHalContext *ctx, const char *udi)
 {
     halevt_insertion *current_insertion = halevt_insertion_root;
 
-    if (halevt_report)
-    {
-        DEBUG("New Device: %s", udi);
-    }
+    DEBUG_REPORT("New Device: %s", udi);
     while (current_insertion != NULL)
     {
         if (halevt_true_tree(current_insertion->match, udi, NULL))
@@ -74,13 +71,7 @@ void halevt_device_removed(LibHalContext *ctx, const char *udi)
     halevt_removal *current_removal = halevt_removal_root; 
     halevt_device *removed_device;
    
-/*
-    DEBUG("Device removed: %s", udi);
-*/
-    if (halevt_report)
-    {
-        DEBUG("Device removed: %s", udi);
-    }
+    DEBUG_REPORT("Device removed: %s", udi);
 
     /* use preferably the device from the devices list since the 
      * properties will be right */
@@ -121,10 +112,7 @@ void halevt_device_removed(LibHalContext *ctx, const char *udi)
 void halevt_device_new_capability(LibHalContext *ctx, const char *udi,
                         const char *capability)
 {
-    if (halevt_report)
-    {
-        DEBUG("Capability new %s:%s",udi,capability);
-    }
+    DEBUG_REPORT("Capability new %s:%s",udi,capability);
 }
 
 /** Invoked when device in the Global Device List loses a capability.
@@ -135,10 +123,7 @@ void halevt_device_new_capability(LibHalContext *ctx, const char *udi,
 void halevt_device_lost_capability (LibHalContext *ctx, const char *udi,
                            const char *capability)
 {
-    if (halevt_report)
-    {
-        DEBUG("Capability lost %s:%s",udi,capability);
-    }
+    DEBUG_REPORT("Capability lost %s:%s",udi,capability);
 }
 
 /** Invoked when a property of a device in the Global Device List is
@@ -150,10 +135,7 @@ void halevt_device_lost_capability (LibHalContext *ctx, const char *udi,
 void halevt_device_property_modified(LibHalContext *ctx, const char *udi,
   const char *key, dbus_bool_t is_removed, dbus_bool_t is_added)
 {
-    if (halevt_report)
-    {
-        DEBUG("Property %s:%s modified (removed: %d, added: %d)",udi,key,is_removed,is_added);
-    }
+    DEBUG_REPORT("Property %s:%s modified (removed: %d, added: %d)",udi,key,is_removed,is_added);
 
     halevt_property *current_property = halevt_property_root; 
     halevt_property_action *current_action;
@@ -195,10 +177,7 @@ void halevt_device_property_modified(LibHalContext *ctx, const char *udi,
 void halevt_device_condition(LibHalContext *ctx, const char *udi,
     const char *condition_name, const char *condition_detail)
 {
-    if (halevt_report)
-    {
-        DEBUG("Condition: %s,%s (%s)", udi,condition_name,condition_detail);
-    }
+    DEBUG_REPORT("Condition: %s,%s (%s)", udi,condition_name,condition_detail);
 
     halevt_condition *current_condition = halevt_condition_root;
     while (current_condition != NULL)

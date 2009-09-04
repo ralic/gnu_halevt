@@ -29,6 +29,16 @@
 # include "config.h"
 #endif
 
+#define DEBUG(fmt, arg...) \
+	do { \
+		debug(fmt, __FILE__, __LINE__, __FUNCTION__, ##arg); \
+	} while(0)
+
+#define DEBUG_REPORT(fmt, arg...) \
+	do { \
+		if (halevt_report) { DEBUG(fmt, ##arg); } \
+	} while(0)
+
 extern int halevt_fork;
 extern int halevt_report;
 extern int halevt_priority;
@@ -36,7 +46,5 @@ extern int halevt_priority;
 
 void debug(const char *format, const char *file, const int line,
            const char *func, ...);
-
-#define DEBUG(fmt, arg...) debug(fmt,__FILE__,__LINE__,__FUNCTION__,##arg)
 
 #endif
