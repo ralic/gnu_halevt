@@ -40,7 +40,9 @@ Release
 
 Edit ../halevt-web/index.html
 
+make
 make distcheck
+(cd doc/references && make regenerate)
 cp doc/halevt.html doc/halevt.1.html doc/halevt-mount.1.html doc/hvmount.1.html ../halevt-web/doc
 (cd ../halevt-web && cvs commit)
 VERSION=0.1.5

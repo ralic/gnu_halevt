@@ -4,8 +4,8 @@ What is Halevt?
 Halevt (HAL events manager) is a daemon that executes arbitrary commands 
 when a device with certain properties is added to the system and when 
 device properties change. Halevt uses HAL to monitor the state of your 
-system's hardware. With the default config file and script, it can handle 
-the mounting of media as they are inserted/attached to the system.
+system's hardware. Example config files show how to handle the mounting 
+of media as they are inserted/attached to the system.
 
 Halevt comes with halevt-mount a program able to use HAL to mount, umount 
 devices and keep a list of devices handled by halevt-mount.
@@ -102,16 +102,28 @@ configuration files by user files. The configuration files should be xml
 files, for the format see the examples shiped with halevt (some examples
 are in the examples/ directory) and the documentation.
 
-A file is shipped with halevt, called halevt.xml. With this file
-removable devices should be automounted. The halevt-mount program is 
-used to mount or unmount through hal and keep a list of mounted and 
-inserted devices by querying hal. It is installed in the default case.
+Some examples are available in the examples/ directory. The example in 
+automatic_sync_mount.xml leads to removable devices being automounted
+with the sync option, in order not to lose data. However, be warned 
+that in case of media with limited number of write cycles (e.g. some 
+flash drives) "sync" may cause life-cycle shortening, and the 
+performance is reduced a lot compared with the default "async" option.
+The halevt-mount program is used to mount or unmount through hal and keep
+a list of mounted and inserted devices by querying hal.
 
-Another example is given, in the file halevt-hvmount.xml which uses 
-the script hvmount for automounting; this script also allows to keep a list 
-of mounted and inserted devices. gnome-mount, pmount(-hal) or mount 
-are used to perform the actual mount. It is not installed in the default 
-case.
+The umount_from_tray-gtkdialog.xml example is similar and additionally shows 
+how a tray icon can be added upon insertion of a removable media, that 
+can be used to umount the media. Since there is an icon to do the umounting,
+devices are not mounted sync. The script halevt_umount_from_tray-gtkdialog.sh, 
+installed in the default case, installs the icon in the tray and prepares
+the pop-up window that allows to umount the device. This example requires
+alltray and gtkdialog. A similar example umount_from_tray-xmessage.xml
+uses the script halevt_umount_from_tray-xmessage.sh and xmessage.
+
+Another example is given, in the file automatic_mount_with_hvmount.xml 
+which uses the script hvmount for automounting; this script also allows 
+to keep a list of mounted and inserted devices. gnome-mount, pmount(-hal) 
+or mount are used to perform the actual mount. 
 
 
 Usage

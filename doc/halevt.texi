@@ -41,6 +41,8 @@ halevt(1) and halevt-mount(1) man
 @end ifnothtml
 pages.
 
+Some examples are provided in the Halevt distribution.
+
 
 @menu
 * Configuration file locations::

@@ -534,7 +534,7 @@ halevt_mount_udi **halevt_mount_find_udi (const char *udi, const char *device,
   return list;
 }
 
-void halevt_mount_umount (DBusConnection *dbus_connection, halevt_mount_udi *udi)
+int halevt_mount_umount (DBusConnection *dbus_connection, halevt_mount_udi *udi)
 {
   DBusError dbus_error;
   DBusMessage *dbus_msg;
@@ -545,14 +545,14 @@ void halevt_mount_umount (DBusConnection *dbus_connection, halevt_mount_udi *udi
        "org.freedesktop.Hal.Device.Volume", "Unmount")) == NULL)
   {
     fprintf (stderr, "Out of memory\n");
-    return;
+    return 0;
   }
   if (! (dbus_message_append_args (dbus_msg, 
        DBUS_TYPE_ARRAY, DBUS_TYPE_STRING, &options_array, 0, 
        DBUS_TYPE_INVALID)))
   {
     fprintf (stderr, _("Out of memory\n"));
-    return;
+    return 0;
   }
     
   dbus_error_init (&dbus_error);
@@ -560,8 +560,11 @@ void halevt_mount_umount (DBusConnection *dbus_connection, halevt_mount_udi *udi
       (dbus_connection, dbus_msg, -1, &dbus_error)) == NULL) || dbus_error_is_set (&dbus_error))
   {
     fprintf (stderr, _("Unmount error for %s:\n"), udi->udi);
+    halevt_mount_check_dbus_error (&dbus_error);
+    return 0;
   }
   halevt_mount_check_dbus_error (&dbus_error);
+  return 1;
 }
 
 halevt_mount_udi *halevt_mount_new_udi (char *udi)
@@ -1180,12 +1183,14 @@ int main (int argc, char **argv)
       {
         if (! strcmp (cmd, "umount"))
         {
+          int unmount_done = 0;
           current_udi_found = udi_found;
           while ((*current_udi_found) != NULL)
           {
-            halevt_mount_umount (dbus_connection, *current_udi_found);
+            if (halevt_mount_umount (dbus_connection, *current_udi_found)) { unmount_done = 1; }
             current_udi_found++;
           }
+          if (!unmount_done) { exit (1); }
         }
         else if (! strcmp (cmd, "clean"))
         { /* remove the udi, device or mountpoints from the list */
@@ -1221,10 +1226,12 @@ int main (int argc, char **argv)
         if (! strcmp (cmd, "list"))
         {  
           fprintf (stderr, _("Cannot find a device to be listed\n"));
+          exit (1);
         }
         else
         {
           fprintf (stderr, _("Cannot find a device to be umounted\n"));
+          exit (1);
         }
       }
     }

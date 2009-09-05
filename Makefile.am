@@ -4,10 +4,10 @@ SUBDIRS = po doc src scripts halevt-mount examples
 
 confdir = $(pkgdatadir)
 
-dist_conf_DATA = $(PACKAGE).xml
+#dist_conf_DATA = $(PACKAGE).xml
 
 EXTRA_DIST = config/config.rpath m4/ChangeLog  halevt.spec halevt.spec.in \
-  halevt-initscript halevt-hvmount.xml bootstrap.sh
+  halevt-initscript bootstrap.sh
 DISTCLEANFILES = halevt.spec
 
 all-local: halevt.spec

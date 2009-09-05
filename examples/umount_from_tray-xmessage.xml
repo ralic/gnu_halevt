@@ -37,7 +37,7 @@ Upon insertion, they are mounted, recorded by halevt-mount and the tray
 will have an icon ready for umounting. 
 !-->
 <halevt:Device match="&MOUNTABLE;">
-   <halevt:Insertion exec="halevt-mount -u $hal.udi$ &amp;&amp; alltray -stask -st halevt_umount_from_tray.sh '&quot;$hal.block.device$&quot;' '&quot;$hal.volume.label$&quot;'"/>
+   <halevt:Insertion exec="halevt-mount -u $hal.udi$ &amp;&amp; alltray -stask -st halevt_umount_from_tray-xmessage.sh '&quot;$hal.block.device$&quot;' '&quot;$hal.volume.label$&quot;'"/>
 </halevt:Device>
 
 <!--
@@ -62,11 +62,7 @@ When a device is unmounted, it is recorded by halevt-mount.
 
 <!--
 When a device is removed, it is recorded by halevt-mount.
-Note that at that point the device is already out of hal, so we use
-* which matches any device in the match attribute, and only pass the
-udi to the command.
-
-Also note that, normally the device should already be unmounted
+Note that, normally the device should already be unmounted
 if the tray was used so that halevt-umount will give an error message 
 saying that it cannot find the device, which is normal.
 !-->

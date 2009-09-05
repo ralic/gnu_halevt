@@ -23,11 +23,21 @@ Requires(pre): shadow-utils
 Halevt (HAL events manager) is a daemon that executes arbitrary commands 
 when a device with certain properties is added to the system and when 
 device properties change. Halevt uses HAL to monitor the state of your 
-system's hardware. With the default config file, it can handle 
-the mounting of media as they are inserted/attached to the system.
+system's hardware. 
 
 Halevt comes with halevt-mount a program able to use HAL to mount, umount 
 devices and keep a list of devices handled by halevt-mount.
+
+%package tray
+Summary:  Automounting with unmounting icon in the tray
+Group:    Applications/System
+Requires: alltray, gtkdialog
+Requires: %{name} = %{version}-%{release}
+
+%description tray
+
+This package sets up halevt to automatically mount devices as they are
+inserted and display an icon in the tray that allows to umount the devices.
 
 %prep
 %setup -q
@@ -42,11 +52,17 @@ make %{?_smp_mflags}
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT INSTALL='install -p'
 
-rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/halevt
+install -m 0644 -p examples/umount_from_tray-gtkdialog.xml $RPM_BUILD_ROOT%{_datadir}/halevt 
 
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d
-
 install -m 0755 -p halevt-initscript $RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/halevt
+
+rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+
+rm -rf __package_examples
+mkdir -p __package_examples/examples
+cp -p examples/*.xml __package_examples/examples/
 
 %find_lang %{name}
 %find_lang %{name}-mount
@@ -78,23 +94,29 @@ fi
 
 %files -f %{name}.lang
 %defattr(-,root,root,-)
-%doc COPYING AUTHORS README NEWS halevt-hvmount.xml
+%doc COPYING AUTHORS README NEWS
 %doc doc/*.html
-%doc examples/
+%doc __package_examples/examples/
 %dir %{_sysconfdir}/halevt
 %{_sysconfdir}/rc.d/init.d/halevt
 %{_bindir}/halevt
+%{_bindir}/halevt_umount_from_tray-gtkdialog.sh
+%{_bindir}/halevt_umount_from_tray-xmessage.sh
+%{_bindir}/halevt_umount_dialog.sh
 %{_bindir}/halevt-mount
 %{_bindir}/halevt-umount
 %{_bindir}/hvmount
 %{_bindir}/hvumount
 %{_infodir}/halevt.info*
 %dir %{_datadir}/halevt
-%{_datadir}/halevt/halevt.xml
 %{_mandir}/man1/halevt*.1*
 %{_mandir}/man1/hvm*.1*
 %dir %attr(750,halevt,halevt) %{_localstatedir}/run/halevt
 %dir %attr(755,halevt,halevt) %{_localstatedir}/lib/halevt
+
+%files tray
+%defattr(-,root,root,-)
+%{_datadir}/halevt/umount_from_tray-gtkdialog.xml
 
 %changelog
 * Sun Feb  4 2007 Patrice Dumas <pertusus@free.fr> @PACKAGE_VERSION@-1
