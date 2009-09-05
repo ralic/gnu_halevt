@@ -113,6 +113,7 @@ char **halevt_find_conf_files()
            if ((filename = (char *) malloc (strlen (directories[i]) + strlen (next_file->d_name) + 1)) == NULL)
            {
                DEBUG(_("Out of memory"));
+               closedir(dir);
                return NULL;
            }
            strcpy (filename, directories[i]);
@@ -155,6 +156,7 @@ char **halevt_find_conf_files()
                    if (basefiles == NULL || conffiles == NULL)
                    {
                        DEBUG(_("Out of memory"));
+                       closedir(dir);
                        return NULL;
                    }
                    basefiles[conffile_nr - 2] = strdup (next_file->d_name);
@@ -162,6 +164,7 @@ char **halevt_find_conf_files()
                    if ((basefiles[conffile_nr - 2] = strdup (next_file->d_name)) == NULL)
                    {
                        DEBUG(_("Out of memory"));
+                       closedir(dir);
                        return NULL;
                    }
                    conffiles[conffile_nr - 1] = NULL;
@@ -173,6 +176,7 @@ char **halevt_find_conf_files()
                DEBUG(_("stat failed for %s: %s"), filename, strerror (errno));
            }
        }
+       closedir(dir);
     }
 
     current_basefile = basefiles;
