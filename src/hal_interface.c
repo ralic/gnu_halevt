@@ -621,6 +621,7 @@ char **halevt_get_iterator_value(const LibHalPropertyType type,
 
     value = malloc(2*sizeof(char *));
     if (value == NULL) { return NULL; };
+    value[0] = NULL;
     value[1] = NULL;
 
     if (type == LIBHAL_PROPERTY_TYPE_STRING)
@@ -688,6 +689,7 @@ char **halevt_get_property_value(LibHalPropertyType type,
 
     value = malloc(2*sizeof(char *));
     if (value == NULL) { return NULL; };
+    value[0] = NULL;
     value[1] = NULL;
 
     if (type == LIBHAL_PROPERTY_TYPE_STRING)
