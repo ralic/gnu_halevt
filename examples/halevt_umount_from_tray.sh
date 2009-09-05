@@ -10,9 +10,18 @@ fi
 
 [ z"$label" = 'z' ] && label=$device
 
-xmessage -title "$label" -buttons "umount $label:2" "Click to unmount"
-if [ $? != 2 ]; then
-  exit 1
-fi
+while true; do
+  xmessage -title "$label" -buttons "umount $label:2" "Click to unmount"
+  if [ $? != 2 ]; then
+    exit 1
+  fi
 
-halevt-umount -d "$device"
+  error_msg=`halevt-umount -d "$device" 2>&1`
+  status=$?
+
+  if [ z"$status" = z0 ]; then
+    exit 0
+  fi
+  xmessage "$error_msg"
+done
+  
