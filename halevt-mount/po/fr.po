@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: halevt 0.0.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-04 09:30+0200\n"
+"POT-Creation-Date: 2009-07-27 15:35+0200\n"
 "PO-Revision-Date: 2007-02-24 11:11+0100\n"
 "Last-Translator: Patrice Dumas <pertusus@free.fr>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -16,8 +16,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: halevt-mount/halevt-mount.c:71 halevt-mount/halevt-mount.c:666
-#: halevt-mount/halevt-mount.c:1082
+#: halevt-mount/halevt-mount.c:71 halevt-mount/halevt-mount.c:669
+#: halevt-mount/halevt-mount.c:1085
 #, c-format
 msgid "Error opening %s: %s\n"
 msgstr "Erreur à l'ouverture de %s : %s\n"
@@ -71,15 +71,15 @@ msgstr "Le mémoire est certainment épuisée, abandon\n"
 #: halevt-mount/halevt-mount.c:271 halevt-mount/halevt-mount.c:358
 #: halevt-mount/halevt-mount.c:367 halevt-mount/halevt-mount.c:495
 #: halevt-mount/halevt-mount.c:524 halevt-mount/halevt-mount.c:554
-#: halevt-mount/halevt-mount.c:573 halevt-mount/halevt-mount.c:722
-#: halevt-mount/halevt-mount.c:727 halevt-mount/halevt-mount.c:780
-#: halevt-mount/halevt-mount.c:802 halevt-mount/halevt-mount.c:809
-#: halevt-mount/halevt-mount.c:816 halevt-mount/halevt-mount.c:823
-#: halevt-mount/halevt-mount.c:830 halevt-mount/halevt-mount.c:837
-#: halevt-mount/halevt-mount.c:850 halevt-mount/halevt-mount.c:924
-#: halevt-mount/halevt-mount.c:936 halevt-mount/halevt-mount.c:947
-#: halevt-mount/halevt-mount.c:956 halevt-mount/halevt-mount.c:1101
-#: halevt-mount/halevt-mount.c:1123
+#: halevt-mount/halevt-mount.c:576 halevt-mount/halevt-mount.c:725
+#: halevt-mount/halevt-mount.c:730 halevt-mount/halevt-mount.c:783
+#: halevt-mount/halevt-mount.c:805 halevt-mount/halevt-mount.c:812
+#: halevt-mount/halevt-mount.c:819 halevt-mount/halevt-mount.c:826
+#: halevt-mount/halevt-mount.c:833 halevt-mount/halevt-mount.c:840
+#: halevt-mount/halevt-mount.c:853 halevt-mount/halevt-mount.c:927
+#: halevt-mount/halevt-mount.c:939 halevt-mount/halevt-mount.c:950
+#: halevt-mount/halevt-mount.c:959 halevt-mount/halevt-mount.c:1104
+#: halevt-mount/halevt-mount.c:1126
 #, c-format
 msgid "Out of memory\n"
 msgstr "La mémoire est épuisée\n"
@@ -136,39 +136,39 @@ msgstr "Le point de montage trouvé %s et celui donné %s ne correspondent pas\n
 msgid "Unmount error for %s:\n"
 msgstr ""
 
-#: halevt-mount/halevt-mount.c:601 halevt-mount/halevt-mount.c:1047
+#: halevt-mount/halevt-mount.c:604 halevt-mount/halevt-mount.c:1050
 #, c-format
 msgid "HAL didn't return any device\n"
 msgstr "HAL n'a pas trouvé un seul périphérique\n"
 
-#: halevt-mount/halevt-mount.c:619
+#: halevt-mount/halevt-mount.c:622
 #, c-format
 msgid "Device %s is associated with udi %s, but udi %s was specified\n"
 msgstr ""
 "Le périphérique %s est associé à l'udi %s, pourtant l'udi %s a été donné\n"
 
-#: halevt-mount/halevt-mount.c:632
+#: halevt-mount/halevt-mount.c:635
 #, c-format
 msgid "The specified device %s wasn't found\n"
 msgstr "Le périphérique %s n'a pas été trouvé\n"
 
-#: halevt-mount/halevt-mount.c:639
+#: halevt-mount/halevt-mount.c:642
 #, c-format
 msgid "The specified udi %s doesn't seem to exist\n"
 msgstr "L'udi %s n'a pas été trouvé\n"
 
-#: halevt-mount/halevt-mount.c:658 halevt-mount/halevt-mount.c:983
-#: halevt-mount/halevt-mount.c:993
+#: halevt-mount/halevt-mount.c:661 halevt-mount/halevt-mount.c:986
+#: halevt-mount/halevt-mount.c:996
 #, c-format
 msgid "Cannot unlink %s: %s\n"
 msgstr "Impossible d'enlever le fichier %s : %s\n"
 
-#: halevt-mount/halevt-mount.c:672
+#: halevt-mount/halevt-mount.c:675
 #, c-format
 msgid "Renaming %s to %s failed: %s\n"
 msgstr "Le renommage de %s en %s a échoué : %s\n"
 
-#: halevt-mount/halevt-mount.c:680
+#: halevt-mount/halevt-mount.c:683
 #, c-format
 msgid ""
 " Usage: halevt-mount [option]\n"
@@ -250,57 +250,57 @@ msgstr ""
 " the state of the system. \n"
 " "
 
-#: halevt-mount/halevt-mount.c:786
+#: halevt-mount/halevt-mount.c:789
 #, c-format
 msgid "Error for getpwuid: %s\n"
 msgstr "getpwuid a échoué : %s\n"
 
-#: halevt-mount/halevt-mount.c:919
+#: halevt-mount/halevt-mount.c:922
 #, c-format
 msgid "Cannot getenv HOME\n"
 msgstr "Impossible de récupérer la variable HOME\n"
 
-#: halevt-mount/halevt-mount.c:966
+#: halevt-mount/halevt-mount.c:969
 #, c-format
 msgid "Cannot create directory %s: %s\n"
 msgstr "Impossible de créer le répertoire %s : %s\n"
 
-#: halevt-mount/halevt-mount.c:972
+#: halevt-mount/halevt-mount.c:975
 #, c-format
 msgid "Error opening lock file %s: %s\n"
 msgstr "Erreur d'ouverture du fichier de verrouillage %s: %s\n"
 
-#: halevt-mount/halevt-mount.c:976
+#: halevt-mount/halevt-mount.c:979
 #, c-format
 msgid "Error locking lock file %s: %s\n"
 msgstr "Le verrouillage du fichier verrou %s a échouée : %s\n"
 
-#: halevt-mount/halevt-mount.c:1003
+#: halevt-mount/halevt-mount.c:1006
 #, c-format
 msgid "Error parsing %s\n"
 msgstr "L'analyse du fichier %s a échouée\n"
 
-#: halevt-mount/halevt-mount.c:1012
+#: halevt-mount/halevt-mount.c:1015
 #, c-format
 msgid "Failed to create HAL context\n"
 msgstr "La création d'un contexte pour HAL a échouée\n"
 
-#: halevt-mount/halevt-mount.c:1019
+#: halevt-mount/halevt-mount.c:1022
 #, c-format
 msgid "Error connecting to D-BUS system bus: %s"
 msgstr "Erreur de connection au bus système de B-BUS : %s"
 
-#: halevt-mount/halevt-mount.c:1027
+#: halevt-mount/halevt-mount.c:1030
 #, c-format
 msgid "Error initializing HAL"
 msgstr "Erreur d'initialisation de HAL"
 
-#: halevt-mount/halevt-mount.c:1039
+#: halevt-mount/halevt-mount.c:1042
 #, c-format
 msgid "Devices handled:\n"
 msgstr "Périphériques pris en charge\n"
 
-#: halevt-mount/halevt-mount.c:1063
+#: halevt-mount/halevt-mount.c:1066
 #, c-format
 msgid ""
 "\n"
@@ -309,42 +309,42 @@ msgstr ""
 "\n"
 "Tous les périphériques :\n"
 
-#: halevt-mount/halevt-mount.c:1070
+#: halevt-mount/halevt-mount.c:1073
 #, c-format
 msgid "An udi or a device is needed\n"
 msgstr "Il faut spécifier un udi ou un périphérique\n"
 
-#: halevt-mount/halevt-mount.c:1092
+#: halevt-mount/halevt-mount.c:1095
 #, c-format
 msgid "Renaming %s to %s after add failed: %s\n"
 msgstr "Le renommage de %s en %s après une addition a échoué : %s\n"
 
-#: halevt-mount/halevt-mount.c:1146
+#: halevt-mount/halevt-mount.c:1149
 #, c-format
 msgid "Mount error for %s:\n"
 msgstr "Erreur de montage pour %s :\n"
 
-#: halevt-mount/halevt-mount.c:1153
+#: halevt-mount/halevt-mount.c:1156
 #, c-format
 msgid "Renaming %s to %s after a mount failed: %s\n"
 msgstr "Le renommage du fichier %s en %s (après un montage) a échoué : %s\n"
 
-#: halevt-mount/halevt-mount.c:1161
+#: halevt-mount/halevt-mount.c:1164
 #, c-format
 msgid "An argument or -a is needed\n"
 msgstr "Un argument ou -a doit être spécifié\n"
 
-#: halevt-mount/halevt-mount.c:1223
+#: halevt-mount/halevt-mount.c:1228
 #, c-format
 msgid "Cannot find a device to be listed\n"
 msgstr "Périphérique à lister non trouvé\n"
 
-#: halevt-mount/halevt-mount.c:1227
+#: halevt-mount/halevt-mount.c:1233
 #, c-format
 msgid "Cannot find a device to be umounted\n"
 msgstr "Périphérique à démonter non trouvé\n"
 
-#: halevt-mount/halevt-mount.c:1248
+#: halevt-mount/halevt-mount.c:1255
 #, c-format
 msgid "Error on close %s: %s\n"
 msgstr "Erreur à la fermeture de %s : %s\n"

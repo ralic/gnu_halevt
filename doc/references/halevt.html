@@ -3,11 +3,11 @@
 <title>Halevt configuation</title>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="description" content="Halevt configuation">
-<meta name="generator" content="makeinfo 4.12">
+<meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="top" href="#Top">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-Copyright (C) 2008 Patrice Dumas
+Copyright (C) 2008, 2009 Patrice Dumas
 
 
 Permission is granted to make and distribute verbatim
@@ -34,8 +34,8 @@ identical to this one.-->
 </head>
 <body>
 <div class="node">
-<p><hr>
 <a name="Top"></a>
+<p><hr>
 Next:&nbsp;<a rel="next" accesskey="n" href="#Configuration-file-locations">Configuration file locations</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="#dir">(dir)</a>
 
@@ -43,19 +43,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="#dir">(dir)</a>
 
 <h2 class="unnumbered">Halevt configuration</h2>
 
-<p>The commands <samp><span class="command">halevt</span></samp> and <samp><span class="command">halevt-mount</span></samp> options and
-synopsis are given in the
-<a href="halevt.1.html">halevt</a> and <a href="halevt-mount.1.html">halevt-mount</a>
-pages.
-
-<ul class="menu">
-<li><a accesskey="1" href="#Configuration-file-locations">Configuration file locations</a>
-<li><a accesskey="2" href="#Halevt-configuration-syntax">Halevt configuration syntax</a>
-</ul>
-
 <h3 class="heading">License of this document</h3>
 
-<p class="noindent">Copyright (C) 2008 Patrice Dumas<br>
+<p class="noindent">Copyright (C) 2008, 2009 Patrice Dumas<br>
 
    <p>Permission is granted to make and distribute verbatim
 copies of this manual provided the copyright notice and
@@ -67,9 +57,24 @@ copying, provided that the entire resulting derived work is
 distributed under the terms of a permission notice
 identical to this one.
 
+<h3 class="heading">Other sources of information</h3>
+
+<p>The commands <samp><span class="command">halevt</span></samp> and <samp><span class="command">halevt-mount</span></samp> options and
+synopsis are given in the
+<a href="halevt.1.html">halevt</a> and <a href="halevt-mount.1.html">halevt-mount</a>
+pages.
+
+   <p>Some examples are provided in the Halevt distribution.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Configuration-file-locations">Configuration file locations</a>
+<li><a accesskey="2" href="#Halevt-configuration-syntax">Halevt configuration syntax</a>
+<li><a accesskey="3" href="#Discovering-hal-properties">Discovering hal properties</a>
+</ul>
+
 <div class="node">
-<p><hr>
 <a name="Configuration-file-locations"></a>
+<p><hr>
 Next:&nbsp;<a rel="next" accesskey="n" href="#Halevt-configuration-syntax">Halevt configuration syntax</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="#Top">Top</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
@@ -96,8 +101,9 @@ in the other directores.
 file is used, <samp><span class="command">halevt</span></samp> reports all the HAL events.
 
 <div class="node">
-<p><hr>
 <a name="Halevt-configuration-syntax"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Discovering-hal-properties">Discovering hal properties</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="#Configuration-file-locations">Configuration file locations</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
 
@@ -111,8 +117,8 @@ Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
 </ul>
 
 <div class="node">
-<p><hr>
 <a name="Basic-syntax-of-halevt-xml-files"></a>
+<p><hr>
 Next:&nbsp;<a rel="next" accesskey="n" href="#Selecting-devices-and-actions-for-hal-events">Selecting devices and actions for hal events</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="#Halevt-configuration-syntax">Halevt configuration syntax</a>
 
@@ -128,7 +134,7 @@ at <a href="http://www.w3.org/XML/">http://www.w3.org/XML/</a>). A configuration
    <p>and end with
 <pre class="example">     &lt;/halevt:Configuration&gt;
 </pre>
-   <p>Comments are within &lsquo;<samp><span class="samp">&lt;--</span></samp>&rsquo; and &lsquo;<samp><span class="samp">--&gt;</span></samp>&rsquo;.
+   <p>Comments are within &lsquo;<samp><span class="samp">&lt;!--</span></samp>&rsquo; and &lsquo;<samp><span class="samp">--&gt;</span></samp>&rsquo;.
 
    <p>Basically, there are nested <dfn>elements</dfn> marked by &lsquo;<samp><span class="samp">&lt;...&gt;</span></samp>&rsquo;,
 either with a start tag and an end tag with a slash marking
@@ -163,8 +169,8 @@ as &lsquo;<samp><span class="samp">&amp;gt;</span></samp>&rsquo;.
 <pre class="example">     echo "$hal.udi$" &gt; file
 </pre>
    <div class="node">
-<p><hr>
 <a name="Selecting-devices-and-actions-for-hal-events"></a>
+<p><hr>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="#Basic-syntax-of-halevt-xml-files">Basic syntax of halevt xml files</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="#Halevt-configuration-syntax">Halevt configuration syntax</a>
 
@@ -195,8 +201,8 @@ element to select an action based on the property value.
 </ul>
 
 <div class="node">
-<p><hr>
 <a name="Device-selection-syntax"></a>
+<p><hr>
 Next:&nbsp;<a rel="next" accesskey="n" href="#Specifying-a-command-to-be-executed">Specifying a command to be executed</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="#Selecting-devices-and-actions-for-hal-events">Selecting devices and actions for hal events</a>
 
@@ -240,8 +246,8 @@ the property to check is also an UDI, the UDI can be considered to be
 another device and so on and so forth.
 
 <div class="node">
-<p><hr>
 <a name="Specifying-a-command-to-be-executed"></a>
+<p><hr>
 Next:&nbsp;<a rel="next" accesskey="n" href="#Actions">Actions</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="#Device-selection-syntax">Device selection syntax</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="#Selecting-devices-and-actions-for-hal-events">Selecting devices and actions for hal events</a>
@@ -264,8 +270,8 @@ UDI. For example in:
 is replaced by the &lsquo;<samp><span class="samp">block.device</span></samp>&rsquo; property value for the device.
 
 <div class="node">
-<p><hr>
 <a name="Actions"></a>
+<p><hr>
 Previous:&nbsp;<a rel="previous" accesskey="p" href="#Specifying-a-command-to-be-executed">Specifying a command to be executed</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="#Selecting-devices-and-actions-for-hal-events">Selecting devices and actions for hal events</a>
 
@@ -302,9 +308,17 @@ device removal, specified by a <code>exec</code> attribute. For example:
 </pre>
      <br><dt><code>halevt:Condition</code><dd>This element corresponds with an action to be performed when a condition
 is emitted. The <code>name</code> attribute allows to specify the condition,
-while the <code>exec</code> attribute specifies the action. For example:
+while the <code>exec</code> attribute specifies the action. An optional
+<code>value</code> attribute may also be used to match only for a given
+condition detail value. 
+For example:
      <pre class="example">          &lt;halevt:Device match="hal.info.udi = /org/freedesktop/Hal/devices/acpi_PWRF"&gt;
               &lt;halevt:Condition name="ButtonPressed" exec="sudo /sbin/shutdown"/&gt;
+          &lt;/halevt:Device&gt;
+</pre>
+     <p>With a value:
+     <pre class="example">          &lt;halevt:Device match="hal.input.originating_device.hal.info.linux.driver = atkbd"&gt;
+              &lt;halevt:Condition name="ButtonPressed" value="mute" exec="amixer -q set Master toggle"/&gt;
           &lt;/halevt:Device&gt;
 </pre>
      <br><dt><code>halevt:Property</code><dd>for an action to be performed when a property changes. The property name
@@ -314,7 +328,8 @@ element. An <code>halevt:Action</code> element is nested within the
 property value. In the <code>halevt:Action</code> element, the <code>value</code>
 attribute allows to specify which value for the property should lead to
 the action to be taken, and the <code>exec</code> attribute specifies the command to
-be run. For example:
+be run. &lsquo;<samp><span class="samp">*</span></samp>&rsquo; as an <code>halevt:Action</code> <code>value</code> will match
+any value. For example:
      <pre class="example">          &lt;halevt:Device match="hal.block.device &amp;amp; hal.block.is_volume = true"&gt;
              &lt;halevt:Property name="hal.volume.is_mounted"&gt;
                 &lt;halevt:Action value="true" exec="halevt-mount -s"/&gt;
@@ -325,6 +340,41 @@ be run. For example:
 and the action is executed when the value of &lsquo;<samp><span class="samp">volume.is_mounted</span></samp>&rsquo;
 becomes &lsquo;<samp><span class="samp">true</span></samp>&rsquo;. 
 </dl>
+
+<div class="node">
+<a name="Discovering-hal-properties"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Halevt-configuration-syntax">Halevt configuration syntax</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">3 Tips and tricks for discovering hal properties</h2>
+
+<p>The hal properties are very important in halevt, but cannot necessarily
+be found easily. Here are some tricks.
+
+   <p>To discover what changes when a device is inserted, one can use
+<samp><span class="command">lshal -m</span></samp>. Once started, it will wait for hal events and
+will print all the changes emitted
+by the hald daemon, allowing to know which UDI was added and which
+property changed.
+
+   <p>Also, one can use <samp><span class="command">lshal</span></samp> to list the devices with their
+properties. The properties can then be used in <code>match</code>
+prepended by &lsquo;<samp><span class="samp">hal.</span></samp>&rsquo;, and also in <code>exec</code>, also prepended by &lsquo;<samp><span class="samp">hal</span></samp>&rsquo;
+and enclosed in &lsquo;<samp><span class="samp">$</span></samp>&rsquo;, like:
+<pre class="example">     exec="halevt-mount -d $hal.block.device$"
+</pre>
+   <p>Reference to other UDI are recognizable because they begin with
+<pre class="example">     /org/freedesktop/Hal/devices/
+</pre>
+   <p>For example, one can have:
+<pre class="example">       info.parent = '/org/freedesktop/Hal/devices/usb_device_47b_2_noserial_if1'  (string)
+       input.originating_device = '/org/freedesktop/Hal/devices/usb_device_47b_2_noserial_if1'  (string)
+</pre>
+   <p>The properties of those devices can be used as explained
+in <a href="#Device-selection-syntax">Device selection syntax</a>.
 
 </body></html>
 
