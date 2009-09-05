@@ -327,14 +327,14 @@ int halevt_property_matches_udi (const char *property,
            (hal_ctx, udi, property, &dbus_error);
       halevt_check_dbus_error (&dbus_error);
 
-      if (type == DBUS_TYPE_BOOLEAN)
+      if (type == LIBHAL_PROPERTY_TYPE_BOOLEAN)
       {
           dbus_bool_t val_bool = FALSE;
           if (! strcmp(value, "true")) { val_bool = TRUE; }
           result = (libhal_device_get_property_bool
                (hal_ctx, udi, property, &dbus_error) == val_bool);
       }
-      else if (type == DBUS_TYPE_STRING)
+      else if (type == LIBHAL_PROPERTY_TYPE_STRING)
       {
           char *str_val = libhal_device_get_property_string
                (hal_ctx, udi, property, &dbus_error);
@@ -344,13 +344,14 @@ int halevt_property_matches_udi (const char *property,
              libhal_free_string (str_val);
           }
       }
-      else if (type == DBUS_TYPE_INT32)
+      else if (type == LIBHAL_PROPERTY_TYPE_INT32)
       {
           result = (libhal_device_get_property_int 
                (hal_ctx, udi, property, &dbus_error) == atoi(value));
-      } /* FIXME: LIBHAL_PROPERTY_TYPE_STRLIST */
-      else if (type == LIBHAL_PROPERTY_TYPE_STRING)
+      }
+      else if (type == LIBHAL_PROPERTY_TYPE_STRLIST)
       {
+          /* impulze: why was this LIBHAL_PROPERTY_TYPE_STRING? */
           char **cur_str;
           char **str_list = libhal_device_get_property_strlist
                 (hal_ctx, udi, property, &dbus_error);
@@ -365,13 +366,13 @@ int halevt_property_matches_udi (const char *property,
 
           libhal_free_string_array (str_list);
       }
-      else if (type == DBUS_TYPE_UINT64)
+      else if (type == LIBHAL_PROPERTY_TYPE_UINT64)
       {
           result = (libhal_device_get_property_int 
                (hal_ctx, udi, property, &dbus_error) == 
                   strtoull(value, NULL, 10));
       }
-      else if (type == DBUS_TYPE_DOUBLE)
+      else if (type == LIBHAL_PROPERTY_TYPE_DOUBLE)
       {
           result = (libhal_device_get_property_double
                (hal_ctx, udi, property, &dbus_error) == 
@@ -622,7 +623,7 @@ char **halevt_get_iterator_value(const LibHalPropertyType type,
     if (value == NULL) { return NULL; };
     value[1] = NULL;
 
-    if (type == DBUS_TYPE_STRING)
+    if (type == LIBHAL_PROPERTY_TYPE_STRING)
     {
         char *hal_value = libhal_psi_get_string (iter);
         if (hal_value != NULL)
@@ -631,7 +632,7 @@ char **halevt_get_iterator_value(const LibHalPropertyType type,
             libhal_free_string(hal_value);
         }
     }
-    else if (type == DBUS_TYPE_BOOLEAN)
+    else if (type == LIBHAL_PROPERTY_TYPE_BOOLEAN)
     {
         dbus_bool_t value_b = libhal_psi_get_bool (iter);
         if (value_b == TRUE)
@@ -643,21 +644,21 @@ char **halevt_get_iterator_value(const LibHalPropertyType type,
             value[0] = strdup("false");
         }
     }
-    else if (type == DBUS_TYPE_INT32)
+    else if (type == LIBHAL_PROPERTY_TYPE_INT32)
     {
         dbus_int32_t int_value = libhal_psi_get_int (iter);
         snprintf(tmp, 255, "%d", int_value);
         tmp[255] = '\0';
         value[0] = strdup(tmp);
     }
-    else if (type == DBUS_TYPE_UINT64)
+    else if (type == LIBHAL_PROPERTY_TYPE_UINT64)
     {
         dbus_uint64_t uint_value = libhal_psi_get_uint64 (iter);
         snprintf(tmp, 255, "%llu", uint_value);
         tmp[255] = '\0';
         value[0] = strdup(tmp);
     }
-    else if (type == DBUS_TYPE_DOUBLE)
+    else if (type == LIBHAL_PROPERTY_TYPE_DOUBLE)
     {
         double dble_value = libhal_psi_get_double (iter);
         snprintf(tmp, 255, "%g", dble_value);
@@ -689,7 +690,7 @@ char **halevt_get_property_value(LibHalPropertyType type,
     if (value == NULL) { return NULL; };
     value[1] = NULL;
 
-    if (type == DBUS_TYPE_STRING)
+    if (type == LIBHAL_PROPERTY_TYPE_STRING)
     {
         char *hal_value = libhal_device_get_property_string
             (hal_ctx, udi, property, dbus_error_pointer);
@@ -699,7 +700,7 @@ char **halevt_get_property_value(LibHalPropertyType type,
             libhal_free_string(hal_value);
         }
     }
-    else if (type == DBUS_TYPE_BOOLEAN)
+    else if (type == LIBHAL_PROPERTY_TYPE_BOOLEAN)
     {
         dbus_bool_t value_b = libhal_device_get_property_bool
             (hal_ctx, udi, property, dbus_error_pointer);
@@ -712,7 +713,7 @@ char **halevt_get_property_value(LibHalPropertyType type,
             value[0] = strdup("false");
         }
     }
-    else if (type == DBUS_TYPE_INT32)
+    else if (type == LIBHAL_PROPERTY_TYPE_INT32)
     {
         dbus_int32_t int_value = libhal_device_get_property_int
                (hal_ctx, udi, property, dbus_error_pointer);
@@ -720,7 +721,7 @@ char **halevt_get_property_value(LibHalPropertyType type,
         tmp[255] = '\0';
         value[0] = strdup(tmp);
     }
-    else if (type == DBUS_TYPE_UINT64)
+    else if (type == LIBHAL_PROPERTY_TYPE_UINT64)
     {
         dbus_uint64_t uint_value = libhal_device_get_property_uint64
                 (hal_ctx, udi, property, dbus_error_pointer);
@@ -728,7 +729,7 @@ char **halevt_get_property_value(LibHalPropertyType type,
         tmp[255] = '\0';
         value[0] = strdup(tmp);
     }
-    else if (type == DBUS_TYPE_DOUBLE)
+    else if (type == LIBHAL_PROPERTY_TYPE_DOUBLE)
     {
         double dble_value = libhal_device_get_property_double
                 (hal_ctx, udi, property, dbus_error_pointer);
