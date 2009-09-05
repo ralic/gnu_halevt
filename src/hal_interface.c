@@ -545,23 +545,19 @@ char **halevt_property_value(const char *key, const char *udi,
         }
         values[0] = new_udi;
         values[1] = NULL;
-        return values;
     }
-
-    if (device != NULL)
+    else if (device != NULL)
     {
         halevt_device_property *property =
              halevt_device_list_get_property(key, device);
-        if (property != NULL)
-        {
-            return property->values;
-        }
-        else
-        {
-            return NULL;
-        }
+        values = property != NULL ? property->values : NULL;
     }
-    return halevt_udi_property_value(key, udi);
+    else
+    {
+        values = halevt_udi_property_value(key, udi);
+    }
+
+    return values;
 }
 
 char **halevt_duplicate_str_list(char** str_list)
