@@ -141,6 +141,14 @@ halevt_exec *halevt_new_exec(const xmlChar *exec)
    return result_exec;
 }
 
+static void halevt_free_exec(halevt_exec *exec)
+{
+   free(exec->string);
+   free(exec->parsed_string);
+   free(exec->elements);
+   free(exec);
+}
+
 /* for debugging */
 char *halevt_print_exec(halevt_exec *exec_str)
 {
@@ -198,6 +206,13 @@ halevt_insertion *halevt_add_insertion(const xmlChar *match, const xmlChar *exec
    return new_insertion;
 }
 
+static void halevt_free_insertion(halevt_insertion *insertion)
+{
+   halevt_free_boolean_expression(insertion->match);
+   halevt_free_exec(insertion->exec);
+   free(insertion);
+}
+
 halevt_oninit *halevt_add_oninit(const xmlChar *match, const xmlChar *exec)
 {
    halevt_oninit *new_oninit;
@@ -224,6 +239,13 @@ halevt_oninit *halevt_add_oninit(const xmlChar *match, const xmlChar *exec)
    return new_oninit;
 }
 
+static void halevt_free_oninit(halevt_oninit *oninit)
+{
+   halevt_free_boolean_expression(oninit->match);
+   halevt_free_exec(oninit->exec);
+   free(oninit);
+}
+
 halevt_removal *halevt_add_removal(const xmlChar *match, const xmlChar *exec)
 {
    halevt_removal *new_removal;
@@ -248,6 +270,13 @@ halevt_removal *halevt_add_removal(const xmlChar *match, const xmlChar *exec)
       halevt_removal_root = new_removal;
    }
    return new_removal;
+}
+
+static void halevt_free_removal(halevt_removal *removal)
+{
+   halevt_free_boolean_expression(removal->match);
+   halevt_free_exec(removal->exec);
+   free(removal);
 }
 
 halevt_condition *halevt_add_condition(const xmlChar *match,
@@ -292,6 +321,14 @@ halevt_condition *halevt_add_condition(const xmlChar *match,
       halevt_condition_root = new_condition;
    }
    return new_condition;
+}
+
+static void halevt_free_condition(halevt_condition *condition)
+{
+   halevt_free_boolean_expression(condition->match);
+   halevt_free_exec(condition->exec);
+   free(condition->name);
+   free(condition);
 }
 
 halevt_property *halevt_add_property(const xmlChar *match, xmlChar *name)
@@ -354,6 +391,21 @@ halevt_property_action *halevt_add_property_value(halevt_property *property,
       property->action = new_property_action;
    }
    return new_property_action;
+}
+
+static void halevt_free_property_value(halevt_property_action *action)
+{
+   halevt_free_exec(action->exec);
+   free(action->value);
+   free(action);
+}
+
+static void halevt_free_property(halevt_property *property)
+{
+   FREE_LINKED_LIST(halevt_property_action, property->action, halevt_free_property_value);
+   halevt_free_boolean_expression(property->match);
+   free(property->name);
+   free(property);
 }
 
 int halevt_parse_config (char const *path)
@@ -555,4 +607,14 @@ void halevt_print_config()
       }
       property = property->next;
    }
+}
+
+void halevt_free_config()
+{
+   FREE_LINKED_LIST(halevt_property, halevt_property_root, halevt_free_property);
+   FREE_LINKED_LIST(halevt_insertion, halevt_insertion_root, halevt_free_insertion);
+   FREE_LINKED_LIST(halevt_removal, halevt_removal_root, halevt_free_removal);
+   FREE_LINKED_LIST(halevt_condition, halevt_condition_root, halevt_free_condition);
+   FREE_LINKED_LIST(halevt_oninit, halevt_oninit_root, halevt_free_oninit);
+   xmlCleanupParser();
 }

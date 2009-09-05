@@ -418,5 +418,8 @@ int main(int argc, char *argv[])
 
     if (halevt_fork) { halevt_clear_pidfile(pid_file); }
 
+    halevt_free_config();
+    halevt_free_devices();
+
     return 0;
 }

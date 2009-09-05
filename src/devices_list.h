@@ -46,6 +46,8 @@ halevt_device *halevt_device_list_find_device (const char *udi);
 int halevt_device_list_set_property (const char *udi, const char *key);
 halevt_device_property *halevt_device_list_get_property (const char *property,
    const halevt_device *device);
+void halevt_free_devices ();
+
 /* debugging */
 void halevt_print_device (const halevt_device *device);
 int halevt_count_devices ();

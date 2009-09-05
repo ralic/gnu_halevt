@@ -214,6 +214,11 @@ int halevt_device_list_remove_property (const char *udi, const char *key)
    return 0;
 }
 
+void halevt_free_devices ()
+{
+    FREE_LINKED_LIST(halevt_device, halevt_device_root, halevt_free_device);
+}
+
 /* debugging */
 void halevt_print_device (const halevt_device *device)
 {

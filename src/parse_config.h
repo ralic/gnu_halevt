@@ -81,6 +81,7 @@ typedef struct halevt_condition
 } halevt_condition;
 
 int halevt_parse_config(char const *path);
+void halevt_free_config();
 char *halevt_hal_string (char *string);
 void halevt_print_config ();
 
