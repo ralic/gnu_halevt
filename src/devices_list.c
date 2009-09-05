@@ -58,12 +58,8 @@ halevt_device *halevt_device_list_add_device (LibHalContext *ctx, const char *ud
    LibHalPropertySet* device_property_set;
    halevt_device *device;
    char *key;
-   char *udi_string;
    char **value;
    halevt_device_property *new_property;
-
-   udi_string = strdup(udi);
-   if (udi_string == NULL) { return NULL; }
 
    dbus_error_init(&dbus_error);
    device_property_set = libhal_device_get_all_properties(ctx, udi, &dbus_error);
@@ -75,8 +71,9 @@ halevt_device *halevt_device_list_add_device (LibHalContext *ctx, const char *ud
    }
 
    device = malloc (sizeof(halevt_device));
-   if (device == NULL) { return NULL; }
-   device->udi = udi_string;
+   if (device == NULL) { goto oom; }
+   device->udi = strdup(udi);
+   if (device->udi == NULL) { goto oom; }
    device->properties = NULL;
 
    for (libhal_psi_init(&device_property_iterator, device_property_set);
@@ -87,9 +84,18 @@ halevt_device *halevt_device_list_add_device (LibHalContext *ctx, const char *ud
       key = strdup(libhal_psi_get_key(&device_property_iterator));
       if (key == NULL) { goto oom; }
       value = halevt_get_iterator_value (type, &device_property_iterator);
-      if (value == NULL) { goto oom; }
+      if (value == NULL)
+      {
+         free(key);
+         goto oom;
+      }
       new_property = halevt_new_device_property (key, value);
-      if (new_property == NULL) { goto oom; }
+      if (new_property == NULL)
+      {
+         free(key);
+         FREE_NULL_ARRAY(char *, value, free);
+         goto oom;
+      }
       new_property->next = device->properties;
       device->properties = new_property;
    }
