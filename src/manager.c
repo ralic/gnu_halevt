@@ -190,7 +190,7 @@ char **halevt_find_conf_files()
     return conffiles;
 }
 
-void halevt_clear_pidfile(char *file)
+void halevt_clear_pidfile(const char *file)
 {
     if (file != NULL)
     {
@@ -224,9 +224,9 @@ int main(int argc, char *argv[])
 {
     char **conffiles = NULL;
     char **current_conffile;
-    char *user = NULL;
-    char *group = NULL;
-    char *pid_file = NULL;
+    const char *user = NULL;
+    const char *group = NULL;
+    const char *pid_file = NULL;
     struct group *group_struct;
     struct passwd *passwd_struct;
     struct stat statbuf;
@@ -271,25 +271,13 @@ int main(int argc, char *argv[])
                do_fork = 0;
                break;
             case 'u':
-               if ((user = strdup(optarg)) == NULL)
-               {
-                   DEBUG(_("Out of memory"));
-                   exit (1);
-               }
+               user = optarg;
                break;
             case 'g':
-               if ((group = strdup(optarg)) == NULL)
-               {
-                   DEBUG(_("Out of memory"));
-                   exit (1);
-               }
+               group = optarg;
                break;
             case 'p':
-               if ((pid_file = strdup(optarg)) == NULL)
-               {
-                   DEBUG(_("Out of memory"));
-                   exit (1);
-               }
+               pid_file = optarg;
                break;
             case 'f':
                do_fork = 0;
