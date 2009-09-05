@@ -197,7 +197,7 @@ void halevt_clear_pidfile(const char *file)
         DEBUG(_("Deleting lockfile %s"), file);
         if (unlink(file) == -1)
         {
-            DEBUG(_("Failed to delete lockfile %s!"), file);
+            DEBUG(_("Failed to delete lockfile %s"), file);
         }
     }
 }
@@ -397,7 +397,7 @@ int main(int argc, char *argv[])
     loop = g_main_loop_new(NULL, FALSE);
     if (!loop) 
     {
-        DEBUG(_("Error creating main loop!"));
+        DEBUG(_("Error creating main loop"));
         return 1;
     }
 

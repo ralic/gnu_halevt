@@ -226,7 +226,7 @@ void halevt_setup_HAL()
 
     if ((hal_ctx = libhal_ctx_new()) == NULL)
     {
-        DEBUG(_("Failed to create HAL context!"));
+        DEBUG(_("Failed to create HAL context"));
         exit(1);
     }
 
@@ -271,7 +271,7 @@ void halevt_check_dbus_error(DBusError *error)
 {
     if (dbus_error_is_set(error)) 
     {
-        DEBUG(_("DBus Error! %s: %s"), error->name, error->message);
+        DEBUG(_("D-Bus Error %s: %s"), error->name, error->message);
         dbus_error_free(error);
     }
 }
@@ -716,7 +716,7 @@ char **halevt_get_iterator_value(const LibHalPropertyType type,
     }
     else
     {
-        DEBUG(_("Unhandled HAL iterator type: %d!"), type);
+        DEBUG(_("Unhandled HAL iterator type: %d"), type);
     }
     return value;
 }
@@ -788,7 +788,7 @@ char **halevt_get_property_value(LibHalPropertyType type,
     }
     else
     {
-        DEBUG(_("Unhandled HAL type for property %s, device %s: %d!"), property, udi, type);
+        DEBUG(_("Unhandled HAL type for property %s, device %s: %d"), property, udi, type);
     }
     return value;
 }
