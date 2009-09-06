@@ -269,6 +269,7 @@ free_memory:
 void halevt_free_boolean_expression (halevt_boolean_expression *expr)
 {
    free (expr->expression_string);
+   boolstuff_destroy_tree (expr->tree);
    free (expr->matches);
    free (expr);
 }
