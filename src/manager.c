@@ -71,17 +71,13 @@ char **halevt_find_conf_files()
     int i;
     DIR *dir;
     struct dirent *next_file;
-    char *filename;
+    char *filename = NULL;
     char *extension;
     char *string_pos;
     char **current_basefile;
     int found;
 
-    if (conffiles == NULL || basefiles == NULL)
-    {
-        DEBUG(_("Out of memory"));
-        return NULL;
-    }
+    if (conffiles == NULL || basefiles == NULL) { goto oom; }
     basefiles[0] = NULL;
     conffiles[0] = NULL;
 
@@ -90,8 +86,7 @@ char **halevt_find_conf_files()
     {
         if ((homedir =  (char *) malloc ((1 + strlen("/.") + strlen (home) + strlen (PACKAGE) + strlen ("/")))) == NULL)
         {
-            DEBUG(_("Out of memory"));
-            return NULL;
+            goto oom;
         }
         strcpy (homedir, home);
         strcat (homedir, "/.");
@@ -110,18 +105,25 @@ char **halevt_find_conf_files()
         {
            if ((filename = (char *) malloc (strlen (directories[i]) + strlen (next_file->d_name) + 1)) == NULL)
            {
-               DEBUG(_("Out of memory"));
                closedir(dir);
-               return NULL;
+               goto oom;
            }
            strcpy (filename, directories[i]);
            strcat (filename, next_file->d_name);
 
            if (stat (filename, &statbuf) == 0)
            {
-               if (! S_ISREG(statbuf.st_mode)) { continue ;}
+               if (! S_ISREG(statbuf.st_mode))
+               {
+                   free(filename);
+                   continue;
+               }
                /* special case, a file named .xml... */
-               if (! strcmp (CONFFILEEXTENSION, next_file->d_name)) { continue; }
+               if (! strcmp (CONFFILEEXTENSION, next_file->d_name))
+               {
+                   free(filename);
+                   continue;
+               }
 
                /* process a file only if it ends with .xml */
                string_pos = next_file->d_name;
@@ -134,7 +136,11 @@ char **halevt_find_conf_files()
                    }
                    string_pos += strlen (CONFFILEEXTENSION);
                }
-               if (extension == NULL) { continue ;}
+               if (extension == NULL)
+               {
+                   free(filename);
+                   continue ;
+               }
                found = 0;
                WALK_NULL_ARRAY(current_basefile, basefiles)
                {
@@ -146,22 +152,22 @@ char **halevt_find_conf_files()
                }
                if (! found)
                {
-                   conffile_nr++;
-                   basefiles = (char **) realloc (basefiles, conffile_nr * sizeof(char *));
-                   conffiles =  (char **) realloc (conffiles, conffile_nr * sizeof(char *));
-                   if (basefiles == NULL || conffiles == NULL)
+                   char **tmp_basefiles = (char **) realloc (basefiles, ++conffile_nr * sizeof(char *));
+                   char **tmp_conffiles =  (char **) realloc (conffiles, conffile_nr * sizeof(char *));
+                   if (tmp_basefiles == NULL || tmp_conffiles == NULL)
                    {
-                       DEBUG(_("Out of memory"));
+                       free(tmp_basefiles);
+                       free(tmp_conffiles);
                        closedir(dir);
-                       return NULL;
+                       goto oom;
                    }
-                   basefiles[conffile_nr - 2] = strdup (next_file->d_name);
+                   basefiles = tmp_basefiles;
+                   conffiles = tmp_conffiles;
                    conffiles[conffile_nr - 2] = filename;
                    if ((basefiles[conffile_nr - 2] = strdup (next_file->d_name)) == NULL)
                    {
-                       DEBUG(_("Out of memory"));
                        closedir(dir);
-                       return NULL;
+                       goto oom;
                    }
                    conffiles[conffile_nr - 1] = NULL;
                    basefiles[conffile_nr - 1] = NULL;
@@ -176,8 +182,17 @@ char **halevt_find_conf_files()
     }
 
     FREE_NULL_ARRAY(char *, basefiles, free);
+    free(homedir);
 
     return conffiles;
+
+oom:
+    DEBUG(_("Out of memory"));
+    FREE_NULL_ARRAY(char *, conffiles, free);
+    FREE_NULL_ARRAY(char *, basefiles, free);
+    free(homedir);
+    free(filename);
+    return NULL;
 }
 
 void halevt_clear_pidfile(const char *file)
@@ -318,7 +333,7 @@ int main(int argc, char *argv[])
     {
        /* parse conf file */
         if (conffiles == NULL) { conffiles = halevt_find_conf_files (); }
-        if (conffiles[0] == NULL)
+        if (conffiles == NULL || conffiles[0] == NULL)
         {
             DEBUG(_("No configuration file found"));
             exit (1);
