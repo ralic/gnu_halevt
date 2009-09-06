@@ -619,10 +619,8 @@ char **halevt_get_iterator_value(const LibHalPropertyType type,
        return halevt_duplicate_str_list(str_list);
     }
 
-    value = malloc(2*sizeof(char *));
+    value = calloc(2, sizeof(char *));
     if (value == NULL) { return NULL; };
-    value[0] = NULL;
-    value[1] = NULL;
 
     if (type == LIBHAL_PROPERTY_TYPE_STRING)
     {
