@@ -31,12 +31,14 @@ void halevt_free_device_property (halevt_device_property *property)
 {
     free (property->key);
     FREE_NULL_ARRAY(char *, property->values, free);
+    free (property);
 }
 
 void halevt_free_device (halevt_device *device)
 {
     free (device->udi);
-    FREE_LINKED_LIST(halevt_device_property, device->properties, free);
+    FREE_LINKED_LIST(halevt_device_property, device->properties, halevt_free_device_property);
+    free (device);
 }
 
 halevt_device_property *halevt_new_device_property (char *key,
