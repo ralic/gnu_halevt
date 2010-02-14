@@ -13,12 +13,12 @@ halevt_mount_LDADD = $(HAL_LIBS) $(DBUS_LIBS)
 # the link may already be there
 
 all-local:
-	-ln -s halevt-mount halevt-umount
+	-$(LN_S) halevt-mount halevt-umount
 
 install-exec-local:
 	-f=`echo "halevt-mount" | sed 's|^.*/||;$(transform)'`; \
 	  t=`echo "halevt-umount" | sed 's|^.*/||;$(transform)'`; \
-	  ln -s "$$f" "$(DESTDIR)$(bindir)/$$t"
+	  $(LN_S) "$$f" "$(DESTDIR)$(bindir)/$$t"
 
 # data directory for halevt-mount
 install-data-local:
@@ -26,7 +26,7 @@ install-data-local:
 
 uninstall-local:
 	t=`echo "halevt-umount" | sed 's|^.*/||;$(transform)'`; \
-	  rm -f "$(DESTDIR)$(bindir)/$$t"
+	  $(RM) "$(DESTDIR)$(bindir)/$$t"
 	-rmdir "$(DESTDIR)$(localstatedir)/lib/$(PACKAGE_NAME)"
 
 perms:

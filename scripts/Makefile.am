@@ -14,7 +14,7 @@ hvmount: hvmount.in ../config.log
 install-exec-local:
 	-f=`echo "hvmount" | sed 's|^.*/||;$(transform)'`; \
 	  t=`echo "hvumount" | sed 's|^.*/||;$(transform)'`; \
-	  ln -s "$$f" "$(DESTDIR)$(bindir)/$$t"
+	  $(LN_S) "$$f" "$(DESTDIR)$(bindir)/$$t"
 
 # data directory for hvmount
 install-data-local:
@@ -22,7 +22,7 @@ install-data-local:
 
 uninstall-local:
 	t=`echo "hvumount" | sed 's|^.*/||;$(transform)'`; \
-	  rm -f "$(DESTDIR)$(bindir)/$$t"
+	  $(RM) "$(DESTDIR)$(bindir)/$$t"
 	-rmdir "$(DESTDIR)$(localstatedir)/lib/$(PACKAGE_NAME)"
 
 perms:
