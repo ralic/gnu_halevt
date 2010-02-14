@@ -68,8 +68,8 @@ AC_ARG_ENABLE([default-group],
             [halevt_default_group=$enableval],
             [])
 
-AC_DEFINE_UNQUOTED([USER], ["$halevt_default_user"], [Default user.])
-AC_DEFINE_UNQUOTED([GROUP], ["$halevt_default_group"], [Default group.])
+AC_DEFINE_UNQUOTED([HALEVT_USER], ["$halevt_default_user"], [Default user.])
+AC_DEFINE_UNQUOTED([HALEVT_GROUP], ["$halevt_default_group"], [Default group.])
 
 HALEVT_USER_NAME=$halevt_default_user
 HALEVT_GROUP_NAME=$halevt_default_group

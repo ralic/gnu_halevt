@@ -1,3 +1,10 @@
+2010-02-14 Patrice Dumas <pertusus@free.fr>
+
+	* configure.ac, doc/*: use HALEVT_USER and HALEVT_GROUP instead
+	of USER and GROUP.
+	change to halevt-mount man page from Dominik Schemmel report.
+	Document that no uid= mount option is used when user is halevt.
+
 2010-02-14  Daniel Mierswa  <impulze@impulze.org>
 
 	use calloc instead explicit instantiation

@@ -33,7 +33,7 @@ I think it would be useful to add some conditions handling like in match
 attribute for halevt:Device tag. Maybe halevt:Action tag should have 
 value or match attribute which will contain condition.
 
-
+* l160 manager.c ligne en trop.
 
 Release
 -------

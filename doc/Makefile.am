@@ -27,6 +27,7 @@ halevt.1: halevt.1.in ../config.status
 halevt-mount.1: halevt-mount.1.in ../config.status
 	sed -e "s/[@]PACKAGE_VERSION[@]/$(PACKAGE_VERSION)/" \
 		-e "s/[@]PACKAGE_NAME[@]/$(PACKAGE_NAME)/g" \
+		-e "s/[@]HALEVT_USER_NAME[@]/$(HALEVT_USER_NAME)/g" \
 		$< > $@
 
 hvmount.1: hvmount.1.in ../config.status

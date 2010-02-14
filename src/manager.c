@@ -298,8 +298,8 @@ int main(int argc, char *argv[])
     /* change id */
     if (geteuid() == 0)
     {
-        if (user == NULL) { user = USER; }
-        if (group == NULL) { group = GROUP; }
+        if (user == NULL) { user = HALEVT_USER; }
+        if (group == NULL) { group = HALEVT_GROUP; }
         if (pid_file == NULL) { pid_file = PIDFILE; }
         if (!strcmp(pid_file, "-")) { pid_file = NULL; }
 
@@ -345,10 +345,7 @@ int main(int argc, char *argv[])
                 DEBUG(_("Configuration file %s parsing failed"), *current_conffile);
                 exit(1);
             }
-            if (halevt_fork)
-            {
-                DEBUG(_("Using configuration file %s"), *current_conffile);
-            }
+            DEBUG(_("Using configuration file %s"), *current_conffile);
             free (*current_conffile);
         }
         free (conffiles);

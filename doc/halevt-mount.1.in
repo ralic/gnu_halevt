@@ -17,8 +17,11 @@ halevt-mount/halevt-umount \- Mount or umount device through HAL
 .SH DESCRIPTION
 .I halevt-mount
 Mount or umount device through HAL and keep a track of devices handled.
-When called as \fIhalevt-umount\fP the default is to unmount, when called 
-as \fIhalevt-mount\fP the default is to mount.
+When called as 
+.B halevt-umount
+the default is to unmount, when called as 
+.B halevt-mount
+the default is to mount.
 Option \fI-c\fP, \fI-l\fP, \fI-r\fP, \fI-s\fP or \fI-w\fP changes the 
 operation performed.
 Additional argument is considered to be a mount point, a device or an udi
@@ -26,8 +29,16 @@ when unmounting or removing.
 .PP
 If the commands are not called with \fI-s\fP after changes in the state of the
 devices (after mounting, unmounting, removing devices), the information
-available for \fIhalevt-mount\fP and \fIhalevt-umount\fP may become 
-out of sync with the state of the system.
+available for 
+.B halevt-mount
+and 
+.B halevt-umount
+may become out of sync with the state of the system.
+.PP
+When run as user
+.B @HALEVT_USER_NAME@
+(or as root), no \fIuid=\fP argument is passed to HAL when mounting,
+otherwise this option is passed, if the filesystem allows it.
 .SH OPTIONS
 .TP
 .B \-a
@@ -83,7 +94,9 @@ Add to the handled devices.
 .SH SEE ALSO
 halevt(1), gnome-mount(1), pmount(1)
 .SH VERSION
-This is \fIhalevt\-mount\fP version @PACKAGE_VERSION@.
+This is 
+.B halevt\-mount
+version @PACKAGE_VERSION@.
 .SH AUTHOR
 Main author is Patrice Dumas pertusus at free dot fr.
 .SH AVAILABILITY
