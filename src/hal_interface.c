@@ -360,7 +360,7 @@ char **halevt_property_value(const char *key, const char *udi,
     {
         halevt_device_property *property =
              halevt_device_list_get_property(key, device);
-        values = property != NULL ? halevt_duplicate_str_list(property->values) : NULL;
+        values = ((property != NULL) ? halevt_duplicate_str_list(property->values) : NULL);
     }
     else
     {
