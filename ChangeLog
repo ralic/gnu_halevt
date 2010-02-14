@@ -1,3 +1,339 @@
+2010-02-14  Daniel Mierswa  <impulze@impulze.org>
+
+	use calloc instead explicit instantiation
+	halevt_get_iterator_value:
+	  use calloc instead of explicitly initializing members to NULL after
+	  successful allocation
+
+	fix illegal free
+	halevt_get_iterator_value:
+	halevt_get_property_value:
+	  if we don't set the first array member (see default case and/or if
+	  libhal returns a NULL pointer), then it will be left unitialized
+	  leaving the caller to do an illegal free when recursively removing the
+	  contents of the array, hence we always initialize it to NULL
+
+	release glib mainloop reference
+	main:
+	  we release our reference so we reach a cleaner exit state (this makes
+	  memory checkers happer)
+
+	fix memory leak
+	halevt_free_boolean_expression:
+	  halevt_new_boolean_expression duplicates the original string and
+	  allocates an array of parents, both were never deallocated
+
+	split public/private interface
+	- due to the change, reorder function definitions so we don't need to
+	  prototype them which also makes clear what needs what
+	- make private implementation functions static
+	- halevt_property_value no longer needs the preeceding declaration
+	  of halevt_duplicate_str_list because of reordering
+
+	do not exit application when cleaning resources
+
+	provide cleanup function (HAL)
+	halevt_cleanup_HAL:
+	  - as a counter-part to startup_HAL, this function was introduced to
+	    cleanup HAL resources in order to make memory checkers happy.
+	  - it may also come in handy if we're going to reuse things after HAL
+	    connection was lost
+
+	implementation details:
+	  - libhal_ctx_shutdown asks HAL to remove itself from the D-Bus bus
+	    including filters and watches
+	  - then we lose a reference to the D-Bus bus in order to make D-Bus
+	    release all the resources associated with this connection
+	  - dbus_shutdown then eliminates all long-living memory consumed by
+	    D-Bus, this is not necessary and requires a call to
+	    dbus_threads_init, if we want to get a new D-Bus connection but it
+	    keeps memory checkers quiet
+	  - libhal_ctx_free then deallocates the pointer to the context
+
+	fix memory leak
+	halevt_device_list_add_device:
+	  - if device allocation failed, we would've leaked (forgot udi_string)
+	  - if value allocation failed, we would've leaked (forgot key)
+	  - if property allocation failed, we would've leaked (forgot key and
+	    value)
+
+	clean boolstuff tree when done parsing
+	we no longer need the resources of the boolstuff tree when cleaning up
+	the devices so we can destroy it
+
+	provide cleanup functions (configuration/devices)
+	halevt_free_devices:
+	  (devices_list.{c,h}) adds a new function to cleanup resources
+	  acquired by the device list to make memory checkers quiet on exit
+
+	halevt_free_exec:
+	halevt_free_insertion:
+	halevt_free_oninit:
+	halevt_free_removal:
+	halevt_free_condition:
+	halevt_free_property_value:
+	halevt_free_property:
+	  (parse_config.c) adds new private functions to help cleaning up
+	  resources acquired by the individual types in the list which
+	  represents parts of the configuration file
+
+	halevt_free_config:
+	  - call the new functions recursively on the corresponding lists
+	  - here we also add a call to cleanup the xml parser, it cleans up
+	    resources acquired by the library and is merely to get memcheckers
+	    quiet
+
+	main:
+	  call the new cleanup functions right before exiting
+
+	fix memory leak
+	halevt_run_command:
+	  if g_spawn_async does not succeed, it sets an error and we have to
+	  make sure to instruct glib to free its resources
+
+	fix memory leak
+	halevt_free_device:
+	  - the allocated device pointer itself wasn't deallocated
+	  - use the right free function to clean the whole property instead of
+	    just the pointer
+
+	halevt_free_device_property:
+	  - deallocate the property pointer itself
+
+	fix memory leak
+	halevt_add_property:
+	  - the partial substring returned by halevt_hal_string overwrote the
+	    initial string pointer, so we ended up free'ing fewer bytes than
+	    allocated
+	  - now we first check if the property is valid, then
+	    duplicate the substring, this means that we have to accept a
+	    non-const xmlChar * since halevt_hal_string works with non-const
+	    strings
+
+	fix memory leak
+	halevt_parse_config:
+	  - xml properties obtained by the config parser were never released
+
+	fix memory leak
+	halevt_new_match:
+	  - this function duplicated the match string although
+	    halevt_new_boolean_expression duplicated it aswell
+	  - it also never stored this duplicate and so it leaked
+	  - it was therefore an unneeded proxy and removed
+
+	halevt_new_boolean_expression:
+	  now takes a const xmlChar * instead of a char *, since we duplicate
+	  the string right at the beginning anyway, there was no point in
+	  editing the parameter
+
+	fix memory leak
+	halevt_match_udi:
+	  - the libhal_device_get_property_string returns a dynamically allocated
+	    string, so the expression a = libhal_...(a); leaks memory since the
+	    old string was never deallocated
+	  - after fixing the bug i refactored the function a bit to increase
+	    readability
+
+	fix memory leak
+	halevt_find_conf_files:
+	  - homedir was never de-allocated
+	  - filename was dynamically allocated and if the loop would've
+	    prematurely continued or the function would've been aborted it
+	    would've leaked
+	  - since realloc leaves the previous pointer unchanged we need to
+	    temporarily store what realloc gives us and assign if it was successful
+	  - conffiles and basefiles would also never be de-allocated, if the
+	    function prematurely returned
+	  - the previous-last member of the basefiles array was allocated twice
+	  - all in all readability increased since i've put a label to indicate
+	    oom
+
+	main:
+	  we always assumed that find_conf_files returns a non-NULL array which
+	  is false in some cases, so check for NULL before dereferencing
+
+	fix memory leak
+	halevt_duplicate_str_list:
+	  - this function is also called by halevt_get_iterator_value which
+	    obtains a pointer to the property set, hence calling
+	    libhal_free_string_array on the returned value is illegal, since the
+	    whole property set needs to be deallocated with
+	    libhal_free_property_set
+	  - also this function duplicates as in allocates a new string list so
+	    the caller can handle the deallocation of his own resources
+
+	halevt_get_iterator_value:
+	  as stated above, the caller has to call libhal_free_property_set on
+	  the whole set, individually deallocating the resources returned by
+	  libhal_get_psi_* is illegal
+
+	halevt_get_property_value:
+	  since halevt_duplicate_str_list no longer deallocates resources it's
+	  our job to do it here
+
+	halevt_device_list_add_device:
+	  a call to libhal_device_get_all_properties results in the need to call
+	  libhal_free_property_set
+
+	fix memory leak
+	halevt_duplicate_str_list:
+	  - this function is also called by halevt_get_iterator_value which
+	    obtains a pointer to the property set, hence calling
+	    libhal_free_string_array on the returned value is illegal, since the
+	    whole property set needs to be deallocated with
+	    libhal_free_property_set
+	  - also this function duplicates as in allocates a new string list so
+	    the caller can handle the deallocation of his own resources
+
+	halevt_get_iterator_value:
+	  as stated above, the caller has to call libhal_free_property_set on
+	  the whole set, individually deallocating the resources returned by
+	  libhal_get_psi_* is illegal
+
+	halevt_get_property_value:
+	  since halevt_duplicate_str_list no longer deallocates resources it's
+	  our job to do it here
+
+	halevt_device_list_add_device:
+	  a call to libhal_device_get_all_properties results in the need to call
+	  libhal_free_property_set
+
+	halevt_property_value:
+	  - the caller of halevt_property_value, halevt_device_list_set_property
+	    expects a dynamically allocated array, because it either frees it in
+	    case of any oom error or he puts it into the device by calling
+	    halevt_device_set_property, that's why we have to duplicate the
+	    property->values array
+	  - added a declaration of halevt_duplicate_str_list because we need it
+	    there
+
+	increase readability in condition handling
+	halevt_property_value:
+	  just a small readability fix that sets the variable in every condition
+	  and does not prematurily exit
+
+	removed trailing whitespace / duplicate newlines
+	removed trailing whitespace and duplicate newlines to enforce
+	used coding-style
+
+	remove unnecessary include
+	match.c:
+	  no need to include the boolstuff/c-api.h header twice, we already do
+	  it in the header
+
+	use libhal library macros when interfacing with it
+	halevt_property_matches_udi:
+	halevt_get_iterator_value:
+	halevt_get_property_value:
+	  use LIBHAL_PROPERTY_TYPE_* instead of DBUS_TYPE_* for consistency
+	  reasons
+
+	halevt_property_matches_udi:
+	  - there was a conditional which asked if type was DBUS_TYPE_STRING and
+	    down below a conditional which asked if type was
+	    LIBHAL_PROPERTY_TYPE_STRING although both evaluate to the same so
+	    the second was never reached
+	  - since the handling of that conditional seems to indicate that we're
+	    supposed to deal with a string list and the FIXME: above that
+	    conditional indicated the same, i used the appropriate
+	    LIBHAL_PROPERTY_TYPE_STRLIST macro for that, hope that won't do any
+	    damage
+
+	add helper macros for iterating/freeing containers
+	common.h introduces 4 new macros:
+	  - WALK_LINKED_LISTP(p, c, l) iterates through a linked list beginning
+	    at 'l' storing the previous node in 'p', the current node in 'c'
+	  - WALK_LINKED_LIST(c, l) iterates through a linked list beginning at
+	    'l' storing the current node in 'c'
+	  - FREE_LINKED_LIST(T, l, callback) iterates through a linked list
+	    which node is of type 'T', calling 'callback' on each node and
+	    finally on the first node 'l'
+	  - WALK_NULL_ARRAY(c, a) iterates through a null terminated array 'a'
+	    storing the current element in 'c'
+	  - FREE_NULL_ARRAY(T, a, callback) iterates through a null terminated
+	    array 'a', calling 'callback' on each element and finally on 'a'
+
+	halevt_free_device_property:
+	halevt_device_list_set_property:
+	  - because halevt_free_property_value did nothing but recursively free
+	    a null terminated array, it is removed in favor of the new macro
+
+	...:
+	  lots of functions use the new macro now, shouldn't contain any
+	  logical changes
+
+	add helper macro to debug if report is wanted
+	common.h:
+	  introduce a new macro DEBUG_REPORT(fmt, arg...) which acts as the
+	  DEBUG macro but only if halevt_report is set to a non-zero value
+
+	hal_interface.c:
+	  make use of the new helper macro and remove unnecessary comment
+
+	declare globals extern, define them in place
+	common.h/parse_config.h:
+	  be explicit and mark the declaration with extern so the compiler
+	  always knows that those are to be defined elsewhere
+
+	main:
+	  remove the inner initialization since we define and initialize the
+	  variables in module scope
+
+	boolstuff needs a c++ linker
+	Makefile.am/configure.ac:
+	  - the boolstuff library needs to be linked with the standard c++
+	    library so we include the proper macro to instruct autoconf to
+	    search the c++ linker
+	  - provide a dummy file which we create on the fly on the machine
+	    compiling the code, so when linking the binary a c++ linker is used
+	  - see C-API in http://perso.b2b2c.ca/sarrazip/dev/boolstuff.html
+
+	remove unused variable and storage
+	halevt_run_oninit:
+	  there is no point in storing the the device, it's not used anywhere
+
+	changed some output formatting
+	- let the translator of the software decide how to empphasize and word
+	    output of our program, do not explicitly set punctuation (including
+	    exclamation marks)
+	  - changed printing of DBus to D-Bus, that's how it's called throughout
+	    the world :-)
+
+	fix memory leak
+	halevt_run_command:
+	  halevt_property_value returns a dynamically allocated array which was
+	  never deallocated
+
+	avoid unnecessary strdup
+	main:
+	  getopt makes optarg point into argv, which is valid through the whole
+	  program runtime, so do not strdup it
+
+	fix memory leak
+	halevt_find_conf_files:
+	  opendir() requires closedir() to avoid leaking file descriptor and
+	  other resources
+
+	fix memory leak
+	halevt_run_oninit:
+	  the string list returned by libhal_get_all_devices() needs to be
+	  deallocated
+
+	fix memory leak
+	debug:
+	  neither buffer nor buffer_next were deallocated upon return
+
+	use for loop for iteration
+	halevt_device_list_add_device:
+	  use a for loop here, coherent logic is less error prone and looks much
+	  nicer too :)
+
+	fix memory leak
+	halevt_device_list_add_device:
+	  - the iterator was allocated but never freed
+	  - there really is no need to dynamically allocate iterators, we can
+	    just pass a pointer to an object on the stack
+
 2009-09-05  Patrice Dumas <pertusus@free.fr>
 
 	* NEWS: 0.1.5 release.

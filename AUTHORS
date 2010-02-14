@@ -2,6 +2,8 @@
     - main author
 * Mike Kasick: 
     - match on condition value
+* Daniel Mierswa:
+    - memory handling. Many improvements in the code.
 
 halevt_setup_HAL inspired from code in gnome-volume-manager src/manager.c from 
 Robert Love.
