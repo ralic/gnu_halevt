@@ -75,11 +75,11 @@ On Fedora: dbus-glib-devel hal-devel libxml2-devel boolstuff-devel
            gettext pkgconfig
 
 
-Starting from CVS
-=================
+Starting from CVS/GIT
+=====================
 
 You need autoconf, automake, autoreconf, gettext and autopoint. You can 
-use the script bootstrap.sh shipped in CVS, like
+use the script bootstrap.sh, like
 
 ./bootstrap.sh
 
