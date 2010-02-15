@@ -4,7 +4,6 @@ bin_PROGRAMS = halevt-mount
 
 halevt_mount_SOURCES = halevt-mount.c
 halevt_mount_CPPFLAGS = -DLOCALSTATEDIR="\"$(localstatedir)\"" \
- -DHALEVT_USER_NAME="\"$(HALEVT_USER_NAME)\"" \
   -DDATADIR="\"$(datadir)\"" \
   $(HAL_CFLAGS) $(DBUS_CFLAGS)
 halevt_mount_LDADD = $(HAL_LIBS) $(DBUS_LIBS)
@@ -30,7 +29,7 @@ uninstall-local:
 	-rmdir "$(DESTDIR)$(localstatedir)/lib/$(PACKAGE_NAME)"
 
 perms:
-	chown $(HALEVT_USER_NAME) "$(DESTDIR)$(localstatedir)/lib/$(PACKAGE_NAME)"
-	chgrp $(HALEVT_GROUP_NAME) "$(DESTDIR)$(localstatedir)/lib/$(PACKAGE_NAME)"
+	chown $(HALEVT_DEFAULT_USER) "$(DESTDIR)$(localstatedir)/lib/$(PACKAGE_NAME)"
+	chgrp $(HALEVT_DEFAULT_GROUP) "$(DESTDIR)$(localstatedir)/lib/$(PACKAGE_NAME)"
 
 CLEANFILES = halevt-umount

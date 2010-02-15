@@ -36,7 +36,7 @@ and
 may become out of sync with the state of the system.
 .PP
 When run as user
-.B @HALEVT_USER_NAME@
+.B @HALEVT_DEFAULT_USER@
 (or as root), no \fIuid=\fP argument is passed to HAL when mounting,
 otherwise this option is passed, if the filesystem allows it.
 .SH OPTIONS

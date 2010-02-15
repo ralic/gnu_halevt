@@ -31,7 +31,7 @@ Stay in the foreground.
 .TP
 .B \-g  \fIgroup\fP
 Run as group \fIgroup\fP, if started by the root user. Default is to 
-run as @HALEVT_GROUP_NAME@.
+run as @HALEVT_DEFAULT_GROUP@.
 .TP
 .B \-h
 Help message and options summary.
@@ -42,12 +42,12 @@ stays in the foreground, reporting all the HAL events.
 .TP
 .B \-p  \fIpidfile\fP
 Use pid file \fIpidfile\fP to store the daemon pid, instead of the default.
-Default is @halevt_piddir@/halevt\.pid if run as root user, and no pid file 
+Default is @HALEVT_PIDDIR@/halevt\.pid if run as root user, and no pid file 
 if run as a user. \fI-\fP means no pidfile.
 .TP
 .B \-u  \fIuser\fP
 Run as user \fIuser\fP, if started by the root user. Default is to 
-run as @HALEVT_USER_NAME@.
+run as @HALEVT_DEFAULT_USER@.
 .SH SEE ALSO
 lshal(1), hald(8)
 .SH VERSION

@@ -3,7 +3,7 @@ bin_SCRIPTS = hvmount
 EXTRA_DIST = hvmount.in
 
 hvmount: hvmount.in ../config.log
-	sed -e 's:[@]HALEVT_USER_NAME[@]:$(HALEVT_USER_NAME):' \
+	sed -e 's:[@]HALEVT_DEFAULT_USER[@]:$(HALEVT_DEFAULT_GROUP):' \
 	    -e 's:[@]PACKAGE_NAME[@]:$(PACKAGE_NAME):' \
 	    -e 's:[@]localstatedir[@]:$(localstatedir):' \
 	    $< > hvmount
@@ -26,7 +26,7 @@ uninstall-local:
 	-rmdir "$(DESTDIR)$(localstatedir)/lib/$(PACKAGE_NAME)"
 
 perms:
-	chown $(HALEVT_USER_NAME) "$(DESTDIR)$(localstatedir)/lib/$(PACKAGE_NAME)"
-	chgrp $(HALEVT_GROUP_NAME) "$(DESTDIR)$(localstatedir)/lib/$(PACKAGE_NAME)"
+	chown $(HALEVT_DEFAULT_USER) "$(DESTDIR)$(localstatedir)/lib/$(PACKAGE_NAME)"
+	chgrp $(HALEVT_DEFAULT_GROUP) "$(DESTDIR)$(localstatedir)/lib/$(PACKAGE_NAME)"
 
 CLEANFILES = hvmount hvumount

@@ -19,15 +19,15 @@ halevt.1: halevt.1.in ../config.status
 	sed -e "s/[@]PACKAGE_VERSION[@]/$(PACKAGE_VERSION)/" \
 		-e "s/[@]PACKAGE_NAME[@]/$(PACKAGE_NAME)/g" \
 		-e "s#[@]sysconfdir[@]#$(sysconfdir)#" \
-		-e "s#[@]halevt_piddir[@]#$(halevt_piddir)#" \
-		-e "s#[@]HALEVT_GROUP_NAME[@]#$(HALEVT_GROUP_NAME)#" \
-		-e "s#[@]HALEVT_USER_NAME[@]#$(HALEVT_USER_NAME)#" \
+		-e "s#[@]HALEVT_PIDDIR[@]#$(HALEVT_PIDDIR)#" \
+		-e "s#[@]HALEVT_DEFAULT_GROUP[@]#$(HALEVT_DEFAULT_GROUP)#" \
+		-e "s#[@]HALEVT_DEFAULT_USER[@]#$(HALEVT_DEFAULT_USER)#" \
 		-e "s#[@]datadir[@]#$(datadir)#" $< > $@
 
 halevt-mount.1: halevt-mount.1.in ../config.status
 	sed -e "s/[@]PACKAGE_VERSION[@]/$(PACKAGE_VERSION)/" \
 		-e "s/[@]PACKAGE_NAME[@]/$(PACKAGE_NAME)/g" \
-		-e "s/[@]HALEVT_USER_NAME[@]/$(HALEVT_USER_NAME)/g" \
+		-e "s/[@]HALEVT_DEFAULT_USER[@]/$(HALEVT_DEFAULT_USER)/g" \
 		$< > $@
 
 hvmount.1: hvmount.1.in ../config.status

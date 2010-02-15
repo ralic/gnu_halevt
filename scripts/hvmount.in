@@ -19,7 +19,7 @@
 #    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 user_name=`id -un`
-system_user=@HALEVT_USER_NAME@
+system_user=@HALEVT_DEFAULT_USER@
 PACKAGE_NAME=@PACKAGE_NAME@
 mount_sync=no
 filename=uditab

@@ -20,21 +20,21 @@ halevt.spec: halevt.spec.in config.log
 # if they are not empty leave them as is
 install-data-local:
 	$(MKDIR_P) "$(DESTDIR)$(sysconfdir)/$(PACKAGE)"
-	$(MKDIR_P) "$(DESTDIR)$(halevt_piddir)"
+	$(MKDIR_P) "$(DESTDIR)$(HALEVT_PIDDIR)"
 
 uninstall-local:
 	-rmdir "$(DESTDIR)$(sysconfdir)/$(PACKAGE)"
-	-rmdir "$(DESTDIR)$(halevt_piddir)"
+	-rmdir "$(DESTDIR)$(HALEVT_PIDDIR)"
 
 perms:
-	if groupmod $(HALEVT_GROUP_NAME) > /dev/null 2>&1; then : ; \
+	if groupmod $(HALEVT_DEFAULT_GROUP) > /dev/null 2>&1; then : ; \
 	else \
-	   groupadd $(HALEVT_GROUP_NAME) ; \
+	   groupadd $(HALEVT_DEFAULT_GROUP) ; \
 	fi
-	if id -un $(HALEVT_USER_NAME) > /dev/null 2>&1; then : ; \
+	if id -un $(HALEVT_DEFAULT_USER) > /dev/null 2>&1; then : ; \
 	else \
-	   useradd -c 'Halevt system user' -g $(HALEVT_GROUP_NAME) -d "$(localstatedir)/lib/$(PACKAGE_NAME)" -s '/bin/false' $(HALEVT_USER_NAME) ; \
+	   useradd -c 'Halevt system user' -g $(HALEVT_DEFAULT_GROUP) -d "$(localstatedir)/lib/$(PACKAGE_NAME)" -s '/bin/false' $(HALEVT_DEFAULT_USER) ; \
 	fi
-	chown $(HALEVT_USER_NAME) "$(DESTDIR)$(halevt_piddir)"
-	chgrp $(HALEVT_GROUP_NAME) "$(DESTDIR)$(halevt_piddir)"
+	chown $(HALEVT_DEFAULT_USER) "$(DESTDIR)$(HALEVT_PIDDIR)"
+	chgrp $(HALEVT_DEFAULT_GROUP) "$(DESTDIR)$(HALEVT_PIDDIR)"
 	(cd scripts && $(MAKE) $(AM_MAKEFLAGS) perms)

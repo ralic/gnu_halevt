@@ -788,7 +788,7 @@ int main (int argc, char **argv)
   {
     fprintf (stderr, _("Error for getpwuid: %s\n"), strerror (errno));
   }
-  if ((! strcmp(passwd_struct->pw_name, HALEVT_USER_NAME)) || (getuid() == 0))
+  if ((! strcmp(passwd_struct->pw_name, HALEVT_DEFAULT_USER)) || (getuid() == 0))
   {
     system_user = 1;
   }

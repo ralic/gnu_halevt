@@ -44,7 +44,7 @@
 #define SYSCONFFILE SYSCONFDIR "/" PACKAGE "/" CONFFILE
 #define DATACONFDIR DATADIR "/" PACKAGE "/"
 #define SYSCONFCONFDIR SYSCONFDIR "/" PACKAGE "/"
-#define PIDFILE PIDDIR "/" PACKAGE ".pid"
+#define PIDFILE HALEVT_PIDDIR "/" PACKAGE ".pid"
 
 static GMainLoop *loop;
 
@@ -298,8 +298,8 @@ int main(int argc, char *argv[])
     /* change id */
     if (geteuid() == 0)
     {
-        if (user == NULL) { user = HALEVT_USER; }
-        if (group == NULL) { group = HALEVT_GROUP; }
+        if (user == NULL) { user = HALEVT_DEFAULT_USER; }
+        if (group == NULL) { group = HALEVT_DEFAULT_GROUP; }
         if (pid_file == NULL) { pid_file = PIDFILE; }
         if (!strcmp(pid_file, "-")) { pid_file = NULL; }
 

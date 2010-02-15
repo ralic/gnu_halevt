@@ -56,6 +56,11 @@ fi
 AC_SUBST(HAL_CFLAGS)
 AC_SUBST(HAL_LIBS)
 
+
+
+dnl
+dnl default user and group
+dnl
 halevt_default_user=halevt
 AC_ARG_ENABLE([default-user],
             [AS_HELP_STRING([--enable-default-user],
@@ -69,23 +74,33 @@ AC_ARG_ENABLE([default-group],
             [halevt_default_group=$enableval],
             [])
 
-AC_DEFINE_UNQUOTED([HALEVT_USER], ["$halevt_default_user"], [Default user.])
-AC_DEFINE_UNQUOTED([HALEVT_GROUP], ["$halevt_default_group"], [Default group.])
+AC_DEFINE_UNQUOTED([HALEVT_DEFAULT_USER], ["$halevt_default_user"], [Default user.])
+AC_DEFINE_UNQUOTED([HALEVT_DEFAULT_GROUP], ["$halevt_default_group"], [Default group.])
 
-HALEVT_USER_NAME=$halevt_default_user
-HALEVT_GROUP_NAME=$halevt_default_group
+AC_SUBST(HALEVT_DEFAULT_USER, ["$halevt_default_user"])
+AC_SUBST(HALEVT_DEFAULT_GROUP, ["$halevt_default_group"])
 
-AC_SUBST(HALEVT_USER_NAME)
-AC_SUBST(HALEVT_GROUP_NAME)
 
+
+dnl
+dnl pid directory
+dnl
 halevt_piddir='${localstatedir}/run/${PACKAGE}'
 AC_ARG_WITH([piddir],
             [AS_HELP_STRING([--with-piddir],
               [directory used for the system pid file])],
             [halevt_piddir=$withval],
             [])
-AC_SUBST(halevt_piddir)
 
+AC_DEFINE_UNQUOTED(HALEVT_PIDDIR, ["$halevt_piddir"], [Directory for the pidfile.])
+
+AC_SUBST(HALEVT_PIDDIR, ["$halevt_piddir"])
+
+
+
+dnl
+dnl output
+dnl
 AC_CONFIG_FILES([Makefile  po/Makefile.in halevt-mount/po/Makefile.in\
               src/Makefile \
               examples/Makefile \
