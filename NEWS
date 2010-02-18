@@ -1,3 +1,9 @@
+0.1.6 (Sun Feb 18 2010)
+* this release is the result of Daniel Mierswa work
+* fix many memory leaks, and other similar bugs (Daniel Mierswa)
+* improve documentation of user and uid in halevt-mount man page
+  (report from Dominik Schemmel)
+
 0.1.5 (Sat Sep  5 2009)
 * move the project to savannah
 * only pass umask= if it is a valid option (report from nb)

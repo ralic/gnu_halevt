@@ -1,5 +1,9 @@
 2010-02-18  Patrice Dumas  <pertusus@free.fr>
 
+	Release 0.1.6.
+
+2010-02-18  Patrice Dumas  <pertusus@free.fr>
+
 	add scripts easying git log to ChangeLog change.
 	gitlog-to-changelog comes from gnulib.
 	Use git-revert to add ChangeLog change.
