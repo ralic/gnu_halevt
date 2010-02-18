@@ -1,3 +1,14 @@
+2010-02-15  Daniel Mierswa  <impulze@impulze.org>
+
+	Build system cleanup.
+	Convenience "fixes":
+	  use HALEVT_PIDDIR instead of lowercase
+	  use HALEVT_DEFAULT_GROUP/USER
+
+	Also do not pass piddir as preprocessor macros but rather define them in
+	the config.h file (just as the USER_NAME/GROUP_NAME was).
+
+	Use LN_S and RM instead of ln -s and rm -f.
 2010-02-14 Patrice Dumas <pertusus@free.fr>
 
 	* configure.ac, doc/*: use HALEVT_USER and HALEVT_GROUP instead
