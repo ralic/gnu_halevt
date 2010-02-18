@@ -64,13 +64,13 @@ dnl
 halevt_default_user=halevt
 AC_ARG_ENABLE([default-user],
             [AS_HELP_STRING([--enable-default-user],
-              [default user name to run halevt as])],
+              [default user name to run halevt as, default: halevt])],
             [halevt_default_user=$enableval],
             [])
 halevt_default_group=halevt
 AC_ARG_ENABLE([default-group],
             [AS_HELP_STRING([--enable-default-group],
-              [default group name to run halevt as])],
+              [default group name to run halevt as, default: halevt])],
             [halevt_default_group=$enableval],
             [])
 
