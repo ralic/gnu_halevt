@@ -9,10 +9,3 @@ rm ChangeLog-old.old ChangeLog-git.new
 git reset --soft HEAD^
 git add ChangeLog
 git commit -C ORIG_HEAD
-#git commit -n --cleanup=verbatim -m '' ChangeLog
-# in case there is uncommited changes
-# doesn't work... stash with and without keep-index reverts the ChangeLog...
-#git stash save 
-# without interactive rebase the empty commit message is left...
-#git rebase -i HEAD~2
-#git stash pop

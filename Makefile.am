@@ -7,7 +7,7 @@ confdir = $(pkgdatadir)
 #dist_conf_DATA = $(PACKAGE).xml
 
 EXTRA_DIST = config/config.rpath m4/ChangeLog  halevt.spec halevt.spec.in \
-  halevt-initscript bootstrap.sh
+  halevt-initscript bootstrap.sh config/gitlog-to-changelog config/git-log-Changelog.sh
 DISTCLEANFILES = halevt.spec
 
 all-local: halevt.spec

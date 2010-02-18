@@ -1,6 +1,9 @@
 2010-02-18  Patrice Dumas  <pertusus@free.fr>
 
-	Use git-revert to add ChangeLog change
+	add scripts easying git log to ChangeLog change.
+	gitlog-to-changelog comes from gnulib.
+	Use git-revert to add ChangeLog change.
+	Add user and group name to ./configure --help.
 
 2010-02-15  Daniel Mierswa  <impulze@impulze.org>
 
