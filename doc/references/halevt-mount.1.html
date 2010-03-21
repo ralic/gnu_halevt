@@ -38,8 +38,13 @@ halevt-mount/halevt-umount - Mount or umount device through HAL
 <I>halevt-mount</I>
 
 Mount or umount device through HAL and keep a track of devices handled.
-When called as <I>halevt-umount</I> the default is to unmount, when called 
-as <I>halevt-mount</I> the default is to mount.
+When called as 
+<B>halevt-umount</B>
+
+the default is to unmount, when called as 
+<B>halevt-mount</B>
+
+the default is to mount.
 Option <I>-c</I>, <I>-l</I>, <I>-r</I>, <I>-s</I> or <I>-w</I> changes the 
 operation performed.
 Additional argument is considered to be a mount point, a device or an udi
@@ -48,8 +53,20 @@ when unmounting or removing.
 
 If the commands are not called with <I>-s</I> after changes in the state of the
 devices (after mounting, unmounting, removing devices), the information
-available for <I>halevt-mount</I> and <I>halevt-umount</I> may become 
-out of sync with the state of the system.
+available for 
+<B>halevt-mount</B>
+
+and 
+<B>halevt-umount</B>
+
+may become out of sync with the state of the system.
+<P>
+
+When run as user
+<B>halevt</B>
+
+(or as root), no <I>uid=</I> argument is passed to HAL when mounting,
+otherwise this option is passed, if the filesystem allows it.
 <A NAME="lbAE">&nbsp;</A>
 <H2>OPTIONS</H2>
 
@@ -128,7 +145,10 @@ Add to the handled devices.
 <A NAME="lbAG">&nbsp;</A>
 <H2>VERSION</H2>
 
-This is <I>halevt-mount</I> version 0.1.5.
+This is 
+<B>halevt-mount</B>
+
+version 0.1.6.
 <A NAME="lbAH">&nbsp;</A>
 <H2>AUTHOR</H2>
 
@@ -166,6 +186,6 @@ For more information about these matters, see the file named COPYING.
 This document was created by
 <A HREF="/cgi-bin/man/man2html">man2html</A>,
 using the manual pages.<BR>
-Time: 21:30:37 GMT, September 05, 2009
+Time: 21:34:52 GMT, March 21, 2010
 </BODY>
 </HTML>
