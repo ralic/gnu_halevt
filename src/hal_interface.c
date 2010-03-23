@@ -388,7 +388,7 @@ char **halevt_property_name_value(const halevt_property_name *property,
         halevt_device *real_device = halevt_property_resolve_device(property, device);
         if (real_device != NULL)
         {
-           halevt_device_property *device_property = halevt_device_list_get_property(property->name, device);
+           halevt_device_property *device_property = halevt_device_list_get_property(property->name, real_device);
            if (device_property != NULL)
               values = halevt_duplicate_str_list(device_property->values);
         }
