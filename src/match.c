@@ -28,8 +28,6 @@
 #include "hal_interface.h"
 #include "parse_config.h"
 
-static const char *hal_substring = ".hal.";
-
 /* transform a string with boolean expression containing any character
  * to a string acceptable by boolstuff, containing only alphanumeric
  * characters. Here, all the atoms are substitued by a numeric index
@@ -160,77 +158,34 @@ halevt_boolean_expression *halevt_new_boolean_expression(const xmlChar *original
    }
    for (i=0; i < new_expression->matches_size; i++)
    {
+      char *match_property_string;
       halevt_match *new_match;
-      char *p;
-      char *string;
-      int parents_size = 0;
 
       new_match = &(new_expression->matches[i]);
 
       /* first parse a 'name = value' or a simple 'name', remove leading
-         sapces from value and trailing spaces from name */
+         spaces from value and trailing spaces from name */
       new_match->value = atoms[i];
 
-      new_match->name = strsep(&(new_match->value), "=");
+      match_property_string = strsep(&(new_match->value), "=");
       if (new_match->value != NULL)
       {
          while (isspace(*new_match->value)) { (new_match->value)++; }
-         s = strlen (new_match->name);
-         while (s > 0 && isspace (*(new_match->name + s-1))) { s--; };
-         new_match->name[s] = '\0';
+         s = strlen (match_property_string);
+         while (s > 0 && isspace (*(match_property_string + s-1))) { s--; };
+         match_property_string[s] = '\0';
       }
 
-      if ((halevt_hal_string(new_match->name)) == NULL)
+      if ((halevt_hal_string(match_property_string)) == NULL)
       {
-         DEBUG(_("Bad match expression: %s"), new_match->name);
-         goto free_match;
-      }
-      /* cut the string in substring separated by hal. the last
-         corresponds with the value, the other are the parents */
-
-      /* first find the number of parents */
-      p = new_match->name;
-      while ((p = strstr(p, hal_substring)) != NULL)
-      {
-         parents_size++;
-         p = p + 1;
-      }
-
-      if ((new_match->parents = malloc(sizeof(char *) * (parents_size + 1))) == NULL)
-      {
+         DEBUG(_("Bad match expression: %s"), match_property_string);
          goto free_match;
       }
 
-      if (parents_size > 0)
-      {
-         int parent_index = 0;
-         p = new_match->name;
-         new_match->parents[0] = new_match->name;
-         /* cut the string in pieces */
-         while ((p = strstr (p, hal_substring)) != NULL)
-         {
-            *p = '\0';
-            parent_index++;
-            new_match->parents[parent_index] = p+1;
-            p = p + 1;
-         }
+      halevt_parse_property_name(match_property_string, &(new_match->property));
 
-         for (j=0; j<parent_index+1; j++)
-         {
-            if ((string = halevt_hal_string(new_match->parents[j])) == NULL)
-            {
-               DEBUG(_("Bad match expression: %s"), new_match->parents[j]);
-               goto free_match;
-            }
-            new_match->parents[j] = string;
-         }
-         new_match->name = new_match->parents[parent_index];
-      }
-      else
-      {
-         new_match->name = halevt_hal_string(new_match->name);
-      }
-      new_match->parents[parents_size] = NULL;
+      if (new_match->property.name == NULL)
+         goto free_match;
    }
 
    /* now use boolstuff to parse the expression and transform to DNF */
@@ -275,7 +230,7 @@ void halevt_free_boolean_expression (halevt_boolean_expression *expr)
 
    for (i = 0; i < expr->matches_size; i++)
    {
-      free(expr->matches[i].parents);
+      free(expr->matches[i].property.parents);
    }
 
    boolstuff_destroy_tree (expr->tree);
@@ -285,39 +240,36 @@ void halevt_free_boolean_expression (halevt_boolean_expression *expr)
 
 char *halevt_print_boolean_expression (halevt_boolean_expression *expr)
 {
-   char *string;
+   char *string = NULL;
    char tmp[256];
    int total_size = 0;
-   int i, j;
+   int i;
+   char **match_properties_string;
+
+   if ((match_properties_string = (char **) malloc(expr->matches_size * sizeof(char *))) == NULL)
+      return NULL;
 
    for (i=0; i < expr->matches_size; i++)
    {
-      total_size += strlen(expr->matches[i].name) + 2;
-      if (expr->matches[i].value !=  NULL) { total_size += strlen(expr->matches[i].value) + 1; }
-      j=0;
-      while (expr->matches[i].parents[j] != NULL)
-      {
-         total_size += strlen(expr->matches[i].parents[j]) + 2;
-         j++;
-      }
+      match_properties_string[i] = halevt_print_property_name(&(expr->matches[i].property));
+      if (match_properties_string[i] != NULL)
+        total_size += strlen(match_properties_string[i]);
+      if (expr->matches[i].value !=  NULL) 
+        total_size += strlen(expr->matches[i].value) + 1;
+      total_size += 2;
    }
    sprintf(tmp, "%d: ", expr->matches_size);
    /* +2 for the first ", ", +1 for the end of line  */
    total_size += strlen(tmp) + strlen(expr->expression_string) +2 +1;
-   string = (char *) malloc(total_size * sizeof(char));
+   if ((string = (char *) malloc(total_size * sizeof(char))) == NULL)
+      goto oom;
    strcpy (string, tmp);
    strcat (string, expr->expression_string);
    strcat(string, ", ");
    for (i=0; i < expr->matches_size; i++)
    {
-      j=0;
-      while (expr->matches[i].parents[j] != NULL)
-      {
-         strcat(string, expr->matches[i].parents[j]);
-         strcat(string, "->");
-         j++;
-      }
-      strcat(string, expr->matches[i].name);
+      if (match_properties_string[i] != NULL)
+        strcat(string, match_properties_string[i]);
       if (expr->matches[i].value != NULL)
       {
          strcat(string, "=");
@@ -325,6 +277,12 @@ char *halevt_print_boolean_expression (halevt_boolean_expression *expr)
       }
       strcat(string, ", ");
    }
+oom:
+   for (i=0; i < expr->matches_size; i++)
+   {
+      free (match_properties_string[i]);
+   }
+   free (match_properties_string);
    return string;
 }
 

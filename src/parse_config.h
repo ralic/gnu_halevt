@@ -25,6 +25,7 @@
 typedef struct halevt_exec_element
 {
    char *string;
+   halevt_property_name property;
    int hal_property;
 } halevt_exec_element;
 
@@ -33,6 +34,7 @@ typedef struct halevt_exec
    char *string;
    char *parsed_string;
    halevt_exec_element *elements;
+   int exec_size;
 } halevt_exec;
 
 typedef struct halevt_property_action
@@ -84,6 +86,8 @@ int halevt_parse_config(char const *path);
 void halevt_free_config();
 char *halevt_hal_string (char *string);
 void halevt_print_config ();
+void halevt_parse_property_name (char *string, halevt_property_name *property_name);
+char *halevt_print_property_name(halevt_property_name *property);
 
 extern halevt_property *halevt_property_root;
 extern halevt_insertion *halevt_insertion_root;

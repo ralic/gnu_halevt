@@ -32,10 +32,11 @@ void halevt_cleanup_HAL();
 
 void halevt_check_dbus_error(DBusError *error);
 
+void halevt_run_oninit();
+
 int halevt_matches (const halevt_match* match, const char *udi,
    const halevt_device *device);
-char **halevt_property_value (const char* property, const char *udi,
-   const halevt_device* device);
+char **halevt_udi_property_value (const char* property, const char *udi);
 char **halevt_get_property_value(LibHalPropertyType type, const char *property,
    const char *udi, DBusError *dbus_error_pointer);
 char **halevt_get_iterator_value(const LibHalPropertyType type,

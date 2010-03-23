@@ -165,7 +165,7 @@ int halevt_device_list_set_property (const char *udi, const char *key)
 
    if (device == NULL) { return 0; }
 
-   values = halevt_property_value (key, udi, NULL);
+   values = halevt_udi_property_value (key, udi);
    if (values == NULL) { return 0; }
 
    property = halevt_device_list_get_property(key, device);

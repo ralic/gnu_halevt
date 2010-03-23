@@ -25,11 +25,16 @@
 #include <libxml/xmlstring.h>
 #include "devices_list.h"
 
-typedef struct halevt_match
+typedef struct halevt_property_name
 {
   char *name;
-  char *value;
   char **parents;
+} halevt_property_name;
+
+typedef struct halevt_match
+{
+  char *value;
+  halevt_property_name property;
 } halevt_match;
 
 typedef struct halevt_boolean_expression

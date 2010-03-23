@@ -34,6 +34,7 @@ halevt_oninit *halevt_oninit_root = NULL;
 
 static const char *halevt_hal_prefix = "hal.";
 static const char *halevt_hal_exec_prefix = "$hal.";
+static const char *hal_substring = ".hal.";
 
 /*
  * returns the beginning of the string after the 'hal prefix', if
@@ -48,6 +49,64 @@ char *halevt_hal_string (char *string)
    return string + strlen(halevt_hal_prefix);
 }
 
+/* cut the string in substring separated by hal. the last
+   corresponds with the value, the other are the parents */
+
+void halevt_parse_property_name (char *string, halevt_property_name *property_name)
+{
+   char *p;
+   int parents_size = 0;   
+
+   property_name->name = string;
+
+   /* first find the number of parents */
+   p = string;
+   while ((p = strstr(p, hal_substring)) != NULL)
+   {
+      parents_size++;
+      p = p + 1;
+   }
+   if ((property_name->parents = malloc(sizeof(char *) * (parents_size + 1))) == NULL)
+   {
+     property_name->name = NULL;
+     return;
+   }
+   if (parents_size > 0)
+   {
+      int parent_index = 0;
+      int j;
+      char *string;
+      p = property_name->name;
+      property_name->parents[0] = property_name->name;
+      /* cut the string in pieces */
+      while ((p = strstr (p, hal_substring)) != NULL)
+      {
+         *p = '\0';
+         parent_index++;
+         property_name->parents[parent_index] = p+1;
+         p = p + 1;
+      }
+
+      for (j=0; j<parent_index+1; j++)
+      {
+        if ((string = halevt_hal_string(property_name->parents[j])) == NULL)
+        {
+            DEBUG(_("Bad match expression: %s"), property_name->parents[j]);
+            property_name->name = NULL;
+            free(property_name->parents);
+            return;
+        }
+        property_name->parents[j] = string;
+     }
+     property_name->name = property_name->parents[parent_index];
+   }
+   else
+   {
+      property_name->name = halevt_hal_string(property_name->name);
+   }
+   property_name->parents[parents_size] = NULL;
+}
+
 halevt_exec *halevt_new_exec(const xmlChar *exec)
 {
    char *string;
@@ -56,9 +115,8 @@ halevt_exec *halevt_new_exec(const xmlChar *exec)
    halevt_exec *result_exec;
    int sub_elements_number = 0;
    if ((string = (char *) xmlStrdup(exec)) == NULL)
-   {
       return NULL;
-   }
+
    /* handle the special case where there is a $hal. at the beginning */
    if (strlen(string) >= strlen(halevt_hal_exec_prefix) && !strncmp(halevt_hal_exec_prefix, string, strlen(halevt_hal_exec_prefix)))
    {
@@ -98,7 +156,7 @@ halevt_exec *halevt_new_exec(const xmlChar *exec)
       sub_elements_number++;
    }
    /* now allocate the array */
-   if ((result_exec->elements = (halevt_exec_element *) malloc(sizeof(halevt_exec_element) * (sub_elements_number +2)))  == NULL)
+   if ((result_exec->elements = (halevt_exec_element *) malloc(sizeof(halevt_exec_element) * (sub_elements_number +1)))  == NULL)
    {
       free (string);
       free (parsed_string);
@@ -110,6 +168,7 @@ halevt_exec *halevt_new_exec(const xmlChar *exec)
    p = parsed_string;
    result_exec->elements[0].string = parsed_string;
    result_exec->elements[0].hal_property = 0;
+
    while ((p = strstr(p, halevt_hal_exec_prefix)) != NULL)
    {
       char *p_begin = p;
@@ -117,10 +176,19 @@ halevt_exec *halevt_new_exec(const xmlChar *exec)
       if ((p = strstr(p, "$")) != NULL)
       {
          sub_elements_number++;
-         result_exec->elements[sub_elements_number].string = p_begin+strlen(halevt_hal_exec_prefix);
-         result_exec->elements[sub_elements_number].hal_property = 1;
          *p = '\0';
          *p_begin = '\0';
+         halevt_parse_property_name(p_begin+strlen("$"), &(result_exec->elements[sub_elements_number].property));
+         if (result_exec->elements[sub_elements_number].property.name == NULL)
+         {
+           free (string);
+           free (parsed_string);
+           free (result_exec);
+           return NULL;
+         }
+         /* result_exec->elements[sub_elements_number].string = p_begin+strlen(halevt_hal_exec_prefix); */
+         result_exec->elements[sub_elements_number].hal_property = 1;
+         result_exec->elements[sub_elements_number].string = NULL;
       }
       else
       {
@@ -133,9 +201,11 @@ halevt_exec *halevt_new_exec(const xmlChar *exec)
       p = p+1;
       sub_elements_number++;
       result_exec->elements[sub_elements_number].string = p;
+      result_exec->elements[sub_elements_number].property.name = NULL;
       result_exec->elements[sub_elements_number].hal_property = 0;
    }
-   result_exec->elements[sub_elements_number+1].string = NULL;
+   /*result_exec->elements[sub_elements_number+1] = NULL;*/
+   result_exec->exec_size = sub_elements_number+1;
    result_exec->string = string;
    result_exec->parsed_string = parsed_string;
    return result_exec;
@@ -143,10 +213,43 @@ halevt_exec *halevt_new_exec(const xmlChar *exec)
 
 static void halevt_free_exec(halevt_exec *exec)
 {
+   int i;
    free(exec->string);
    free(exec->parsed_string);
+   for (i = 0; i < exec->exec_size; i++)
+   {
+     if (exec->elements[i].hal_property == 1)
+     {
+       free (exec->elements[i].property.parents);
+     }
+   }
    free(exec->elements);
    free(exec);
+}
+
+/* for debugging */
+char *halevt_print_property_name(halevt_property_name *property)
+{
+   int total_size = 0;
+   char *string;
+   char **parent;
+   if (property->name == NULL)
+     return NULL;
+   total_size += strlen(property->name)+1;
+   WALK_NULL_ARRAY(parent, property->parents)
+   {
+     total_size += strlen(*parent) +2;
+   }
+   if ((string = (char *) malloc(total_size * sizeof(char))) == NULL)
+      return NULL;
+   *string = '\0';
+   WALK_NULL_ARRAY(parent, property->parents)
+   {
+     strcat(string, *parent);
+     strcat(string, "->");
+   }
+   strcat(string, property->name);
+   return string;
 }
 
 /* for debugging */
@@ -155,28 +258,47 @@ char *halevt_print_exec(halevt_exec *exec_str)
    int i;
    int str_size = 0;
    char *result;
-   for(i = 0; exec_str->elements[i].string != NULL; i++)
+   /* used to store the formatted property strings */
+   char **property_strings;
+
+   if ((property_strings = (char **) malloc(exec_str->exec_size * sizeof (char*))) == NULL)
+     return NULL;
+   
+   for(i = 0; i < exec_str->exec_size; i++)
    {
-      str_size += strlen(exec_str->elements[i].string) + 7;
+      if (exec_str->elements[i].hal_property)
+      {
+         property_strings[i] = halevt_print_property_name (&(exec_str->elements[i].property));
+         if (property_strings[i] != NULL)
+           str_size += strlen(property_strings[i]);
+      }
+      else
+      {
+        str_size += strlen(exec_str->elements[i].string);
+        /* not useful, but cleaner */
+        property_strings[i] = NULL;
+      }
+      str_size += 2;
    }
    if ((result = (char *) malloc((str_size+1)*sizeof(char))) == NULL)
    {
        return NULL;
    }
    *result = '\0';
-   for(i = 0; exec_str->elements[i].string != NULL; i++)
+   for(i = 0; i < exec_str->exec_size; i++)
    {
-      if (exec_str->elements[i].hal_property)
+      if (exec_str->elements[i].hal_property && property_strings[i] != NULL)
       {
-         strcat (result, "1: '");
+         strcat (result, property_strings[i]);
+         free (property_strings[i]);
       }
       else
       {
-         strcat (result, "0: '");
+         strcat (result, exec_str->elements[i].string);
       }
-      strcat(result, exec_str->elements[i].string);
-      strcat(result, "', ");
+      strcat(result, "| ");
    }
+   free (property_strings);
    return result;
 }
 
@@ -197,9 +319,11 @@ halevt_insertion *halevt_add_insertion(const xmlChar *match, const xmlChar *exec
          free(new_insertion);
          return NULL;
       }
+
 /*
       printf ("add_insertion %s, %s\n", match, exec);
 */
+
       new_insertion->next = halevt_insertion_root;
       halevt_insertion_root = new_insertion;
    }
@@ -465,7 +589,9 @@ int halevt_parse_config (char const *path)
                   }
                   else
                   {
-                     halevt_add_insertion (match, exec);
+                     halevt_insertion *new_insertion = halevt_add_insertion (match, exec);
+                     if (new_insertion == NULL)
+                       DEBUG(_("Warning: match %s, exec %s: adding insertion failed"), match, exec);
                      xmlFree(exec);
                   }
                }
@@ -580,7 +706,9 @@ void halevt_print_config()
    insertion = halevt_insertion_root;
    while (insertion != NULL)
    {
-      fprintf(stderr, "insertion %s, %s\n", halevt_print_boolean_expression(insertion->match), halevt_print_exec(insertion->exec));
+      char *exec_string = halevt_print_exec(insertion->exec);
+      fprintf(stderr, "insertion %s, %s\n", halevt_print_boolean_expression(insertion->match), exec_string);
+      free(exec_string);
       insertion = insertion->next;
    }
    removal = halevt_removal_root;
