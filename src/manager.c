@@ -224,6 +224,7 @@ void usage()
 
 int halevt_fork = 0;
 int halevt_report = 0;
+int halevt_print_callbacks = 0;
 
 /**
  * main function.
@@ -274,6 +275,7 @@ int main(int argc, char *argv[])
                break;
             case 'i':
                halevt_report = 1;
+               halevt_print_callbacks = 1;
                do_fork = 0;
                break;
             case 'u':
@@ -290,6 +292,8 @@ int main(int argc, char *argv[])
                break;
             case 'd':
                debug_config = 1;
+               halevt_print_callbacks = 1;
+               do_fork = 0;
                break;
             case 'h':
                usage();
@@ -359,7 +363,6 @@ int main(int argc, char *argv[])
     {
       fprintf(stderr, "Config:\n");
       halevt_print_config();
-      exit (0);
     }
     halevt_setup_HAL();
     

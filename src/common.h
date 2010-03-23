@@ -68,11 +68,12 @@
 
 #define DEBUG_REPORT(fmt, arg...) \
 	do { \
-		if (halevt_report) { DEBUG(fmt, ##arg); } \
+		if (halevt_print_callbacks) { DEBUG(fmt, ##arg); } \
 	} while(0)
 
 extern int halevt_fork;
 extern int halevt_report;
+extern int halevt_print_callbacks;
 extern int halevt_priority;
 
 

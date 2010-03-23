@@ -1,5 +1,9 @@
 2010-03-23  Patrice Dumas  <pertusus@free.fr>
 
+	Debug option prints the hal callbacks
+
+2010-03-23  Patrice Dumas  <pertusus@free.fr>
+
 	Resolve parents for exec properties, too
 
 2010-03-23  Patrice Dumas  <pertusus@free.fr>
