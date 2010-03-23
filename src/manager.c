@@ -242,6 +242,7 @@ int main(int argc, char *argv[])
     gid_t gid;
     int c;
     int do_fork = 1;
+    int debug_config = 0;
 
     setlocale (LC_ALL, "");
     bindtextdomain (PACKAGE, DATADIR "/locale/");
@@ -249,7 +250,7 @@ int main(int argc, char *argv[])
 
     while (1)
     {
-        c = getopt(argc, argv, "ic:u:g:fp:h");
+        c = getopt(argc, argv, "ic:u:g:fp:hd");
         if (c == -1) { break ; }
         switch (c)
         {
@@ -286,6 +287,9 @@ int main(int argc, char *argv[])
                break;
             case 'f':
                do_fork = 0;
+               break;
+            case 'd':
+               debug_config = 1;
                break;
             case 'h':
                usage();
@@ -351,7 +355,12 @@ int main(int argc, char *argv[])
         free (conffiles);
     }
 
-    /* halevt_print_config(); */
+    if (debug_config)
+    {
+      fprintf(stderr, "Config:\n");
+      halevt_print_config();
+      exit (0);
+    }
     halevt_setup_HAL();
     
     if (do_fork)
