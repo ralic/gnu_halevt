@@ -1,3 +1,8 @@
+0.1.6.1 (Wed Mar 24 2010)
+* enhancement release
+* use of device property to specify other devices in exec (report from 
+  Marcus Habermehl)
+
 0.1.6 (Sun Feb 18 2010)
 * this release is the result of Daniel Mierswa work
 * fix many memory leaks, and other similar bugs (Daniel Mierswa)

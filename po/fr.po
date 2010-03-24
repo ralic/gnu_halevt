@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: halevt 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-14 23:06+0100\n"
-"PO-Revision-Date: 2010-02-14 21:33+0100\n"
+"POT-Creation-Date: 2010-03-24 21:35+0100\n"
+"PO-Revision-Date: 2010-03-24 21:49+0100\n"
 "Last-Translator: Patrice Dumas <pertusus@free.fr>\n"
 "Language-Team: French <traduc@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,65 +21,66 @@ msgstr ""
 msgid "D-Bus Error %s: %s"
 msgstr "Erreur de DBus %s : %s"
 
-#: src/hal_interface.c:176
+#: src/hal_interface.c:186
 #, c-format
 msgid "Hal type not handled in match (%s,%s,%s): %d"
 msgstr "Le type Hal n'est pas supporté (%s,%s,%s): %d"
 
-#: src/hal_interface.c:393 src/hal_interface.c:426
+#: src/hal_interface.c:430
+#: src/hal_interface.c:466
 #, c-format
 msgid "Out of memory, cannot run %s"
 msgstr "Epuisement de la mémoire, impossible d'exécuter %s"
 
-#: src/hal_interface.c:405
+#: src/hal_interface.c:443
 #, c-format
 msgid "Hal property %s in command '%s' not found (or OOM)"
 msgstr "La propriété Hal %s n'a pas été trouvé, pour la commande %s"
 
-#: src/hal_interface.c:440
+#: src/hal_interface.c:480
 #, c-format
 msgid "Running: %s"
 msgstr "Exécution de %s"
 
-#: src/hal_interface.c:444
+#: src/hal_interface.c:484
 #, c-format
 msgid "Execution of '%s' failed with error: %s"
 msgstr "L'exécution dela commande '%s' a échoué : %s"
 
-#: src/hal_interface.c:668
+#: src/hal_interface.c:708
 #, c-format
 msgid "Unhandled HAL iterator type: %d"
 msgstr "Type iterateur HAL non supporté : %d"
 
-#: src/hal_interface.c:742
+#: src/hal_interface.c:782
 #, c-format
 msgid "Unhandled HAL type for property %s, device %s: %d"
 msgstr "Type HAL non supporté pour la propriété %s et le périhérique %s : %d"
 
-#: src/hal_interface.c:763 src/hal_interface.c:843
+#: src/hal_interface.c:803
+#: src/hal_interface.c:883
 msgid "No hal devices. Out of memory or an error occured in Hal"
 msgstr "Pas de périphériques pour hal. Il n'y a plus de mémoire, ou une erreur"
 
-#: src/hal_interface.c:804
+#: src/hal_interface.c:844
 msgid "Failed to create HAL context"
 msgstr "La création d'un contexte pour HAL a échoué"
 
-#: src/hal_interface.c:812
+#: src/hal_interface.c:852
 #, c-format
 msgid "Error connecting to D-BUS system bus: %s"
 msgstr "La connection au bus système de D-BUS a échouée : %s"
 
-#: src/hal_interface.c:832
+#: src/hal_interface.c:872
 msgid "Error initializing HAL"
 msgstr "Erreur d'initialisation de HAL"
 
-#: src/hal_interface.c:837
+#: src/hal_interface.c:877
 #, c-format
 msgid "Failed to watch all HAL properties: %s"
-msgstr ""
-"Erreur lors de la mise en place de la surveillance des propriétés HAL : %s"
+msgstr "Erreur lors de la mise en place de la surveillance des propriétés HAL : %s"
 
-#: src/hal_interface.c:881
+#: src/hal_interface.c:921
 msgid "Failed to shut down HAL connection"
 msgstr "Erreur lors de la terminaison de la connection HAL"
 
@@ -93,7 +94,9 @@ msgstr "Signal %d reçu"
 msgid "stat failed for %s: %s"
 msgstr "stat a échoué pour %s : %s"
 
-#: src/manager.c:190 src/manager.c:259 src/manager.c:264
+#: src/manager.c:190
+#: src/manager.c:261
+#: src/manager.c:266
 msgid "Out of memory"
 msgstr "Epuisement de la mémoire"
 
@@ -121,8 +124,7 @@ msgid ""
 "                    '-' means not to use any pid file\n"
 "   -u x             run as user <x>\n"
 "\n"
-"   -i               report events, no configuration read, stay in "
-"foreground\n"
+"   -i               report events, no configuration read, stay in foreground\n"
 msgstr ""
 " Usage : halevt [option]\n"
 " Exécute des commandes en réponse aux événements HAL\n"
@@ -132,159 +134,163 @@ msgstr ""
 "   -f               rester en premier plan, sans devenir un démon\n"
 "   -g x             utiliser le groupe <x>\n"
 "   -p x             utilier le fichier <x> pour le pid au lieu du défaut\n"
-"                    avec une chaîne vide '', le fichier de pid n'est pas "
-"utilisé\n"
+"                    avec une chaîne vide '', le fichier de pid n'est pas utilisé\n"
 "   -u x             utiliser l'utilisateur <x>\n"
 "\n"
-"   -i               reporter les événements, pas de configuration, et rester "
-"au premier plan\n"
+"   -i               reporter les événements, pas de configuration, et rester au premier plan\n"
 
-#: src/manager.c:269
+#: src/manager.c:271
 #, c-format
 msgid "stat on %s failed: %s"
 msgstr "stat sur %s a échoué : %s"
 
-#: src/manager.c:309
+#: src/manager.c:317
 #, c-format
 msgid "Error getting uid for %s: %s"
 msgstr "L'obtention de l'identifiant uid pour %s a échoué : %s"
 
-#: src/manager.c:316
+#: src/manager.c:324
 #, c-format
 msgid "Error getting gid for %s: %s"
 msgstr "L'obtention de l'identifiant gid pour %s a échoué : %s"
 
-#: src/manager.c:322
+#: src/manager.c:330
 #, c-format
 msgid "Error setting gid to %u: %s"
 msgstr "Echec du changement de l'identifiant gid en %u : %s"
 
-#: src/manager.c:327
+#: src/manager.c:335
 #, c-format
 msgid "Error setting uid to %u: %s"
 msgstr "Echec du changement de l'identifiant uid en %u : %s"
 
-#: src/manager.c:338
+#: src/manager.c:346
 msgid "No configuration file found"
 msgstr "Aucun fichier de configuration trouvé"
 
-#: src/manager.c:345
+#: src/manager.c:353
 #, c-format
 msgid "Configuration file %s parsing failed"
 msgstr "L'analyse du fichier configuration %s a échouée"
 
-#: src/manager.c:348
+#: src/manager.c:356
 #, c-format
 msgid "Using configuration file %s"
 msgstr "Le fichier de configuration %s est utilisé"
 
-#: src/manager.c:361
+#: src/manager.c:373
 #, c-format
 msgid "Daemonize error: %s"
 msgstr "Erreur en devenant un démon : %s"
 
-#: src/manager.c:371
+#: src/manager.c:383
 msgid "No pid file used"
 msgstr "Pas d'utilisation de fichier pour le pid"
 
-#: src/manager.c:378
+#: src/manager.c:390
 #, c-format
 msgid "Open pid file %s failed: %s"
 msgstr "L'ouverture du fichier %s pour le pid a échouée: %s"
 
-#: src/manager.c:383
+#: src/manager.c:395
 #, c-format
 msgid "Lock %s failed: %s"
 msgstr "Le verrouillage de %s a échoué : %s"
 
-#: src/manager.c:388
+#: src/manager.c:400
 #, c-format
 msgid "Writing pid to %s failed"
 msgstr "L'écriture du pid dans %s a échoué"
 
-#: src/manager.c:400
+#: src/manager.c:412
 msgid "Error creating main loop"
 msgstr "La mise en place de la boucle principale a échouée"
 
-#: src/match.c:116
+#: src/match.c:114
 #, c-format
 msgid "Too much boolean expressions: %d"
 msgstr "Trop d'expressions booléennes (%d)"
 
-#: src/match.c:185 src/match.c:222
+#: src/match.c:181
+#: src/parse_config.c:94
 #, c-format
 msgid "Bad match expression: %s"
 msgstr "Expression d'appariement incorrecte : %s"
 
-#: src/match.c:242
+#: src/match.c:197
 #, c-format
 msgid "Garbage at end of boolean expression \"%s\""
 msgstr "Eléments inattendus à la fin de l'expression \"%s\""
 
-#: src/match.c:246
+#: src/match.c:201
 #, c-format
 msgid "Runaway parenthesis in boolean expression \"%s\""
 msgstr "Parenthèses surnuméraires dans l'expression \"%s\""
 
-#: src/match.c:250
+#: src/match.c:205
 #, c-format
 msgid "String instead of operator expected in boolean expression \"%s\""
-msgstr ""
-"Chaîne de caractères utilisée à la place d'un opérateur dans l'expression \"%"
-"s\""
+msgstr "Chaîne de caractères utilisée à la place d'un opérateur dans l'expression \"%s\""
 
-#: src/parse_config.c:65
+#: src/parse_config.c:123
 #, c-format
 msgid "Bad exec string: %s"
 msgstr "Commande incorrecte : %s"
 
-#: src/parse_config.c:342
+#: src/parse_config.c:466
 #, c-format
 msgid "Invalid Property name: %s"
 msgstr "Nom de propriété incorrect : %s"
 
-#: src/parse_config.c:421
+#: src/parse_config.c:545
 msgid "Document not parsed successfully"
 msgstr "L'analyse du fichier a échoué"
 
-#: src/parse_config.c:427
+#: src/parse_config.c:551
 msgid "Document is empty"
 msgstr "Le fichier est vide"
 
-#: src/parse_config.c:433
+#: src/parse_config.c:557
 #, c-format
 msgid "Incorrect document type, root node should have been %s"
 msgstr "Document incorrect, l'élément racine aurait du être %s"
 
-#: src/parse_config.c:444
+#: src/parse_config.c:568
 #, c-format
 msgid "Warning: Incorrect element '%s', should be '%s'"
 msgstr "Attention, élément incorrect '%s', devrait être '%s'"
 
-#: src/parse_config.c:451 src/parse_config.c:464 src/parse_config.c:477
-#: src/parse_config.c:490 src/parse_config.c:505 src/parse_config.c:520
-#: src/parse_config.c:542
+#: src/parse_config.c:575
+#: src/parse_config.c:588
+#: src/parse_config.c:603
+#: src/parse_config.c:616
+#: src/parse_config.c:631
+#: src/parse_config.c:646
+#: src/parse_config.c:668
 #, c-format
 msgid "Warning: %s XML tag encountered with missing or bad attributes, ignored"
-msgstr ""
-"Attention, élément XML %s avec des attributs manquants ou incorrects, ignoré"
+msgstr "Attention, élément XML %s avec des attributs manquants ou incorrects, ignoré"
 
-#: src/parse_config.c:534
+#: src/parse_config.c:594
+#, c-format
+msgid "Warning: match %s, exec %s: adding insertion failed"
+msgstr "Attention, match %s, exec %s : échec de l'ajout d'une insertion"
+
+#: src/parse_config.c:660
 #, c-format
 msgid "Warning: Incorrect Property element '%s', should be '%s'"
 msgstr "Attention, élément Property incorrect '%s', devrait être '%s'"
 
-#: src/parse_config.c:559
+#: src/parse_config.c:685
 #, c-format
 msgid "Warning: Incorrect element '%s'"
 msgstr "Attention, élément incorrect '%s'"
 
 #~ msgid "Entering main loop."
 #~ msgstr "On entre dans la boucle principale"
-
 #~ msgid "Exiting normally."
 #~ msgstr "Sortie normale"
-
 #~ msgid "No pid file specified, no pid file used"
 #~ msgstr ""
 #~ "Pas de fichier pour le pid spécifié, pas de fichier pour le pid utilisé"
+

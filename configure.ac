@@ -1,4 +1,4 @@
-AC_INIT([halevt],[0.1.6])
+AC_INIT([halevt],[0.1.6.1])
 AC_CONFIG_SRCDIR([src/manager.c])
 AC_CONFIG_HEADER([src/config.h])
 AC_CONFIG_AUX_DIR([config])
