@@ -26,8 +26,7 @@ msgstr "Erreur de DBus %s : %s"
 msgid "Hal type not handled in match (%s,%s,%s): %d"
 msgstr "Le type Hal n'est pas supporté (%s,%s,%s): %d"
 
-#: src/hal_interface.c:430
-#: src/hal_interface.c:466
+#: src/hal_interface.c:430 src/hal_interface.c:466
 #, c-format
 msgid "Out of memory, cannot run %s"
 msgstr "Epuisement de la mémoire, impossible d'exécuter %s"
@@ -57,8 +56,7 @@ msgstr "Type iterateur HAL non supporté : %d"
 msgid "Unhandled HAL type for property %s, device %s: %d"
 msgstr "Type HAL non supporté pour la propriété %s et le périhérique %s : %d"
 
-#: src/hal_interface.c:803
-#: src/hal_interface.c:883
+#: src/hal_interface.c:803 src/hal_interface.c:883
 msgid "No hal devices. Out of memory or an error occured in Hal"
 msgstr "Pas de périphériques pour hal. Il n'y a plus de mémoire, ou une erreur"
 
@@ -78,7 +76,8 @@ msgstr "Erreur d'initialisation de HAL"
 #: src/hal_interface.c:877
 #, c-format
 msgid "Failed to watch all HAL properties: %s"
-msgstr "Erreur lors de la mise en place de la surveillance des propriétés HAL : %s"
+msgstr ""
+"Erreur lors de la mise en place de la surveillance des propriétés HAL : %s"
 
 #: src/hal_interface.c:921
 msgid "Failed to shut down HAL connection"
@@ -94,9 +93,7 @@ msgstr "Signal %d reçu"
 msgid "stat failed for %s: %s"
 msgstr "stat a échoué pour %s : %s"
 
-#: src/manager.c:190
-#: src/manager.c:261
-#: src/manager.c:266
+#: src/manager.c:190 src/manager.c:261 src/manager.c:266
 msgid "Out of memory"
 msgstr "Epuisement de la mémoire"
 
@@ -124,7 +121,8 @@ msgid ""
 "                    '-' means not to use any pid file\n"
 "   -u x             run as user <x>\n"
 "\n"
-"   -i               report events, no configuration read, stay in foreground\n"
+"   -i               report events, no configuration read, stay in "
+"foreground\n"
 msgstr ""
 " Usage : halevt [option]\n"
 " Exécute des commandes en réponse aux événements HAL\n"
@@ -134,10 +132,12 @@ msgstr ""
 "   -f               rester en premier plan, sans devenir un démon\n"
 "   -g x             utiliser le groupe <x>\n"
 "   -p x             utilier le fichier <x> pour le pid au lieu du défaut\n"
-"                    avec une chaîne vide '', le fichier de pid n'est pas utilisé\n"
+"                    avec une chaîne vide '', le fichier de pid n'est pas "
+"utilisé\n"
 "   -u x             utiliser l'utilisateur <x>\n"
 "\n"
-"   -i               reporter les événements, pas de configuration, et rester au premier plan\n"
+"   -i               reporter les événements, pas de configuration, et rester "
+"au premier plan\n"
 
 #: src/manager.c:271
 #, c-format
@@ -211,8 +211,7 @@ msgstr "La mise en place de la boucle principale a échouée"
 msgid "Too much boolean expressions: %d"
 msgstr "Trop d'expressions booléennes (%d)"
 
-#: src/match.c:181
-#: src/parse_config.c:94
+#: src/match.c:181 src/parse_config.c:94
 #, c-format
 msgid "Bad match expression: %s"
 msgstr "Expression d'appariement incorrecte : %s"
@@ -230,7 +229,9 @@ msgstr "Parenthèses surnuméraires dans l'expression \"%s\""
 #: src/match.c:205
 #, c-format
 msgid "String instead of operator expected in boolean expression \"%s\""
-msgstr "Chaîne de caractères utilisée à la place d'un opérateur dans l'expression \"%s\""
+msgstr ""
+"Chaîne de caractères utilisée à la place d'un opérateur dans l'expression \"%"
+"s\""
 
 #: src/parse_config.c:123
 #, c-format
@@ -260,16 +261,13 @@ msgstr "Document incorrect, l'élément racine aurait du être %s"
 msgid "Warning: Incorrect element '%s', should be '%s'"
 msgstr "Attention, élément incorrect '%s', devrait être '%s'"
 
-#: src/parse_config.c:575
-#: src/parse_config.c:588
-#: src/parse_config.c:603
-#: src/parse_config.c:616
-#: src/parse_config.c:631
-#: src/parse_config.c:646
+#: src/parse_config.c:575 src/parse_config.c:588 src/parse_config.c:603
+#: src/parse_config.c:616 src/parse_config.c:631 src/parse_config.c:646
 #: src/parse_config.c:668
 #, c-format
 msgid "Warning: %s XML tag encountered with missing or bad attributes, ignored"
-msgstr "Attention, élément XML %s avec des attributs manquants ou incorrects, ignoré"
+msgstr ""
+"Attention, élément XML %s avec des attributs manquants ou incorrects, ignoré"
 
 #: src/parse_config.c:594
 #, c-format
@@ -288,9 +286,10 @@ msgstr "Attention, élément incorrect '%s'"
 
 #~ msgid "Entering main loop."
 #~ msgstr "On entre dans la boucle principale"
+
 #~ msgid "Exiting normally."
 #~ msgstr "Sortie normale"
+
 #~ msgid "No pid file specified, no pid file used"
 #~ msgstr ""
 #~ "Pas de fichier pour le pid spécifié, pas de fichier pour le pid utilisé"
-
