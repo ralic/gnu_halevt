@@ -48,5 +48,7 @@ echo $VERSION
 gpg -b --use-agent halevt-${VERSION}.tar.gz
 git commit -a -m "release $VERSION"
 git tag -a -m "release $VERSION" $VERSION
+git push
+git push --tags
 cp -a halevt-${VERSION}.tar.gz* ../halevt-releases/
 rsync -v ../halevt-releases/halevt-${VERSION}.tar.gz* pertusus@dl.sv.nongnu.org:/releases/halevt/
