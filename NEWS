@@ -1,7 +1,7 @@
 0.1.6.2 (Sun May 30 2010)
 * bugfix of the enhancement release
 * properly initialize property values to avoid a segfault when the 
-  property is not set (report and analysis from Marcin Gryszkal)
+  property is not set (report and analysis from Marcin Gryszkalis)
 * really iterate over a str_list when copying it
 
 0.1.6.1 (Wed Mar 24 2010)
