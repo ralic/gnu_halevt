@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: halevt 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-30 19:48+0200\n"
+"POT-Creation-Date: 2010-05-30 23:56+0200\n"
 "PO-Revision-Date: 2010-03-24 21:49+0100\n"
 "Last-Translator: Patrice Dumas <pertusus@free.fr>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -26,60 +26,60 @@ msgstr "Erreur de DBus %s : %s"
 msgid "Hal type not handled in match (%s,%s,%s): %d"
 msgstr "Le type Hal n'est pas supporté (%s,%s,%s): %d"
 
-#: src/hal_interface.c:426 src/hal_interface.c:471
+#: src/hal_interface.c:426 src/hal_interface.c:475
 #, c-format
 msgid "Out of memory, cannot run %s"
 msgstr "Epuisement de la mémoire, impossible d'exécuter %s"
 
-#: src/hal_interface.c:446
-#, c-format
-msgid "Hal property %s in command '%s' not found (or OOM)"
+#: src/hal_interface.c:452
+#, fuzzy, c-format
+msgid "Hal property %s in command '%s' not found (or OOM), values defined %d"
 msgstr "La propriété Hal %s n'a pas été trouvé, pour la commande %s"
 
-#: src/hal_interface.c:485
+#: src/hal_interface.c:489
 #, c-format
 msgid "Running: %s"
 msgstr "Exécution de %s"
 
-#: src/hal_interface.c:489
+#: src/hal_interface.c:493
 #, c-format
 msgid "Execution of '%s' failed with error: %s"
 msgstr "L'exécution dela commande '%s' a échoué : %s"
 
-#: src/hal_interface.c:713
+#: src/hal_interface.c:717
 #, c-format
 msgid "Unhandled HAL iterator type: %d"
 msgstr "Type iterateur HAL non supporté : %d"
 
-#: src/hal_interface.c:785
+#: src/hal_interface.c:789
 #, c-format
 msgid "Unhandled HAL type for property %s, device %s: %d"
 msgstr "Type HAL non supporté pour la propriété %s et le périhérique %s : %d"
 
-#: src/hal_interface.c:806 src/hal_interface.c:886
+#: src/hal_interface.c:810 src/hal_interface.c:890
 msgid "No hal devices. Out of memory or an error occured in Hal"
 msgstr "Pas de périphériques pour hal. Il n'y a plus de mémoire, ou une erreur"
 
-#: src/hal_interface.c:847
+#: src/hal_interface.c:851
 msgid "Failed to create HAL context"
 msgstr "La création d'un contexte pour HAL a échoué"
 
-#: src/hal_interface.c:855
+#: src/hal_interface.c:859
 #, c-format
 msgid "Error connecting to D-BUS system bus: %s"
 msgstr "La connection au bus système de D-BUS a échouée : %s"
 
-#: src/hal_interface.c:875
+#: src/hal_interface.c:879
 msgid "Error initializing HAL"
 msgstr "Erreur d'initialisation de HAL"
 
-#: src/hal_interface.c:880
+#: src/hal_interface.c:884
 #, c-format
 msgid "Failed to watch all HAL properties: %s"
 msgstr ""
 "Erreur lors de la mise en place de la surveillance des propriétés HAL : %s"
 
-#: src/hal_interface.c:924
+#: src/hal_interface.c:928
 msgid "Failed to shut down HAL connection"
 msgstr "Erreur lors de la terminaison de la connection HAL"
 

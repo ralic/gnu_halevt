@@ -1,3 +1,9 @@
+0.1.6.2 (Sun May 30 2010)
+* bugfix of the enhancement release
+* properly initialize property values to avoid a segfault when the 
+  property is not set (report and analysis from Marcin Gryszkal)
+* really iterate over a str_list when copying it
+
 0.1.6.1 (Wed Mar 24 2010)
 * enhancement release
 * use of device property to specify other devices in exec (report from 
