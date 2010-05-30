@@ -443,11 +443,15 @@ static int halevt_run_command(const halevt_exec *exec, char const *udi,
             if (values == NULL || values[0] == NULL)
             {
                 char *property_string = halevt_print_property_name(&(exec->elements[string_index].property));
-                DEBUG(_("Hal property %s in command '%s' not found (or OOM)"), property_string, exec->string);
+                int values_defined = 0;
+                if (values != NULL)
+                { 
+                   free (values);
+                   values_defined = 1;
+                }
+                DEBUG(_("Hal property %s in command '%s' not found (or OOM), values defined %d"), property_string, exec->string, values_defined);
                 free(property_string);
                 string = "UNKNOWN";
-                if (values != NULL)
-                  { FREE_NULL_ARRAY(char *, values, free);}
             }
             else
             {
