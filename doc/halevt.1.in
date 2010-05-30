@@ -26,6 +26,9 @@ stays in the foreground and report all the HAL events.
 .B \-c  \fIfile\fP
 Use configuration file \fIfile\fP.
 .TP
+.B \-d
+Give debugging informations and stay in the foreground.
+.TP
 .B \-f
 Stay in the foreground.
 .TP

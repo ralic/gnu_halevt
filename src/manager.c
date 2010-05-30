@@ -213,6 +213,7 @@ void usage()
  Execute arbitrary commands in response to HAL events\n\n\
    -c x             use config file <x> instead of searching below HOME\n\
                     /etc and /usr/share\n\
+   -d               output debugging information and stay in the foreground\n\
    -f               stay in the foreground, don't run as a daemon\n\
    -g x             run as group <x>\n\
    -p x             use pid file <x> instead of the default\n\
