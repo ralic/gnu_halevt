@@ -743,7 +743,6 @@ int main (int argc, char **argv)
   int fd_lock;
   int c;
   int do_all = 0;
-  int set_umask = 0;
   char *device_file = NULL;
   char *tmp_device_file;
   char *device = NULL;
@@ -770,7 +769,7 @@ int main (int argc, char **argv)
   halevt_mount_udi *new_device_udi;
   int num_devices;
   int system_user = 0;
-  char *mask_string;
+  char *mask_string = NULL;
   char uid_nr[50];
   char *uid_string;
 
@@ -855,7 +854,6 @@ int main (int argc, char **argv)
            }
            strcpy (mask_string, UMASKOPTSTR);
            strcat (mask_string, optarg);
-           set_umask = 1;
          }
          break;
        case 'a':
@@ -1107,7 +1105,7 @@ int main (int argc, char **argv)
 
     if (mountpoint == NULL) { mountpoint = ""; }
 
-    if (set_umask)
+    if (mask_string != NULL)
     {
        if (halevt_mount_check_mount_option(new_device_udi, hal_ctx, UMASKOPTSTR))
        {

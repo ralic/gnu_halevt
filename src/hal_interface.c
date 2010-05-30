@@ -55,7 +55,7 @@ void halevt_check_dbus_error(DBusError *error)
 
 static char **halevt_duplicate_str_list(char** str_list)
 {
-   char **value;
+   char **value = NULL;
    char **cur_str;
    int i;
 
@@ -270,9 +270,9 @@ static int halevt_property_matches_device (const char *key,
 /*
  * resolve the real device by going through the parents.
  */
-static halevt_device *halevt_property_resolve_device(const halevt_property_name *property, const halevt_device *device)
+static const halevt_device *halevt_property_resolve_device(const halevt_property_name *property, const halevt_device *device)
 {
-    halevt_device *new_device = device;
+    const halevt_device *new_device = device;
     const halevt_device_property *udi_property;
     char **new_udi;
     char **parent;
@@ -325,7 +325,7 @@ int halevt_matches (const halevt_match *match, const char *udi,
  */
 char **halevt_udi_property_value (const char *property, const char *udi)
 {
-    char **values;
+    char **values = NULL;
 
     DBusError dbus_error;
 
@@ -385,7 +385,7 @@ char **halevt_property_name_value(const halevt_property_name *property,
     }
     else if (device != NULL)
     {
-        halevt_device *real_device = halevt_property_resolve_device(property, device);
+        const halevt_device *real_device = halevt_property_resolve_device(property, device);
         if (real_device != NULL)
         {
            halevt_device_property *device_property = halevt_device_list_get_property(property->name, real_device);
@@ -414,35 +414,40 @@ static int halevt_run_command(const halevt_exec *exec, char const *udi,
    const halevt_device *device)
 {
     char *argv[4];
-    int string_size = 100;
+    int string_size = 255;
     int current_size = 1;
     char *command;
     GError *error = NULL;
     int string_index = 0;
-    char *string;
-    char **values;
-    int str_len;
-    int hal_value_used;
     int i;
 
     if ((command = (char *) malloc (string_size*sizeof(char))) == NULL)
     {
        DEBUG(_("Out of memory, cannot run %s"), exec->string);
+       return 0;
     }
     *command = '\0';
 
     for (i = 0; i < exec->exec_size; i++)
     {
-        hal_value_used = 0;
+        char *string;
+        /* FIXME this initialization is done to silence the compiler, but should not be needed */
+        char **values = NULL;
+        int str_len;
+        int hal_value_used = 0;
+
         if (exec->elements[string_index].hal_property)
         {
+            /* values[0] may be null if hal cannot get the value or a strdup returns null */
             values = halevt_property_name_value (&(exec->elements[string_index].property), udi, device);
-            if (values == NULL)
+            if (values == NULL || values[0] == NULL)
             {
                 char *property_string = halevt_print_property_name(&(exec->elements[string_index].property));
                 DEBUG(_("Hal property %s in command '%s' not found (or OOM)"), property_string, exec->string);
                 free(property_string);
                 string = "UNKNOWN";
+                if (values != NULL)
+                  { FREE_NULL_ARRAY(char *, values, free);}
             }
             else
             {
@@ -462,7 +467,7 @@ static int halevt_run_command(const halevt_exec *exec, char const *udi,
             if ((command = (char *) realloc (command, string_size*sizeof(char))) == NULL)
             {
                 if (hal_value_used) 
-                  FREE_NULL_ARRAY(char *, values, free);
+                  { FREE_NULL_ARRAY(char *, values, free);}
                 DEBUG(_("Out of memory, cannot run %s"), exec->string);
                 return 0;
             }
@@ -725,10 +730,8 @@ char **halevt_get_property_value(LibHalPropertyType type,
        return new_list;
     }
 
-    value = malloc(2*sizeof(char *));
+    value = calloc(2, sizeof(char *));
     if (value == NULL) { return NULL; };
-    value[0] = NULL;
-    value[1] = NULL;
 
     if (type == LIBHAL_PROPERTY_TYPE_STRING)
     {

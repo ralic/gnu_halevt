@@ -39,7 +39,7 @@ halevt_boolean_expression *halevt_new_boolean_expression(const xmlChar *original
    halevt_boolean_expression *new_expression;
    char *expr;
    char **atoms;
-   int i, j, s;
+   int i, s;
    enum bool_error_t bool_error;
    new_expression = malloc (sizeof(halevt_boolean_expression));
    if (new_expression != NULL)
@@ -49,12 +49,18 @@ halevt_boolean_expression *halevt_new_boolean_expression(const xmlChar *original
       int atom_sizes = 4;
       char next_char;
       char *atom = NULL;
+      /* FIXME this should be set to the length in char of the highest 
+         integer that doesn't trigger an integer overflow. For example with 
+         32 bit integers the number of integers is 2^32 = 4294967296 
+         therefore they may be represented with 10 chars
+      */
       int atom_index_max_size = 256;
       char atom_index_string[atom_index_max_size];
       char next_char_string[2];
 
       new_expression->matches_size = 0;
-      if ((new_expression->string = strdup(original_string)) == NULL)
+      /* FIXME xmlChar conversion */
+      if ((new_expression->string = strdup((char *)original_string)) == NULL)
       {
          free(new_expression);
          return NULL;
@@ -91,6 +97,7 @@ halevt_boolean_expression *halevt_new_boolean_expression(const xmlChar *original
                while (isspace(*(new_expression->string+index-b -1))){ b++; }
                *(new_expression->string+index - b) = '\0';
                /* add the atom to the list of atoms */
+               /* FIXME integer overflow? */
                (new_expression->matches_size)++;
                if (new_expression->matches_size >= atom_sizes -1)
                {
@@ -111,7 +118,7 @@ halevt_boolean_expression *halevt_new_boolean_expression(const xmlChar *original
                { /* the index number representation in char is more
                     than atom_index_max_size characters... This should
                     never happen */
-                  DEBUG(_("Too much boolean expressions: %d"), new_expression->matches_size);
+                  DEBUG(_("Error storing boolean expression index: %d"), new_expression->matches_size);
                   goto free_memory;
                }
                atom_index_string_size = strlen(atom_index_string);

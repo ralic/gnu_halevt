@@ -114,7 +114,7 @@ halevt_exec *halevt_new_exec(const xmlChar *exec)
    char *p;
    halevt_exec *result_exec;
    int sub_elements_number = 0;
-   if ((string = (char *) xmlStrdup(exec)) == NULL)
+   if ((string = strdup((char *)exec)) == NULL)
       return NULL;
 
    /* handle the special case where there is a $hal. at the beginning */
@@ -124,7 +124,7 @@ halevt_exec *halevt_new_exec(const xmlChar *exec)
       free(string);
       return NULL;
    }
-   if ((parsed_string = (char *) xmlStrdup(exec)) == NULL)
+   if ((parsed_string = strdup(string)) == NULL)
    {
       free (string);
       return NULL;
@@ -455,19 +455,23 @@ static void halevt_free_condition(halevt_condition *condition)
    free(condition);
 }
 
+/* match: the device match 
+   name: the property name
+*/
 halevt_property *halevt_add_property(const xmlChar *match, xmlChar *name)
 {
    halevt_property *new_property;
    new_property = malloc(sizeof(halevt_property));
    if (new_property != NULL)
    {
-      if ((new_property->name = halevt_hal_string(name)) == NULL)
+      char *hal_property_name = halevt_hal_string((char *) name);
+      if (hal_property_name == NULL)
       {
          DEBUG(_("Invalid Property name: %s"), name);
          free(new_property);
          return NULL;
       }
-      if ((new_property->name = (char *)xmlStrdup(new_property->name)) == NULL)
+      if ((new_property->name = strdup(hal_property_name)) == NULL)
       {
          free(new_property);
          return NULL;
@@ -604,7 +608,10 @@ int halevt_parse_config (char const *path)
                   }
                   else
                   {
-                     halevt_add_removal (match, exec);
+                     halevt_removal *new_removal = halevt_add_removal (match, exec);
+                     if (new_removal == NULL)
+                       DEBUG(_("Warning: match %s, exec %s: adding removal failed"), match, exec);
+
                      xmlFree(exec);
                   }
                }
@@ -617,7 +624,9 @@ int halevt_parse_config (char const *path)
                   }
                   else
                   {
-                     halevt_add_oninit (match, exec);
+                     halevt_oninit *new_oninit = halevt_add_oninit (match, exec);
+                     if (new_oninit == NULL)
+                       DEBUG(_("Warning: match %s, exec %s: adding action on init failed"), match, exec);
                      xmlFree(exec);
                   }
                }
@@ -632,7 +641,9 @@ int halevt_parse_config (char const *path)
                   }
                   else
                   {
-                     halevt_add_condition(match, exec, name, value);
+                     halevt_condition *new_condition = halevt_add_condition(match, exec, name, value);
+                     if (new_condition == NULL)
+                       DEBUG(_("Warning: match %s, exec %s (%s = %s): adding condition failed"), match, exec, name, value);
                   }
                   xmlFree(exec);
                   xmlFree(name);
@@ -647,11 +658,15 @@ int halevt_parse_config (char const *path)
                   }
                   else
                   {
-                     halevt_property * new_property = halevt_add_property(match, name);
-                     xmlNodePtr property_value_node;
+                     halevt_property *new_property = halevt_add_property(match, name);
 
-                     property_value_node = cur->children;
+                     if (new_property  == NULL)
                      {
+                        DEBUG(_("Warning: match %s, name %s: adding property failed"), match, name);
+                     }
+                     else
+                     {
+                        xmlNodePtr property_value_node = cur->children;
                         while(property_value_node != NULL)
                         {
                            if (property_value_node->type == XML_TEXT_NODE || property_value_node->type == XML_COMMENT_NODE) { ; }
@@ -669,7 +684,9 @@ int halevt_parse_config (char const *path)
                               }
                               else
                               {
-                                 halevt_add_property_value(new_property, exec, value);
+                                 halevt_property_action *new_property_action = halevt_add_property_value(new_property, exec, value);
+                                 if (new_property_action == NULL)
+                                   DEBUG(_("Warning: match %s, name %s, value %s, exec %s: adding property value failed"), match, name, exec, value);
                               }
                               xmlFree(exec);
                               xmlFree(value);
