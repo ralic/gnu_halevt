@@ -91,8 +91,8 @@ static char **halevt_duplicate_str_list(char** str_list)
                return NULL;
            }
            *cur_value = cur_val;
-           /* already done above
            cur_value++;
+           /* already done above
            *cur_value = NULL;
            */
        }
