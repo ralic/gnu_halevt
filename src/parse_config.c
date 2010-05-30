@@ -724,30 +724,44 @@ void halevt_print_config()
    while (insertion != NULL)
    {
       char *exec_string = halevt_print_exec(insertion->exec);
-      fprintf(stderr, "insertion %s, %s\n", halevt_print_boolean_expression(insertion->match), exec_string);
+      char *boolean_expression = halevt_print_boolean_expression(insertion->match);
+      fprintf(stderr, "insertion %s, %s\n", boolean_expression, exec_string);
       free(exec_string);
+      free(boolean_expression);
       insertion = insertion->next;
    }
    removal = halevt_removal_root;
    while (removal != NULL)
    {
-      fprintf(stderr, "removal %s, %s\n", halevt_print_boolean_expression(removal->match), halevt_print_exec(removal->exec));
+      char *boolean_expression = halevt_print_boolean_expression(removal->match);
+      char *exec_string = halevt_print_exec(removal->exec);
+      fprintf(stderr, "removal %s, %s\n", boolean_expression, exec_string);
+      free (boolean_expression);
+      free (exec_string);
       removal = removal->next;
    }
    condition = halevt_condition_root;
    while (condition != NULL)
    {
-      fprintf(stderr, "condition %s, %s, %s, %s\n", halevt_print_boolean_expression(condition->match), halevt_print_exec(condition->exec), condition->name, condition->value);
+      char *boolean_expression = halevt_print_boolean_expression(condition->match);
+      char *exec_string = halevt_print_exec(condition->exec);
+      fprintf(stderr, "condition %s, %s, %s, %s\n", boolean_expression, exec_string, condition->name, condition->value);
+      free (boolean_expression);
+      free (exec_string);
       condition = condition->next;
    }
    property = halevt_property_root;
    while (property != NULL)
    {
       halevt_property_action *property_action = property->action;
-      fprintf(stderr, "property %s, %s\n", property->name, halevt_print_boolean_expression(property->match));
+      char *boolean_expression = halevt_print_boolean_expression(property->match);
+      fprintf(stderr, "property %s, %s\n", property->name, boolean_expression);
+      free (boolean_expression);
       while (property_action != NULL)
       {
-         fprintf(stderr, "  property_action %s, %s\n", property_action->value, halevt_print_exec(property_action->exec));
+         char *exec_string = halevt_print_exec(property_action->exec);
+         fprintf(stderr, "  property_action %s, %s\n", property_action->value, exec_string);
+         free (exec_string);
          property_action = property_action->next;
       }
       property = property->next;
