@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Config SYSTEM "../dtd/configuration.dtd">
+<Config namespace="org.freedesktop" interface="UDisks">
+
+
+  <Match description="integral" object="Device">
+    <Characteristic id="backup">
+      <Property id="IdLabel" value="integral"/>
+      <Property id="DeviceIsMounted" value="0"/>
+    </Characteristic>
+    <Event value="DeviceAdded">
+      <Do type="script" value="echo salut"/>
+    </Event>
+  </Match>
+
+  <Match description="sdhc" object="Device">
+    <Characteristic>
+      <Property id="DriveModel" value="CardReader SD0"/>
+      <Event value="DeviceAdded">
+	<Do type="script" value="echo cardReader Here"/>
+      </Event>
+      <Event value="DeviceRemoved">
+	<Do type="script" value="echo some_very_heavy_stuff" fork="true"/>
+      </Event>
+
+    </Characteristic>
+  </Match>
+
+  <Match description="black_usb_device" object="Device">
+    <Characteristic>
+      <Property id="IdUuid" value="5868ff05-19e2-4134-b9ed-452d108e8516"/>
+      <BooleanProperties value="DeviceIsMounted = false &amp; DeviceIsRemovable = true  &amp; ! DeviceIsOpticalDisc" />
+      <Event value="DeviceAdded">
+	<Do type="script" value="ls /tmp"/>
+      </Event>
+      <Event value="OnInit">
+	<Do type="script" value="echo cardReader $IdUuid$ $DriveRevision$ Here $event$ $native_path$"/>
+      </Event>
+
+    </Characteristic>
+  </Match>
+
+  <Match description="MyUSB pen" object="Device">
+    <Characteristic id="MyUSB">
+      <Property id="DeviceFilePresentation" value="show"/>
+      <Property id="DeviceIsRemovable" value="true"/>
+    </Characteristic>
+
+
+    <Event value="DeviceRemoved">
+      <Do type="script" value="echo aurevoir"/>
+    </Event>
+
+    <Event value="DeviceChanged">
+      <!-- optionnal, will make the dbus introspection to be redone
+	   and recomparated to the config because not only we changed but
+	we also want to check this value -->
+      <!-- <Property id="DriveModel" value="SM223AC"/> -->
+      <Property id="IdLabel" value="blah"/>
+      <!-- mandatory: what to do -->
+
+      <!-- env preserved -->
+      <Do type="script" value="echo salut"/>
+      <!-- will use spawnp() -->
+      <Do type="binary" value="/bin/ls" args="%Property% | %Event%"/>
+      <!-- so we can reprocess ourselves -->
+      <Do type="xslt" value="~/reproc.xml"/>
+      <!-- call this method of this object -->
+      <!-- should we forget about this and let ones use type="binary", value="dbus-send" ? -->
+<!--      <Do type="method" value="PartitionModify">
+	<arg id="label" value="plop"/>
+      </Do>
+-->
+    </Event>
+
+    <!-- triggered at each change (we registered to all Object signals + OnInit):
+	 toremove:
+	 <Condition id="IdLabel" value="blah">
+	   // reference to an Action 
+	   <Action ref="MyCustomMount"/>
+	 </Condition>
+	 -->
+  </Match>
+
+
+  <Match description="testExpander" object="Expander">
+    <Characteristic id="exp">
+      <Property id="Vendor" value="ahah"/>
+      <Property id="NumPorts" value="42"/>
+    </Characteristic>
+    <Event value="Changed">
+      <Do type="script" value="echo hi expander $NativePath$"/>
+    </Event>
+  </Match>
+
+
+  <!-- todo; don't specify the object this so soon in the schema -->
+  <Match description="Rsync" object="Device">
+    <Characteristic ref="MyUSB"/>
+    <Characteristic ref="backup"/>
+    <!-- will merge MyUSB & MyHD <Characteristic>,
+	 register all member Events,
+	 run if at least on is one is OnInit:
+	 - test their <Condition> (= <Property> inside an <Event>)
+	 - run successive <Do>
+      -->
+    <Action ref="SaveData"/>
+  </Match>
+
+  <!-- two Action defined separatly in order to be reused -->
+  <Action id="MyCustomMount">
+    <Do type="script" value="mymount %UUID%"/>
+  </Action>
+
+  <Action id="SaveData">
+    <!-- todo %foo% according to known Characteristic -Action has to be known last -->
+    <Do type="script" value="rsync foo bar"/>
+  </Action>
+
+</Config>

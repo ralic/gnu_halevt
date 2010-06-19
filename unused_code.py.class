@@ -1,0 +1,120 @@
+# Copyright (C) 2010 Raphael Droz <raphael.droz@gmail.com>
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+class AbstractPropertySet:
+    # attribute: schema = false
+    def compareToXML(self, node2):
+        # xslt-able
+        # loop on and test if each Property id
+        # appears as one of the Properties in b[i] */
+        for dprop in self.schema.iterchildren(tag='Property'):
+            for cprop in node2.iterchildren(tag='property'):
+                if dprop.get('id') != cprop.get('name'):
+                    print 'A' #return false
+            print(objectify.dump(node2))
+
+    def comparableWithXML(self, node2):
+        print dir(node2)
+        for prop in self.schema[k]:
+            # todo: check if all of our elements exists in node2, with the same name
+            if not "prop exists" in node:
+                return false
+            return true
+
+    class BooleanProperty(AbstractPropertySet):
+        def __init__ ( self, boolexpr ):  #  = string
+            # transform to XML in self.schema
+            print 'A'
+    # implements comparableWithXML
+
+    class Characteristics(AbstractPropertySet):
+        # attribute: array of AbstractProperty + Action
+
+        def __init__( self, xmlschema ):
+            self.xmlschema = objectify.parse(xmlschema)
+            print dir()
+            pass
+        def comparableWith(self, schema):
+            for i in self.props:
+                if i.comparableWithXML(schema):
+                    print 'A'
+
+    #def aMethod( self ):
+    #    raise NotImplementedError( "Should have implemented this" )
+
+        def __eq__(device):
+            for prop in self.props:
+                if not prop.compareTo(device):
+                    return false
+            return true
+
+        def merge( otherCharacteristic):
+            pass
+
+    class Match:
+        # attribute: Characteristics
+        # attribute: array of Events
+        def __init__(self, characteristics):
+            self.characteristics = characteristics
+            #print dir(characteristics)
+        #self.events =
+
+    # compare the whole Config's Match's Characteristics
+    # to the whole device tree
+    # @return a trimmed copy of the device nodeset
+
+    # its kinda DTD, we check if we will be able to compare
+    # our characteristics with all those device according
+    # to the "comparability" of the properties of each of them
+        def reduceNodeSet( nodeset ): # nodeset: a device list
+            for device in self.schema.iterchildren(nodeset):
+                keep=false;
+                for charac in self.characteristics:
+                    keep |= charac.comparableWith(device);
+                    if keep == false:
+                        pass #strip device from returned nodeset
+
+### MISC stuff, result of testing
+
+
+#proxy = bus.get_object(dbusaddr, '/' + string.replace(namespace, '.', '/') + '/' + service + '/'# + aobject)
+#iface = dbus.Interface(proxy, dbusaddr + '.' + aobject )
+
+#config.getCharacteristicFromSignal('DeviceAdded') 
+
+
+#path = iface.FindDeviceByDeviceFile("/dev/sda1") 
+#obj = bus.get_object(dbusaddr ,  path)
+#obj_prop = dbus.Interface(obj, "org.freedesktop.DBus.Properties")
+
+#for i in obj_prop.Get("org.freedesktop.UDisks.Device", "device-mount-paths"):
+#    print i
+
+#a = DbusObject ( obj_prop.GetAll( "org.freedesktop.UDisks.Device" ) )
+#b = a.device
+#print b
+#print a.Introspect()
+#obj_int = dbus.Interface(obj, "org.freedesktop.DBus.Introspectable")
+#print obj_int.Introspect()
+
+#path = iface.FindDeviceByDeviceFile("/dev/sda1") 
+#device = bus.get_object("org.freedesktop.UDisks", path) 
+#print device
+#print device.Introspect()
+#device_prop = dbus.Interface(device, "org.freedesktop.DBus.Properties")
+#print device_prop.Get("org.freedesktop.UDisks.Device", "device-mount-paths")
+#device_prop2 = dbus.Interface(device, "org.freedesktop.DBus.Introspectable")
+#print device_prop.Introspect()

@@ -1,0 +1,96 @@
+What this program does (short version) :
+It listens to Dbus service provider (like udisks or upower) and attempt
+to match event and related objects to a configuration file which define
+some actions to trigger according to the objects properties and the events
+they are related to.
+
+Raphael.Droz@gmail.com, june 2010
+
+Note:
+In order to serialize the dbus dictionary to XML, this program :
+http://www.strangegizmo.com/products/pyxslt
+is needed.
+
+
+What this program does (long version) :
+
+=> TIES SIGNALS
+- get /Config@interface + /Config/Match/@object
+  - attach to the signals of this service which are in /Config/Match//Event@value
+
+=> BUILD A LIST OF CURRENT OBJECTS (HARDWARE)
+- fetch Enumerate<Object> (<Object> is the list of uniques @object built from
+  all //Match@object)
+- for each Object whose name is present as /Config@interface, do :
+   - XML serialize its GetAll() return value (all key-value pairs of this Object)
+- concatenate all objects into one XML
+TODO: strip Properties which doesn't appear in <Config> ?
+TODO: do an intermediate format in order to compare more easily (kind of minimized monitored_devices.xml)
+
+=> PREPROCESS CONFIG
+- create transitionnal XML with resolved cross-references (@ref => @idref)
+
+=> DO INIT TIME CHECK
+- use XSLT to find match /Config properties with the hardware currently present
+  (but only those whose //Event@value = 'OnInit')
+
+=> On<Signal>
+- while running attach_signal() at startup we generated several callbacks
+- each of them as a diffrent prefix like dbus_callback_<signal> and run
+  processEvent(<signal_name>, <dbusobject>)
+- processEvent() does what was done at init check, only the <signal> value is
+  different.
+- rebuilt the Dbus XML representation
+  TODO: atomic updates
+
+=======================
+When speaking about <Config>, it should be understood as a given <Config interface>
+(like UDisks, UPower, ...)
+
+A Match is a set (array) of Properties + an Action
+We may need an AbstractPropertySet
+   ( a Config object would just extend it by adding an Action,
+   DeviceProperty would directly implement it )
+
+A kind of dynamic_xml_representation is what we would need. A bit like /proc is to
+a filesystem. /proc/dbus/udisks.xml would be quite useful here :)
+
+=======================
+How to insert boolstuff here ? (or any syntax which would ease the description)
+The heuristic needs to be compatible with the launch time "OnInit" or, even better,
+when we decide if a Device (just being XML-serialized) is worth being kept in
+the XML-serialized aggregate.
+"if the boolean expression /BooleanProperty@value *may* be equals to this node
+don't strip it from serialization" :
+
+// compare the whole Config's Match's Characteristics to the whole device tree
+// its kinda DTD, we validate if we will be able to compare
+// our //Match with a <device> according to its Properties
+
+trimNodeSets(Match a, DeviceList *b)
+  while(device = b[i])
+    keep=false;
+    while(charac = a[j])
+    	# common case: XSLT: 
+    	while(prop = charac[k])
+	   if(prop exists in b[i]) { keep=true; break;}
+	   # otherwise, we may have to compare a boolstuf with a set
+	   # of properties for a device
+	   keep = charac.comparableWith(device);
+	   if keep == false : strip device from b
+
+
+AbstractProperty::compareNodes(node2):
+	if(node1 type of boolstuf) ...
+	else
+	    while(dprop = node1[i])
+	    	while(cprop = node2[j])
+		     if (a !== b)
+		     	return false;
+	return true;
+
+# to get fine-graind comparator (compare boolean expression attribute
+# to an XML Device representation)
+DeviceProperty convertPropertyType(ConfigProperty);
+ConfigProperty.__eq__( ConfigProperty )
+

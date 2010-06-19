@@ -1,0 +1,50 @@
+* workflow
+- handle <Property> inside an <Event>
+- support multiple <Config> (thus service/namespace)
+- rebuild object representation sooner or later according to signal
+   (Added / Removed)
+
+* DBUS
+- find a way to get rid of Enumerate<Object>, needed to support other
+   app based on dbus (per-service directives may have to come
+   somewhere there)
+- iterate Introspect vs GetAll ? (interfaces provide XML description
+   in /usr/share/dbus-1, services don't)
+
+* DTD !
+- review the whole schema (uneeded markup ??)
+- move namespace, service, object at the <Characteristic> level
+- use &entities; as example
+   => (eg, &udisks; <=> namespace="org.freedesktop" object="udisks"
+   object="Device")
+- allow multiple <Event> (DeviceAdded|DeviceChanged|OnInit,...)
+- use relaxng for better checks
+- support BooleanProperties
+
+* pyxslt
+- find an alternative
+- 1° dbus output XML natively ??
+- 2° at least, get pyxslt natively serialize the DBUS dict
+- 2°° get the device name as the root attribute
+
+* XSLT
+- move as much code as possible to XSLT (the code should as iterative and
+   functionnal as possible to get this done)
+- use fn:collection in comparator.xsl
+
+* misc
+- create dry-run mode
+- optimize the way the object-tree is built
+- handle space in commands arguments / Dbus substitued props
+
+* triggered actions
+- create the 'xslt' case in doit() (if needed)
+- create the 'method' case in doit() (if needed)
+- create a catch-all signal handler <Event value="*" />
+
+* test
+- test with UPower, ... ... gnome, ekiga, pidgin, xfce, bluetooth devices ?
+
+* future ?
+- bash bricks only ?
+   mkfifo, something_other_than_dbus-monitor_output, xsltproc, ...
