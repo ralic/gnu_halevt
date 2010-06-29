@@ -354,10 +354,7 @@ int main(int argc, char *argv[])
                 DEBUG(_("Configuration file %s parsing failed"), *current_conffile);
                 exit(1);
             }
-            DEBUG(_("Using configuration file %s"), *current_conffile);
-            free (*current_conffile);
         }
-        free (conffiles);
     }
 
     if (debug_config)
@@ -403,6 +400,18 @@ int main(int argc, char *argv[])
             }
             fclose(file);
         }
+    }
+
+    /* delay this message until here, such that it ends up in syslog
+       if in daemon mode */
+    if (conffiles != NULL)
+    {
+        WALK_NULL_ARRAY(current_conffile, conffiles)
+        {
+            DEBUG(_("Using configuration file %s"), *current_conffile);
+            free (*current_conffile);
+        }
+        free (conffiles);
     }
 
     halevt_run_oninit ();
