@@ -1,3 +1,7 @@
+0.1.6.3 ()
+* delay the message about configuration files to send it to 
+  syslog if daemonized (report from Benoit-Pierre Demaine).
+
 0.1.6.2 (Sun May 30 2010)
 * bugfix of the enhancement release
 * properly initialize property values to avoid a segfault when the 

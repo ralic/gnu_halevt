@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<halevt:Configuration version="0.1" xmlns:halevt="http://www.environnement.ens.fr/perso/dumas/halevt.html">
+<halevt:Configuration version="0.1" xmlns:halevt="http://www.nongnu.org/halevt/">
 
 <!-- 
   Examples of notifications with popper, from Marcin Gryszkalis.

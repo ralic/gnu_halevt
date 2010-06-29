@@ -8,7 +8,7 @@
 -->
 <!ENTITY MOUNTABLE "hal.block.device &amp; hal.block.is_volume = true &amp; (hal.volume.policy.should_mount = true | ((! hal.volume.policy.should_mount = false) &amp; (hal.block.storage_device.hal.storage.policy.should_mount = true | ((! hal.block.storage_device.hal.storage.policy.should_mount = false)  &amp; (hal.block.storage_device.hal.storage.hotpluggable = true | hal.block.storage_device.hal.storage.removable = true)))))">
 ]>
-<halevt:Configuration version="0.1" xmlns:halevt="http://www.environnement.ens.fr/perso/dumas/halevt.html">
+<halevt:Configuration version="0.1" xmlns:halevt="http://www.nongnu.org/halevt/">
 
 <!--
 Remember to use &amp; and &quot; for & and " in xml attributes.

@@ -85,7 +85,7 @@ Halevt configuration is in XML (described in-depth
 at @uref{http://www.w3.org/XML/}). A configuration file should begin with:
 @example
 <?xml version="1.0" encoding="UTF-8"?>
-<halevt:Configuration version="0.1" xmlns:halevt="http://www.environnement.ens.fr/perso/dumas/halevt.html">
+<halevt:Configuration version="0.1" xmlns:halevt="http://www.nongnu.org/halevt/">
 @end example
 
 and end with

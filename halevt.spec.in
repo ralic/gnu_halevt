@@ -5,8 +5,8 @@ Summary:        Generic handler for HAL events
 
 Group:          Applications/System
 License:        GPLv2+
-URL:            http://www.environnement.ens.fr/perso/dumas/halevt.html
-Source0:        http://www.environnement.ens.fr/perso/dumas/halevt-%{version}.tar.gz
+URL:            http://www.nongnu.org/halevt/
+Source0:        http://savannah.nongnu.org/download/halevt/halevt-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  dbus-glib-devel hal-devel libxml2-devel 

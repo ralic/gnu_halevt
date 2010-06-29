@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: halevt 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-30 23:56+0200\n"
+"POT-Creation-Date: 2010-06-29 10:57+0200\n"
 "PO-Revision-Date: 2010-03-24 21:49+0100\n"
 "Last-Translator: Patrice Dumas <pertusus@free.fr>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -174,36 +174,36 @@ msgstr "Aucun fichier de configuration trouvé"
 msgid "Configuration file %s parsing failed"
 msgstr "L'analyse du fichier configuration %s a échouée"
 
-#: src/manager.c:357
-#, c-format
-msgid "Using configuration file %s"
-msgstr "Le fichier de configuration %s est utilisé"
-
-#: src/manager.c:374
+#: src/manager.c:371
 #, c-format
 msgid "Daemonize error: %s"
 msgstr "Erreur en devenant un démon : %s"
 
-#: src/manager.c:384
+#: src/manager.c:381
 msgid "No pid file used"
 msgstr "Pas d'utilisation de fichier pour le pid"
 
-#: src/manager.c:391
+#: src/manager.c:388
 #, c-format
 msgid "Open pid file %s failed: %s"
 msgstr "L'ouverture du fichier %s pour le pid a échouée: %s"
 
-#: src/manager.c:396
+#: src/manager.c:393
 #, c-format
 msgid "Lock %s failed: %s"
 msgstr "Le verrouillage de %s a échoué : %s"
 
-#: src/manager.c:401
+#: src/manager.c:398
 #, c-format
 msgid "Writing pid to %s failed"
 msgstr "L'écriture du pid dans %s a échoué"
 
-#: src/manager.c:413
+#: src/manager.c:411
+#, c-format
+msgid "Using configuration file %s"
+msgstr "Le fichier de configuration %s est utilisé"
+
+#: src/manager.c:422
 msgid "Error creating main loop"
 msgstr "La mise en place de la boucle principale a échouée"
 

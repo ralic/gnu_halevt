@@ -374,7 +374,7 @@ int main(int argc, char *argv[])
 
         halevt_fork = 1;
 
-        DEBUG("%s, http://www.environnement.ens.fr/perso/dumas/halevt.html", PACKAGE_STRING);
+        DEBUG("%s, http://www.nongnu.org/halevt/", PACKAGE_STRING);
 
         if (pid_file == NULL)
         {
