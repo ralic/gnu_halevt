@@ -73,7 +73,7 @@ if [ x"$cmdname" = 'xhvumount' ]; then
     command='umount'
 else
     command=$1
-    shift
+    [ $# -gt 0 ] && shift
 fi
 
 
@@ -131,7 +131,7 @@ if [ x"$mountpoint" != x ]; then
 fi
 
 (
-   flock 200
+   flock 9
 
 if [ $command = 'mount' ]; then
    if [ x"$udi" = x -o x"$device" = x ]; then
@@ -467,7 +467,7 @@ else
    exit 1
 fi
 
-) 200>"$lockfile"
+) 9>"$lockfile"
 
 # is it really safe?
 rm $lockfile
