@@ -100,7 +100,7 @@ sub quoted_cmd(@)
 }
 
 {
-  my $since_date = '1970-01-01 UTC';
+  my $since_date = '1970-01-02 UTC';
   my $format_string = '%s%n%b%n';
   GetOptions
     (

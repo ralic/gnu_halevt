@@ -93,7 +93,7 @@ while [ $# != 0 ]; do
           -h) usage ; exit 0 ; shift ;;
           *) break ;;
         esac
-        shift
+        [ $# -gt 0 ] && shift
 done
 
 [ -z "$command" ] && usage && exit 1
@@ -291,7 +291,7 @@ elif [ $command = 'mountpoint' ]; then
 elif [ $command = 'umount' ]; then
    if [ x"$udi" = x -a x"$mountpoint" = x -a x"$device" = x -a $umount_all = 'no' ]; then
        mountarg=$1
-       shift
+       [ $# -gt 0 ] && shift
        if [ x"$mountarg" = x ]; then
            echo "umount requires an udi, a mountpoint, a device or -a" 1>&2
            exit 1
