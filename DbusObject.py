@@ -14,6 +14,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+# a simple XML reprensentation of a dbus object obtained through the pyxslt
+# serialization of the dbus object dictionary
+# (the dbus service should provide the GetAll() method)
+
 #from pyxslt.serialize import Serializer
 import pyxslt.serialize
 
@@ -35,6 +39,11 @@ class DbusObject:
 
     def genXML(self):
         self.xml = {}
+
+        # sadly, the following doesn't work (python experts welcomed)
+        # self.xml = pyxslt.serialize.toString(prettyPrintXml=True, foo=self.props)
+
+        # workaround below:
         a = {}
         # TODO; better to directly send the dict (and strip DriveAtaSmartBlob), if possible
         for i in self.props.keys():
@@ -49,10 +58,8 @@ class DbusObject:
         # an element with an arbitrary name
         a['_pyxslt_dbus_path'] = self.path
         self.xml = pyxslt.serialize.toString(prettyPrintXml=True, obj=a)
-        # sadly following doesn't work (python experts welcome)
-        # self.xml = pyxslt.serialize.toString(prettyPrintXml=True, foo=self.props)
 
-    # helper for hand-serialization
+    # helper for hand-serialization (the workaround above)
     def atostring(self, arg):
         if type(arg).__name__ == 'Array':
             a = []
@@ -65,7 +72,11 @@ class DbusObject:
     def processAgainstConfig(self, config):
         xml = etree.fromstring(self.xml)
 
-        xslt_doc = etree.parse(os.path.dirname(sys.argv[0]) + '/xsl/comparator.xsl')
+        program_basedir = os.path.dirname(sys.argv[0])
+        if not program_basedir:
+            program_basedir = '.'
+
+        xslt_doc = etree.parse(program_basedir + '/xsl/comparator.xsl')
         transformCharacteristics = etree.XSLT(xslt_doc)
         res = transformCharacteristics(xml,
                                        config_filepath = etree.XSLT.strparam(config))

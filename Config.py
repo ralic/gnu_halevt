@@ -46,7 +46,8 @@ class Config:
         logger.setLevel(loglevel)
 
         program_basedir = os.path.dirname(sys.argv[0])
-
+        if not program_basedir:
+            program_basedir = '.'
         #self.configO = objectify.parse(configfile).getroot()
         #mxml = self.configO.getchildren()
         #matchlist = Config.Match( mxml )
@@ -65,12 +66,13 @@ class Config:
         self.xml = transformCharacteristics(self.xml)
 
         tmpdir_path = program_basedir + '/tmp/conf.xml'
-        f = open(tmpdir_path, 'w')
-        if f:
-            logger.info('created tmp/conf.xml to store processed configuration')
-        else:
+
+        try:
+            f = open(tmpdir_path, 'w')
+        except IOError:
             logger.info('can not create "conf.xml", please be sure a writable tmp/ directory exists in the program directory')
             sys.exit(1)
+        logger.info('created tmp/conf.xml to store processed configuration')
         f.write(str(self.xml))
         f.close()
 

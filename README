@@ -1,16 +1,26 @@
 What this program does (short version) :
-It listens to Dbus service provider (like udisks or upower) and attempt
-to match event and related objects to a configuration file which define
+It listens to Dbus service provider (like udisks or upower) and attempts
+to match events and related objects against a configuration file which defines
 some actions to trigger according to the objects properties and the events
 they are related to.
 
 Raphael.Droz@gmail.com, june 2010
 
-Note:
-In order to serialize the dbus dictionary to XML, this program :
+Notes:
+- In order to serialize the dbus dictionary to XML, download this python library:
 http://www.strangegizmo.com/products/pyxslt
-is needed.
 
+
+- The XML schema offers the ability to "aliase" commands and device descriptions.
+This is done with the ID->REF entities XML standard mechanism which makes the DTD mandatory.
+* the DTD must be specified in the configuration file (alternatives welcomed)
+* the DTD path must be absolute, URL, or relative to $CWD when the program is run
+* if the DTD isn't found, no error will be thrown (but with 'debug' you may notice empty XML
+sections in tmp/conf.xml)
+
+The udisks dbus interface keywords (objects, properties and signals) can be found here:
+http://cgit.freedesktop.org/udisks/tree/data)
+Current hardware values can be read with udisks --dump
 
 What this program does (long version) :
 

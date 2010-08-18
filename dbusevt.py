@@ -15,6 +15,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+# The main program: works with dbus signals
+# After a configuration file is loaded, it attach to specified dbus services
+# When an event caught happens:
+# - spawn specified actions
+# - refresh its internal list of objects/properties
+
 import dbus, gobject, inspect, string
 
 from dbus.mainloop.glib import DBusGMainLoop
@@ -136,7 +142,7 @@ def command_substitute(torun, dbusobject):
         if aprop == None:
             aprop = 'DBUSEVT_UNKNOWN_PROP'
         torun = re.sub('\$' + j.strip('$') + '\$',
-                       aprop,
+                       str(aprop),
                        torun)
     return torun
 
@@ -182,7 +188,7 @@ def main(argv):
         if os.path.isfile(fallback):
             config_path = fallback
         else:
-            logging.error(config_path + ": no such file")
+            logging.error('no configuration file found under "' + config_path + '"')
             sys.exit(1)
 
     if DRYRUN:
